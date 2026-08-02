@@ -1,0 +1,4 @@
+Countly is a sleek, responsive counter app with persistent local storage, light and dark themes, and a playful Yellow Hunt mode for tracking yellow cars (+1) and motorcycles (+0.5) with animated vehicle effects.
+
+Suggested short tagline:
+Modern counters with a playful Yellow Hunt mode.
