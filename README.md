@@ -13,7 +13,6 @@ Countly is a clean, modern counter app for keeping track of multiple things at o
 - Animated glass-style interface
 - Yellow Hunt mode for the German yellow-car spotting game
 - Yellow car logging for `+1` point
-- Yellow motorcycle logging for `+0.5` points
 - Animated yellow vehicles with exhaust trails
 - Counters and preferences saved automatically in the browser
 - Responsive layout for desktop and mobile screens
@@ -44,7 +43,6 @@ The theme button switches between light and dark mode. Countly remembers your ch
 Select the taxi icon in the top bar to activate Yellow Hunt mode. The mode includes a short explanation of the game and gives each counter two special actions:
 
 - Yellow car: adds 1 point
-- Yellow motorcycle: adds 0.5 points
 
 Each find triggers a playful vehicle animation across the screen. Select the taxi icon again to return to regular counter mode.
 
