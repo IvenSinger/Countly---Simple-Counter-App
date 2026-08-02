@@ -9,6 +9,7 @@ Countly is a clean, modern counter app for keeping track of multiple things at o
 - Reset all counters at once
 - View total count and number of active counters
 - Light mode and dark mode
+- Language selector with English, German, Spanish, Mandarin Chinese, and Hindi options
 - Animated glass-style interface
 - Yellow Hunt mode for the German yellow-car spotting game
 - Yellow car logging for `+1` point
