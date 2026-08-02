@@ -35,7 +35,7 @@ Then open [http://localhost:8000](http://localhost:8000) in your browser.
 
 ## Using the app
 
-Click `+` or `−` on a counter to change its value. Click a counter name to edit it. Use `Add counter` to create another counter and the `×` button to remove one. The reset icon in the top bar resets all current values to zero.
+Click `+` or `−` on a counter to change its value. Click a counter name to edit it. Use `Add new counter` to create another counter and the `×` button to remove one. The reset icon in the top bar resets all current values to zero.
 
 The theme button switches between light and dark mode. Countly remembers your choice for the next visit.
 
