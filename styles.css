@@ -48,7 +48,7 @@ button { font: inherit; cursor: pointer; }
 .hero { animation: rise-in .7s .16s cubic-bezier(.2,.7,.2,1) both; }
 .summary { animation: rise-in .7s .25s cubic-bezier(.2,.7,.2,1) both; }
 .counter-card { animation: none; }
-.app-ready .counter-card { animation: card-in .7s cubic-bezier(.2,.7,.2,1) both; }
+.app-ready:not(.counter-rendered) .counter-card { animation: card-in .7s cubic-bezier(.2,.7,.2,1) both; }
 .counter-card:nth-child(1) { animation-delay: .32s; }.counter-card:nth-child(2) { animation-delay: .4s; }.counter-card:nth-child(3) { animation-delay: .48s; }.counter-card:nth-child(4) { animation-delay: .56s; }.counter-card:nth-child(5) { animation-delay: .64s; }.counter-card:nth-child(6) { animation-delay: .72s; }
 @keyframes scene-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes rise-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
@@ -70,7 +70,7 @@ button { font: inherit; cursor: pointer; }
 .dark-mode.yellow-hunt { --blue: #ffd24d; --blue-dark: #ffe07a; background: radial-gradient(circle at 8% 4%, #403823 0, transparent 27%), radial-gradient(circle at 93% 48%, #44351e 0, transparent 25%), radial-gradient(circle at 44% 100%, #3f2e1c 0, var(--soft) 34%); }
 .dark-mode.yellow-hunt .orb-blue { background: #ffd84d; }.dark-mode.yellow-hunt .orb-lilac { background: #ffa928; }.dark-mode.yellow-hunt .orb-peach { background: #ffcf5b; }
 .dark-mode.yellow-hunt .eyebrow { color: #ffd24d; }.dark-mode.yellow-hunt .step-button { color: #ffd24d; background: rgba(107, 78, 20, .72); }.dark-mode.yellow-hunt .step-button:hover { background: #76591f; }
-.hunt-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px; }
+.hunt-actions { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 16px; }
 .hunt-action { display: flex; align-items: center; justify-content: center; gap: 5px; min-height: 38px; padding: 6px 5px; border: 1px solid rgba(220, 164, 20, .22); border-radius: 10px; color: #8a6500; background: rgba(255, 244, 193, .54); font-size: 10px; font-weight: 700; transition: transform .15s, background .15s, box-shadow .15s; }
 .hunt-action:hover { transform: translateY(-2px); background: #ffefb1; box-shadow: 0 5px 12px rgba(208, 155, 14, .15); }.hunt-action:active { transform: scale(.96); }
 .hunt-emoji { font-size: 17px; line-height: 1; }.hunt-action b { display: block; color: #b77e00; font-size: 9px; font-weight: 700; }
@@ -79,11 +79,9 @@ button { font: inherit; cursor: pointer; }
 .hunt-guide[hidden] { display: none; }.guide-icon { display: grid; flex: 0 0 36px; place-items: center; width: 36px; height: 36px; border-radius: 11px; background: rgba(255, 211, 68, .34); font-size: 20px; }.guide-title { margin: 0 0 3px; color: #9b7000; font-size: 12px; font-weight: 800; letter-spacing: .7px; text-transform: uppercase; }.guide-copy { margin: 0; color: #806b35; font-size: 13px; line-height: 1.45; }.guide-copy strong { color: #8d6500; }.dark-mode .hunt-guide { border-color: rgba(255, 211, 70, .2); background: rgba(105, 79, 21, .4); box-shadow: inset 0 1px rgba(255,255,255,.1); }.dark-mode .guide-icon { background: rgba(255, 205, 55, .18); }.dark-mode .guide-title { color: #ffd24d; }.dark-mode .guide-copy { color: #e7d59c; }.dark-mode .guide-copy strong { color: #ffe071; }
 .vehicle-layer { position: fixed; z-index: 20; inset: 0; overflow: hidden; pointer-events: none; }
 .passing-vehicle { position: absolute; left: 0; top: 0; font-size: 65px; line-height: 1; filter: drop-shadow(0 12px 8px rgba(89, 66, 12, .2)); will-change: transform, opacity; animation: vehicle-pass var(--travel-time, 3.9s) linear both; }
-.passing-vehicle.car { font-size: 65px; }.passing-vehicle.motorcycle { font-size: 57px; animation-name: motorcycle-pass; }
+.passing-vehicle.car { font-size: 65px; }
 .passing-vehicle::after { position: absolute; left: 88%; bottom: 7%; width: 34px; height: 28px; border-radius: 50%; background: rgba(139, 137, 128, .78); box-shadow: 16px 10px 0 -2px rgba(139,137,128,.62), -12px 18px 0 -4px rgba(139,137,128,.52), 27px -7px 0 -7px rgba(139,137,128,.45), 39px 9px 0 -10px rgba(139,137,128,.35); content: ""; opacity: 0; filter: blur(3px); animation: exhaust-puff 1.25s .45s ease-out infinite; }
-.passing-vehicle.motorcycle::after { left: 84%; bottom: 2%; width: 23px; height: 20px; }
 @keyframes vehicle-pass { 0% { opacity: 0; transform: translate(-18vw, var(--start-y)) scaleX(-1) rotate(-3deg); } 8% { opacity: 1; } 42% { transform: translate(38vw, var(--mid-y)) scaleX(-1) rotate(2deg); } 72% { transform: translate(78vw, calc(var(--end-y) - 2vh)) scaleX(-1) rotate(-2deg); } 92% { opacity: 1; } 100% { opacity: 0; transform: translate(120vw, var(--end-y)) scaleX(-1) rotate(3deg); } }
-@keyframes motorcycle-pass { 0% { opacity: 0; transform: translate(-18vw, var(--start-y)) scaleX(-1) rotate(-5deg); } 8% { opacity: 1; } 40% { transform: translate(36vw, var(--mid-y)) scaleX(-1) rotate(3deg); } 72% { transform: translate(78vw, calc(var(--end-y) + 2vh)) scaleX(-1) rotate(-3deg); } 92% { opacity: 1; } 100% { opacity: 0; transform: translate(120vw, var(--end-y)) scaleX(-1) rotate(5deg); } }
 @keyframes exhaust-puff { 0% { opacity: 0; transform: translate(4px, 2px) scale(.35); } 18% { opacity: .95; } 52% { opacity: .72; } 100% { opacity: 0; transform: translate(-42px, -28px) scale(2.35); } }
 @media (prefers-reduced-motion: reduce) { .passing-vehicle { animation: none; opacity: 0; } }
 
