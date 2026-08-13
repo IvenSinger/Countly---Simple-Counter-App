@@ -1,4 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Countly favicon</title>
+  <desc id="desc">Three ascending blue counter bars on a dark rounded square.</desc>
   <rect width="64" height="64" rx="16" fill="#34425c"/>
   <path fill="#5e7fe8" d="M16 35a5 5 0 0 1 10 0v12a5 5 0 0 1-10 0V35Zm15-9a5 5 0 0 1 10 0v21a5 5 0 0 1-10 0V26Zm15-9a5 5 0 0 1 10 0v30a5 5 0 0 1-10 0V17Z"/>
 </svg>
