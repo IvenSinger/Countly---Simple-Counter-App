@@ -1,4 +1,5 @@
 const STORAGE_KEY = "countly-counters";
+const HUNT_COUNTERS_KEY = "countly-yellow-hunt-counters";
 const THEME_KEY = "countly-theme";
 const HUNT_KEY = "countly-yellow-hunt";
 const TUTORIAL_KEY = "countly-tutorial-seen";
@@ -48,8 +49,25 @@ function createYellowHuntCounters() {
   }));
 }
 
-let counters;
-try { counters = JSON.parse(localStorage.getItem(STORAGE_KEY)) || starterCounters; } catch { counters = starterCounters; }
+function readCounters(key) {
+  try {
+    const stored = localStorage.getItem(key);
+    return stored === null ? null : JSON.parse(stored);
+  } catch {
+    return null;
+  }
+}
+
+function isYellowHuntCounters(value) {
+  return Array.isArray(value) && value.length > 0 && value.every((counter) => /^Player [1-3]$/.test(counter.name));
+}
+
+const legacyCounters = readCounters(STORAGE_KEY);
+const savedHuntCounters = readCounters(HUNT_COUNTERS_KEY);
+let huntMode = localStorage.getItem(HUNT_KEY) === "true";
+let counters = huntMode
+  ? savedHuntCounters ?? (isYellowHuntCounters(legacyCounters) ? legacyCounters : createYellowHuntCounters())
+  : (isYellowHuntCounters(legacyCounters) ? starterCounters : legacyCounters ?? starterCounters);
 
 const grid = document.querySelector("#counter-grid");
 const total = document.querySelector("#total-count");
@@ -76,8 +94,6 @@ const redoTutorial = document.querySelector("#redo-tutorial");
 let tutorialIndex = 0;
 const tutorialTargets = ["#add-counter", ".counter-card .increment", "#hunt-toggle", "#language-toggle", "#theme-toggle", "#reset-all"];
 function tutorialSteps() { return tutorialTargets.map((target, index) => ({ target, title: t("tutorials")[index][0], copy: t("tutorials")[index][1] })); }
-let huntMode = localStorage.getItem(HUNT_KEY) === "true";
-
 function applyTheme(theme) {
   const dark = theme === "dark";
   document.body.classList.toggle("dark-mode", dark);
@@ -135,7 +151,9 @@ function applyHuntMode() {
     : `<span class="hint-key">${t("tip")}</span> <span data-i18n="renameHint">${t("renameHint")}</span>`;
 }
 
-function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(counters)); }
+function save() {
+  localStorage.setItem(huntMode ? HUNT_COUNTERS_KEY : STORAGE_KEY, JSON.stringify(counters));
+}
 function formatCount(value) { return new Intl.NumberFormat(currentLanguage).format(value); }
 
 function render() {
@@ -274,9 +292,12 @@ huntToggle.addEventListener("click", () => {
   const enteringHuntMode = !huntMode;
   huntMode = enteringHuntMode;
   if (enteringHuntMode) {
-    counters = createYellowHuntCounters();
-    save();
+    counters = readCounters(HUNT_COUNTERS_KEY) ?? (isYellowHuntCounters(legacyCounters) ? legacyCounters : createYellowHuntCounters());
+  } else {
+    counters = readCounters(STORAGE_KEY);
+    if (!counters || isYellowHuntCounters(counters)) counters = starterCounters;
   }
+  save();
   localStorage.setItem(HUNT_KEY, huntMode);
   applyHuntMode();
   render();
