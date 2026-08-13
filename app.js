@@ -40,6 +40,14 @@ const starterCounters = [
   { id: crypto.randomUUID(), name: "Books read", count: 2 },
 ];
 
+function createYellowHuntCounters() {
+  return [1, 2].map((player) => ({
+    id: crypto.randomUUID(),
+    name: `Player ${player}`,
+    count: Math.floor(Math.random() * 10) + 1,
+  }));
+}
+
 let counters;
 try { counters = JSON.parse(localStorage.getItem(STORAGE_KEY)) || starterCounters; } catch { counters = starterCounters; }
 
@@ -262,7 +270,17 @@ document.querySelector("#add-counter").addEventListener("click", () => {
   setTimeout(() => grid.lastElementChild?.querySelector(".counter-name")?.select(), 0);
 });
 document.querySelector("#reset-all").addEventListener("click", () => { if (counters.length && confirm(t("resetConfirm"))) { counters.forEach((counter) => { counter.count = 0; }); save(); render(); } });
-huntToggle.addEventListener("click", () => { huntMode = !huntMode; localStorage.setItem(HUNT_KEY, huntMode); applyHuntMode(); render(); });
+huntToggle.addEventListener("click", () => {
+  const enteringHuntMode = !huntMode;
+  huntMode = enteringHuntMode;
+  if (enteringHuntMode) {
+    counters = createYellowHuntCounters();
+    save();
+  }
+  localStorage.setItem(HUNT_KEY, huntMode);
+  applyHuntMode();
+  render();
+});
 themeToggle.addEventListener("click", () => {
   const nextTheme = document.body.classList.contains("dark-mode") ? "light" : "dark";
   localStorage.setItem(THEME_KEY, nextTheme);
