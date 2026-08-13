@@ -41,7 +41,7 @@ const starterCounters = [
 ];
 
 function createYellowHuntCounters() {
-  return [1, 2].map((player) => ({
+  return [1, 2, 3].map((player) => ({
     id: crypto.randomUUID(),
     name: `Player ${player}`,
     count: Math.floor(Math.random() * 10) + 1,
