@@ -99,3 +99,9 @@ button { font: inherit; cursor: pointer; }
 @keyframes confetti-fall-left { 0% { opacity: 0; transform: translate3d(0, 16vh, 0) rotate(0); } 12% { opacity: 1; } 38% { transform: translate3d(var(--mid-drift), -42vh, 0) rotate(120deg); } 68% { opacity: .9; transform: translate3d(var(--drift), -42vh, 0) rotate(var(--spin)); } 78% { opacity: 0; transform: translate3d(var(--drift), -40vh, 0) rotate(var(--spin)); } 100% { opacity: 0; transform: translate3d(var(--drift), -8vh, 0) rotate(var(--spin)); } }
 @keyframes confetti-fall-right { 0% { opacity: 0; transform: translate3d(0, 16vh, 0) rotate(0); } 12% { opacity: 1; } 38% { transform: translate3d(var(--mid-drift), -42vh, 0) rotate(120deg); } 68% { opacity: .9; transform: translate3d(var(--drift), -42vh, 0) rotate(var(--spin)); } 78% { opacity: 0; transform: translate3d(var(--drift), -40vh, 0) rotate(var(--spin)); } 100% { opacity: 0; transform: translate3d(var(--drift), -8vh, 0) rotate(var(--spin)); } }
 @media (prefers-reduced-motion: reduce) { .tutorial-card, .tutorial-spotlight, .tutorial-arrow { animation: none; transition: none; } }
+body.yellow-hunt { background: var(--hunt-page-bg); }
+body.dark-mode.yellow-hunt { background: var(--hunt-page-bg-dark); }
+body.yellow-hunt .hunt-guide { border-color: var(--hunt-accent); background: var(--hunt-soft); }
+body.yellow-hunt .guide-title, body.yellow-hunt .guide-copy strong { color: var(--hunt-accent); }
+body.yellow-hunt .guide-copy { color: var(--hunt-accent); }
+body.yellow-hunt .hunt-color-picker select { border-color: var(--hunt-accent); color: var(--hunt-accent); }
