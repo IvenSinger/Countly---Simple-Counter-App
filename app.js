@@ -208,6 +208,9 @@ function applyHuntMode() {
   document.documentElement.style.background = huntMode
     ? (document.body.classList.contains("dark-mode") ? selectedColor.darkPage : selectedColor.page)
     : (document.body.classList.contains("dark-mode") ? "#111721" : "#f5f7fb");
+  document.body.style.background = huntMode
+    ? (document.body.classList.contains("dark-mode") ? selectedColor.darkPage : selectedColor.page)
+    : "";
   document.body.classList.toggle("yellow-hunt", huntMode);
   huntGuide.hidden = !huntMode;
   huntToggle.classList.toggle("is-active", huntMode);
