@@ -173,7 +173,8 @@ function applyHuntMode() {
   heroTitle.textContent = huntMode ? "Spot it. Count it. Win it." : t("heroTitle");
   appHint.innerHTML = huntMode
     ? `<span class="hint-key">${t("play")}</span> ${currentLanguage === "de" ? "Erfasse ein gelbes Auto, wenn du eines siehst" : currentLanguage === "es" ? "Registra un coche amarillo cuando lo veas" : currentLanguage === "zh" ? "发现黄色汽车时记录" : currentLanguage === "hi" ? "पीली कार दिखे तो दर्ज करें" : "Log a yellow car when you spot one"}`
-    : `<span class="hint-key">${t("tip")}</span> <span data-i18n="renameHint">${t("renameHint")}</span>`;
+    : "";
+  appHint.hidden = !huntMode;
 }
 
 function save() {
@@ -278,7 +279,6 @@ function positionTutorial() {
 function showTutorialStep() {
   const steps = tutorialSteps();
   const step = steps[tutorialIndex];
-  appHint.hidden = tutorialIndex === 2;
   tutorialStep.textContent = `${tutorialIndex + 1} / ${steps.length}`;
   tutorialTitle.textContent = step.title;
   tutorialCopy.textContent = step.copy;
@@ -312,7 +312,7 @@ function launchConfetti() {
 
 function closeTutorial(completed = false) {
   tutorialOverlay.hidden = true;
-  appHint.hidden = false;
+  appHint.hidden = !huntMode;
   localStorage.setItem(TUTORIAL_KEY, "true");
   if (completed) launchConfetti();
 }
