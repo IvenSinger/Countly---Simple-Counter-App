@@ -99,9 +99,15 @@ button { font: inherit; cursor: pointer; }
 @keyframes confetti-fall-left { 0% { opacity: 0; transform: translate3d(0, 16vh, 0) rotate(0); } 12% { opacity: 1; } 38% { transform: translate3d(var(--mid-drift), -42vh, 0) rotate(120deg); } 68% { opacity: .9; transform: translate3d(var(--drift), -42vh, 0) rotate(var(--spin)); } 78% { opacity: 0; transform: translate3d(var(--drift), -40vh, 0) rotate(var(--spin)); } 100% { opacity: 0; transform: translate3d(var(--drift), -8vh, 0) rotate(var(--spin)); } }
 @keyframes confetti-fall-right { 0% { opacity: 0; transform: translate3d(0, 16vh, 0) rotate(0); } 12% { opacity: 1; } 38% { transform: translate3d(var(--mid-drift), -42vh, 0) rotate(120deg); } 68% { opacity: .9; transform: translate3d(var(--drift), -42vh, 0) rotate(var(--spin)); } 78% { opacity: 0; transform: translate3d(var(--drift), -40vh, 0) rotate(var(--spin)); } 100% { opacity: 0; transform: translate3d(var(--drift), -8vh, 0) rotate(var(--spin)); } }
 @media (prefers-reduced-motion: reduce) { .tutorial-card, .tutorial-spotlight, .tutorial-arrow { animation: none; transition: none; } }
-body.yellow-hunt { background: var(--hunt-page-bg); }
-body.dark-mode.yellow-hunt { background: var(--hunt-page-bg-dark); }
+body.yellow-hunt { background: var(--hunt-page-bg, #fff4d2); }
+body.dark-mode.yellow-hunt { background: var(--hunt-page-bg-dark, #3f2e1c); }
+body.yellow-hunt .ambient-orb { background: var(--hunt-orb); }
+body.yellow-hunt .brand-mark span { background: var(--hunt-accent); }
+body.yellow-hunt .add-button { background: var(--hunt-accent); box-shadow: 0 8px 15px color-mix(in srgb, var(--hunt-accent) 22%, transparent); }
+body.yellow-hunt .add-button:hover { background: var(--blue-dark); }
+body.yellow-hunt .step-button { color: var(--hunt-accent); background: color-mix(in srgb, var(--hunt-accent) 16%, transparent); }
+body.yellow-hunt .step-button:hover { background: color-mix(in srgb, var(--hunt-accent) 24%, transparent); }
+body.yellow-hunt .eyebrow { color: var(--hunt-accent); }
 body.yellow-hunt .hunt-guide { border-color: var(--hunt-accent); background: var(--hunt-soft); }
-body.yellow-hunt .guide-title, body.yellow-hunt .guide-copy strong { color: var(--hunt-accent); }
-body.yellow-hunt .guide-copy { color: var(--hunt-accent); }
+body.yellow-hunt .guide-title, body.yellow-hunt .guide-copy, body.yellow-hunt .guide-copy strong { color: var(--hunt-accent); }
 body.yellow-hunt .hunt-color-picker select { border-color: var(--hunt-accent); color: var(--hunt-accent); }
