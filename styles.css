@@ -1,3 +1,8 @@
+html { background: #f5f7fb; }
+html:has(body.dark-mode) { background: #111721; }
+html:has(body.yellow-hunt) { background: #fff4d2; }
+html:has(body.dark-mode.yellow-hunt) { background: #3f2e1c; }
+
 :root {
   --ink: #182333;
   --muted: #8290a3;
