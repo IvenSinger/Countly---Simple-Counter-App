@@ -53,7 +53,7 @@ function localizeStarterCounters(language) {
   const names = starterCounterNames[language] || starterCounterNames.en;
   let changed = false;
   counters.forEach((counter, index) => {
-    if (counter.count === starterCounters[index]?.count && allStarterNames.has(counter.name) && counter.name !== names[index]) {
+    if (allStarterNames.has(counter.name) && counter.name !== names[index]) {
       counter.name = names[index];
       changed = true;
     }
