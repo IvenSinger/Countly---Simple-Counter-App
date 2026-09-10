@@ -114,6 +114,7 @@ const languageChoices = [...document.querySelectorAll("[data-language]")];
 const redoTutorial = document.querySelector("#redo-tutorial");
 let tutorialIndex = 0;
 let searchQuery = "";
+const tutorialTargets = ["#add-counter", ".counter-card .increment", ".counter-card .counter-name", "#hunt-toggle", "#language-toggle", "#theme-toggle", "#reset-all"];
 function tutorialSteps() { const tutorials = t("tutorials"); const steps = [...tutorials.slice(0, 2), ["Rename a counter", "Click a counter's name to edit it and keep your counters easy to recognize."], ...tutorials.slice(2)]; return tutorialTargets.map((target, index) => ({ target, title: steps[index][0], copy: steps[index][1] })); }
 
 function applyTheme(theme) {
