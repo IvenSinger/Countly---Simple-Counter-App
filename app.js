@@ -2,6 +2,7 @@ const STORAGE_KEY = "countly-counters";
 const HUNT_COUNTERS_KEY = "countly-yellow-hunt-counters";
 const THEME_KEY = "countly-theme";
 const HUNT_KEY = "countly-yellow-hunt";
+const HUNT_COLOR_KEY = "countly-hunt-color";
 const TUTORIAL_KEY = "countly-tutorial-seen";
 const LANGUAGE_KEY = "countly-language";
 const translations = {
@@ -84,7 +85,18 @@ function isYellowHuntCounters(value) {
 
 const legacyCounters = readCounters(STORAGE_KEY);
 const savedHuntCounters = readCounters(HUNT_COUNTERS_KEY);
+const HUNT_COLORS = {
+  yellow: { label: "Yellow", emoji: "🚕", filter: "" },
+  red: { label: "Red", emoji: "🚗", filter: "hue-rotate(315deg) saturate(1.6)" },
+  blue: { label: "Blue", emoji: "🚗", filter: "hue-rotate(175deg) saturate(1.4)" },
+  green: { label: "Green", emoji: "🚗", filter: "hue-rotate(85deg) saturate(1.5)" },
+  black: { label: "Black", emoji: "🚗", filter: "grayscale(1) brightness(.45)" },
+  white: { label: "White", emoji: "🚗", filter: "grayscale(1) brightness(1.7)" },
+  orange: { label: "Orange", emoji: "🚗", filter: "hue-rotate(12deg) saturate(1.5)" },
+  purple: { label: "Purple", emoji: "🚗", filter: "hue-rotate(250deg) saturate(1.4)" }
+};
 let huntMode = localStorage.getItem(HUNT_KEY) === "true";
+let huntColor = HUNT_COLORS[localStorage.getItem(HUNT_COLOR_KEY)] ? localStorage.getItem(HUNT_COLOR_KEY) : "yellow";
 let counters = huntMode
   ? savedHuntCounters ?? (isYellowHuntCounters(legacyCounters) ? legacyCounters : createYellowHuntCounters())
   : (isYellowHuntCounters(legacyCounters) ? starterCounters : legacyCounters ?? starterCounters);
@@ -100,6 +112,7 @@ const eyebrow = document.querySelector("#eyebrow");
 const heroTitle = document.querySelector("#hero-title");
 const appHint = document.querySelector("#app-hint");
 const huntGuide = document.querySelector("#hunt-guide");
+const huntColorSelect = document.querySelector("#hunt-color");
 const tutorialOverlay = document.querySelector("#tutorial-overlay");
 const tutorialSpotlight = document.querySelector("#tutorial-spotlight");
 const tutorialArrow = document.querySelector("#tutorial-arrow");
@@ -146,7 +159,7 @@ function applyLanguage(language) {
   document.querySelector("#reset-all").title = t("resetAll");
   document.querySelector("#reset-all").setAttribute("aria-label", t("resetAll"));
   applyHuntMode();
-  huntGuide.setAttribute("aria-label", `${t("howToPlay")} Yellow Hunt`);
+  huntGuide.setAttribute("aria-label", `${t("howToPlay")} ${HUNT_COLORS[huntColor].label} Hunt`);
   if (tutorialOverlay && !tutorialOverlay.hidden) showTutorialStep();
   render();
   localStorage.setItem(LANGUAGE_KEY, selected);
@@ -186,15 +199,18 @@ function positionLanguageMenu() {
 }
 
 function applyHuntMode() {
+  const selectedColor = HUNT_COLORS[huntColor];
   document.body.classList.toggle("yellow-hunt", huntMode);
   huntGuide.hidden = !huntMode;
   huntToggle.classList.toggle("is-active", huntMode);
   huntToggle.title = huntMode ? t("exitHunt") : t("activateHunt");
   huntToggle.setAttribute("aria-label", huntToggle.title);
-  eyebrow.textContent = huntMode ? "Yellow Hunt" : t("yourCounters");
+  eyebrow.textContent = huntMode ? `${selectedColor.label} Hunt` : t("yourCounters");
   heroTitle.textContent = huntMode ? "Spot it. Count it. Win it." : t("heroTitle");
+  huntGuide.querySelector(".guide-copy").innerHTML = `Spot a ${selectedColor.label.toLowerCase()} car for <strong>1 point</strong>. Log each find and see who can spot the most.`;
+  huntColorSelect.value = huntColor;
   appHint.innerHTML = huntMode
-    ? `<span class="hint-key">${t("play")}</span> ${currentLanguage === "de" ? "Erfasse ein gelbes Auto, wenn du eines siehst" : currentLanguage === "es" ? "Registra un coche amarillo cuando lo veas" : currentLanguage === "zh" ? "发现黄色汽车时记录" : currentLanguage === "hi" ? "पीली कार दिखे तो दर्ज करें" : "Log a yellow car when you spot one"}`
+    ? `<span class="hint-key">${t("play")}</span> Log a ${selectedColor.label.toLowerCase()} car when you spot one`
     : "";
   appHint.hidden = !huntMode;
 }
@@ -265,7 +281,8 @@ function showVehicle() {
   vehicle.style.setProperty("--mid-y", `${midY}vh`);
   vehicle.style.setProperty("--end-y", `${endY}vh`);
   vehicle.style.setProperty("--travel-time", `${(3.5 + Math.random() * 1.2).toFixed(2)}s`);
-  vehicle.textContent = "🚕";
+  vehicle.textContent = HUNT_COLORS[huntColor].emoji;
+  vehicle.style.filter = HUNT_COLORS[huntColor].filter;
   vehicleLayer.appendChild(vehicle);
   vehicle.addEventListener("animationend", () => vehicle.remove());
 }
@@ -386,5 +403,11 @@ window.addEventListener("scroll", () => { if (!tutorialOverlay.hidden) positionT
 languageToggle.addEventListener("click", () => toggleLanguageMenu());
 languageChoices.forEach((choice) => choice.addEventListener("click", () => { applyLanguage(choice.dataset.language); toggleLanguageMenu(false); }));
 languageSearch.addEventListener("input", filterLanguageChoices);
+huntColorSelect.addEventListener("change", (event) => {
+  if (!HUNT_COLORS[event.target.value]) return;
+  huntColor = event.target.value;
+  localStorage.setItem(HUNT_COLOR_KEY, huntColor);
+  applyHuntMode();
+});
 document.addEventListener("click", (event) => { if (!event.target.closest(".language-picker, #language-menu")) toggleLanguageMenu(false); });
 applyLanguage(localStorage.getItem(LANGUAGE_KEY) || "en");
