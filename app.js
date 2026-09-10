@@ -278,6 +278,7 @@ function positionTutorial() {
 function showTutorialStep() {
   const steps = tutorialSteps();
   const step = steps[tutorialIndex];
+  appHint.hidden = tutorialIndex === 2;
   tutorialStep.textContent = `${tutorialIndex + 1} / ${steps.length}`;
   tutorialTitle.textContent = step.title;
   tutorialCopy.textContent = step.copy;
@@ -311,6 +312,7 @@ function launchConfetti() {
 
 function closeTutorial(completed = false) {
   tutorialOverlay.hidden = true;
+  appHint.hidden = false;
   localStorage.setItem(TUTORIAL_KEY, "true");
   if (completed) launchConfetti();
 }
