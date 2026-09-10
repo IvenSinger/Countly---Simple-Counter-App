@@ -111,3 +111,26 @@ body.yellow-hunt .eyebrow { color: var(--hunt-accent); }
 body.yellow-hunt .hunt-guide { border-color: var(--hunt-accent); background: var(--hunt-soft); }
 body.yellow-hunt .guide-title, body.yellow-hunt .guide-copy, body.yellow-hunt .guide-copy strong { color: var(--hunt-accent); }
 body.yellow-hunt .hunt-color-picker select { border-color: var(--hunt-accent); color: var(--hunt-accent); }
+
+/* Keep the default theme blue and make every hunt surface follow the selected car color. */
+body:not(.yellow-hunt) { --blue: #4169e1; --blue-dark: #3358cf; }
+body.dark-mode:not(.yellow-hunt) { --blue: #7391ff; --blue-dark: #8aa4ff; }
+body.yellow-hunt .step-button,
+body.yellow-hunt .hunt-action,
+body.yellow-hunt .hunt-action b,
+body.yellow-hunt .hunt-color-picker,
+body.yellow-hunt .hunt-color-picker select,
+body.yellow-hunt .guide-title,
+body.yellow-hunt .guide-copy,
+body.yellow-hunt .guide-copy strong,
+body.yellow-hunt .eyebrow { color: var(--hunt-accent); }
+body.yellow-hunt .step-button { background: color-mix(in srgb, var(--hunt-accent) 16%, transparent); }
+body.yellow-hunt .step-button:hover { background: color-mix(in srgb, var(--hunt-accent) 24%, transparent); }
+body.yellow-hunt .hunt-action { border-color: color-mix(in srgb, var(--hunt-accent) 28%, transparent); background: var(--hunt-soft); }
+body.yellow-hunt .hunt-action:hover { background: color-mix(in srgb, var(--hunt-accent) 20%, white); box-shadow: 0 5px 12px color-mix(in srgb, var(--hunt-accent) 15%, transparent); }
+body.yellow-hunt .hunt-guide { border-color: color-mix(in srgb, var(--hunt-accent) 35%, transparent); background: var(--hunt-soft); }
+body.yellow-hunt .guide-icon { background: color-mix(in srgb, var(--hunt-accent) 20%, transparent); }
+body.yellow-hunt .hunt-color-picker select { background: color-mix(in srgb, var(--hunt-accent) 8%, white); }
+body.yellow-hunt .tutorial-spotlight { border-color: var(--hunt-accent); box-shadow: 0 0 0 9999px rgba(20, 27, 39, .56), 0 0 0 5px color-mix(in srgb, var(--hunt-accent) 14%, transparent), 0 0 24px color-mix(in srgb, var(--hunt-accent) 38%, transparent); }
+body.yellow-hunt .tutorial-arrow { background: linear-gradient(90deg, rgba(255,255,255,.18), var(--hunt-accent)); }
+body.yellow-hunt .tutorial-arrow::after { border-left-color: var(--hunt-accent); }
