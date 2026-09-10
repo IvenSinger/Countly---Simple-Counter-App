@@ -86,14 +86,14 @@ function isYellowHuntCounters(value) {
 const legacyCounters = readCounters(STORAGE_KEY);
 const savedHuntCounters = readCounters(HUNT_COUNTERS_KEY);
 const HUNT_COLORS = {
-  yellow: { label: "Yellow", emoji: "🚕", filter: "" },
-  red: { label: "Red", emoji: "🚗", filter: "hue-rotate(315deg) saturate(1.6)" },
-  blue: { label: "Blue", emoji: "🚗", filter: "hue-rotate(175deg) saturate(1.4)" },
-  green: { label: "Green", emoji: "🚗", filter: "hue-rotate(85deg) saturate(1.5)" },
-  black: { label: "Black", emoji: "🚗", filter: "grayscale(1) brightness(.45)" },
-  white: { label: "White", emoji: "🚗", filter: "grayscale(1) brightness(1.7)" },
-  orange: { label: "Orange", emoji: "🚗", filter: "hue-rotate(12deg) saturate(1.5)" },
-  purple: { label: "Purple", emoji: "🚗", filter: "hue-rotate(250deg) saturate(1.4)" }
+  yellow: { label: "Yellow", emoji: "🚕", filter: "", page: "#fff4d2", darkPage: "#3f2e1c", accent: "#d59a00", soft: "rgba(255, 247, 204, .45)" },
+  red: { label: "Red", emoji: "🚗", filter: "hue-rotate(315deg) saturate(1.8)", page: "#fff0f0", darkPage: "#3a2024", accent: "#d04c57", soft: "rgba(255, 219, 222, .5)" },
+  blue: { label: "Blue", emoji: "🚗", filter: "hue-rotate(175deg) saturate(1.7)", page: "#eef4ff", darkPage: "#1e2b45", accent: "#4169e1", soft: "rgba(211, 226, 255, .5)" },
+  green: { label: "Green", emoji: "🚗", filter: "hue-rotate(85deg) saturate(1.8)", page: "#effbf1", darkPage: "#1e3827", accent: "#3e9b5f", soft: "rgba(211, 242, 218, .5)" },
+  black: { label: "Black", emoji: "🚗", filter: "grayscale(1) brightness(.45)", page: "#eef0f2", darkPage: "#16191d", accent: "#4a5360", soft: "rgba(213, 218, 224, .5)" },
+  white: { label: "White", emoji: "🚗", filter: "grayscale(1) brightness(1.7)", page: "#ffffff", darkPage: "#3a3d41", accent: "#8a96a6", soft: "rgba(245, 247, 250, .75)" },
+  orange: { label: "Orange", emoji: "🚗", filter: "hue-rotate(12deg) saturate(1.8)", page: "#fff1e5", darkPage: "#3c281b", accent: "#d9782f", soft: "rgba(255, 225, 198, .5)" },
+  purple: { label: "Purple", emoji: "🚗", filter: "hue-rotate(250deg) saturate(1.7)", page: "#f4efff", darkPage: "#2d2445", accent: "#8058c7", soft: "rgba(228, 215, 255, .5)" }
 };
 let huntMode = localStorage.getItem(HUNT_KEY) === "true";
 let huntColor = HUNT_COLORS[localStorage.getItem(HUNT_COLOR_KEY)] ? localStorage.getItem(HUNT_COLOR_KEY) : "yellow";
@@ -200,6 +200,13 @@ function positionLanguageMenu() {
 
 function applyHuntMode() {
   const selectedColor = HUNT_COLORS[huntColor];
+  document.body.style.setProperty("--hunt-page-bg", selectedColor.page);
+  document.body.style.setProperty("--hunt-page-bg-dark", selectedColor.darkPage);
+  document.body.style.setProperty("--hunt-accent", selectedColor.accent);
+  document.body.style.setProperty("--hunt-soft", selectedColor.soft);
+  document.documentElement.style.background = huntMode
+    ? (document.body.classList.contains("dark-mode") ? selectedColor.darkPage : selectedColor.page)
+    : (document.body.classList.contains("dark-mode") ? "#111721" : "#f5f7fb");
   document.body.classList.toggle("yellow-hunt", huntMode);
   huntGuide.hidden = !huntMode;
   huntToggle.classList.toggle("is-active", huntMode);
@@ -380,6 +387,7 @@ themeToggle.addEventListener("click", () => {
   const nextTheme = document.body.classList.contains("dark-mode") ? "light" : "dark";
   localStorage.setItem(THEME_KEY, nextTheme);
   applyTheme(nextTheme);
+  applyHuntMode();
 });
 applyTheme(localStorage.getItem(THEME_KEY) || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
 applyHuntMode();
