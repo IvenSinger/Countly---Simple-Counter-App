@@ -152,11 +152,22 @@ function applyLanguage(language) {
   localStorage.setItem(LANGUAGE_KEY, selected);
 }
 
+const languageAliases = {
+  en: ["english", "englisch", "inglés", "anglais", "英语", "अंग्रेज़ी"],
+  de: ["german", "deutsch", "alemán", "allemand", "德语", "जर्मन"],
+  es: ["spanish", "español", "spanisch", "espagnol", "西班牙语", "स्पेनिश"],
+  zh: ["mandarin", "chinese", "中文", "chinesisch", "chino", "chinois", "普通话", "चीनी"],
+  hi: ["hindi", "हिन्दी", "hindi", "indisch", "indio", "印地语", "हिंदी"]
+};
+
 function filterLanguageChoices() {
   const query = languageSearch.value.trim().toLocaleLowerCase();
   languageChoices.forEach((choice) => {
+    const code = choice.dataset.language.toLocaleLowerCase();
     const label = choice.textContent.replace("✓", "").trim().toLocaleLowerCase();
-    choice.hidden = Boolean(query) && !label.includes(query) && !choice.dataset.language.includes(query);
+    const aliases = languageAliases[choice.dataset.language] || [];
+    const searchableNames = [code, label, ...aliases];
+    choice.hidden = Boolean(query) && !searchableNames.some((name) => name.includes(query));
   });
 }
 
