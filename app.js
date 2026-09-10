@@ -40,6 +40,26 @@ const starterCounters = [
   { id: crypto.randomUUID(), name: "Daily steps", count: 1250 },
   { id: crypto.randomUUID(), name: "Books read", count: 2 },
 ];
+const starterCounterNames = {
+  en: ["Water glasses", "Daily steps", "Books read"],
+  de: ["Wassergläser", "Tägliche Schritte", "Gelesene Bücher"],
+  es: ["Vasos de agua", "Pasos diarios", "Libros leídos"],
+  zh: ["水杯", "每日步数", "已读书籍"],
+  hi: ["पानी के गिलास", "दैनिक कदम", "पढ़ी गई किताबें"],
+};
+const allStarterNames = new Set(Object.values(starterCounterNames).flat());
+
+function localizeStarterCounters(language) {
+  const names = starterCounterNames[language] || starterCounterNames.en;
+  let changed = false;
+  counters.forEach((counter, index) => {
+    if (counter.count === starterCounters[index]?.count && allStarterNames.has(counter.name) && counter.name !== names[index]) {
+      counter.name = names[index];
+      changed = true;
+    }
+  });
+  if (changed) save();
+}
 
 function createYellowHuntCounters() {
   return [1, 2, 3].map((player) => ({
@@ -107,6 +127,7 @@ function applyLanguage(language) {
   const selected = languageChoices.some((choice) => choice.dataset.language === language) ? language : "en";
   currentLanguage = selected;
   document.documentElement.lang = selected;
+  localizeStarterCounters(selected);
   languageChoices.forEach((choice) => { choice.querySelector("span").textContent = choice.dataset.language === selected ? "✓" : ""; });
   document.querySelectorAll("[data-i18n]").forEach((element) => {
     const value = t(element.dataset.i18n);
