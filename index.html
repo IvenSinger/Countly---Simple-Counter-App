@@ -66,6 +66,12 @@
         <div class="summary-item"><span class="summary-value" id="counter-count">0</span><span class="summary-label" data-i18n="activeCounters">Active counters</span></div>
       </section>
 
+      <div class="counter-search">
+        <label class="sr-only" for="counter-search-input" data-i18n="searchCounters">Search counters</label>
+        <span class="counter-search-icon" aria-hidden="true">⌕</span>
+        <input id="counter-search-input" type="search" autocomplete="off" data-i18n-placeholder="searchCounters" placeholder="Search counters" />
+      </div>
+
       <section class="counter-grid" id="counter-grid" aria-live="polite"></section>
 
       <p class="hint" id="app-hint"><span class="hint-key">TIP</span> <span data-i18n="renameHint">Click a counter’s name to rename it</span></p>
@@ -87,7 +93,7 @@
         <h2 id="tutorial-title"></h2>
         <p id="tutorial-copy"></p>
         <div class="tutorial-actions">
-          <button class="skip-tutorial" id="skip-tutorial" type="button" data-i18n="skipIntro">Skip intro</button>
+          <button class="skip-tutorial" id="skip-tutorial" type="button" data-i18n="skipIntro">Skip Tutorial</button>
           <button class="continue-tutorial" id="continue-tutorial" type="button"><span data-i18n="continue">Continue</span> <span aria-hidden="true">→</span></button>
         </div>
       </section>
