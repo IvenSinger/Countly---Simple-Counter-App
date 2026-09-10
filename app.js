@@ -200,12 +200,14 @@ function positionLanguageMenu() {
 
 function applyHuntMode() {
   const selectedColor = HUNT_COLORS[huntColor];
-  document.body.style.setProperty("--blue", selectedColor.accent);
-  document.body.style.setProperty("--blue-dark", selectedColor.accent);
-  document.body.style.setProperty("--hunt-accent", selectedColor.accent);
-  document.body.style.setProperty("--hunt-soft", selectedColor.soft);
-  document.body.style.setProperty("--hunt-orb", selectedColor.accent);
-  document.documentElement.style.background = huntMode
+    const themeAccent = huntMode ? selectedColor.accent : (document.body.classList.contains("dark-mode") ? "#7391ff" : "#4169e1");
+    const themeDarkAccent = huntMode ? selectedColor.accent : (document.body.classList.contains("dark-mode") ? "#8aa4ff" : "#3358cf");
+  document.body.style.setProperty("--blue", themeAccent);
+    document.body.style.setProperty("--blue-dark", themeDarkAccent);
+      document.body.style.setProperty("--hunt-accent", selectedColor.accent);
+    document.body.style.setProperty("--hunt-soft", selectedColor.soft);
+      document.body.style.setProperty("--hunt-orb", selectedColor.accent);
+      document.documentElement.style.background = huntMode
     ? (document.body.classList.contains("dark-mode") ? selectedColor.darkPage : selectedColor.page)
     : (document.body.classList.contains("dark-mode") ? "#111721" : "#f5f7fb");
   document.body.style.background = huntMode
