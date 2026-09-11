@@ -26,6 +26,9 @@
           <span>countly</span>
         </a>
         <div class="topbar-actions">
+          <button class="icon-button sport-toggle" id="sport-toggle" type="button" title="Activate Sport mode" aria-label="Activate Sport mode">
+            <span aria-hidden="true">🏆</span>
+          </button>
           <button class="icon-button hunt-toggle" id="hunt-toggle" type="button" title="Activate Yellow Hunt mode" aria-label="Activate Yellow Hunt mode">
             <span aria-hidden="true">🚕</span>
           </button>
@@ -60,6 +63,19 @@
         </div>
       </section>
 
+      <section class="sport-guide" id="sport-guide" aria-label="Sport mode active" hidden>
+        <div class="sport-guide-icon" id="sport-guide-icon" aria-hidden="true">🏀</div>
+        <div class="sport-guide-info">
+          <p class="sport-guide-title" id="sport-guide-title">Basketball</p>
+          <p class="sport-guide-copy" id="sport-guide-copy">Score points using the action buttons. Tap a team name to rename it.</p>
+        </div>
+        <div class="sport-switcher" id="sport-switcher" role="group" aria-label="Switch sport">
+          <button class="sport-switch-btn" type="button" data-switch-sport="basketball" title="Switch to Basketball" aria-label="Switch to Basketball">🏀</button>
+          <button class="sport-switch-btn" type="button" data-switch-sport="soccer" title="Switch to Soccer" aria-label="Switch to Soccer">⚽</button>
+          <button class="sport-switch-btn" type="button" data-switch-sport="tennis" title="Switch to Tennis" aria-label="Switch to Tennis">🎾</button>
+        </div>
+      </section>
+
       <section class="summary" aria-label="Counter summary">
         <div class="summary-item"><span class="summary-value" id="total-count">0</span><span class="summary-label" data-i18n="totalCount">Total count</span></div>
         <div class="summary-divider"></div>
@@ -74,9 +90,10 @@
 
       <section class="counter-grid" id="counter-grid" aria-live="polite"></section>
 
-      <p class="hint" id="app-hint"><span class="hint-key">TIP</span> <span data-i18n="renameHint">Click a counter’s name to rename it</span></p>
+      <p class="hint" id="app-hint"><span class="hint-key">TIP</span> <span data-i18n="renameHint">Click a counter's name to rename it</span></p>
       <footer><div>Countly <span>•</span> <span data-i18n="keepItSimple">Keep it simple.</span></div><button class="redo-tutorial" id="redo-tutorial" type="button" data-i18n="viewTutorial">View tutorial again</button></footer>
     </main>
+
     <div class="language-menu" id="language-menu" hidden>
       <p class="language-menu-title" data-i18n="language">Language</p>
       <button type="button" data-language="en">English <span>✓</span></button>
@@ -85,6 +102,7 @@
       <button type="button" data-language="zh">中文 · Mandarin <span></span></button>
       <button type="button" data-language="hi">हिन्दी · Hindi <span></span></button>
     </div>
+
     <div class="tutorial-overlay" id="tutorial-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
       <div class="tutorial-spotlight" id="tutorial-spotlight" aria-hidden="true"></div>
       <div class="tutorial-arrow" id="tutorial-arrow" aria-hidden="true"></div>
@@ -98,6 +116,43 @@
         </div>
       </section>
     </div>
+
+    <!-- Sport picker modal -->
+    <div class="sport-picker" id="sport-picker" hidden role="dialog" aria-modal="true" aria-labelledby="sport-picker-title">
+      <div class="sport-picker-backdrop" id="sport-picker-backdrop"></div>
+      <div class="sport-picker-panel">
+        <h2 class="sport-picker-title" id="sport-picker-title">Choose a Sport</h2>
+        <p class="sport-picker-sub">Pick a game to start tracking scores</p>
+        <div class="sport-option-list">
+          <button class="sport-option" type="button" data-sport="basketball" id="sport-opt-basketball">
+            <span class="sport-option-emoji">🏀</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name">Basketball</span>
+              <span class="sport-option-desc">Free Throw · Field Goal · 3-Pointer</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+          <button class="sport-option" type="button" data-sport="soccer" id="sport-opt-soccer">
+            <span class="sport-option-emoji">⚽</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name">Soccer</span>
+              <span class="sport-option-desc">Log goals for Home &amp; Away</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+          <button class="sport-option" type="button" data-sport="tennis" id="sport-opt-tennis">
+            <span class="sport-option-emoji">🎾</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name">Tennis</span>
+              <span class="sport-option-desc">Love · 15 · 30 · 40 · Deuce · Ad</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+        </div>
+        <button class="sport-picker-cancel" id="sport-picker-cancel" type="button">Cancel</button>
+      </div>
+    </div>
+
     <script src="app.js"></script>
   </body>
 </html>

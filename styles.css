@@ -99,3 +99,199 @@ button { font: inherit; cursor: pointer; }
 @keyframes confetti-fall-left { 0% { opacity: 0; transform: translate3d(0, 16vh, 0) rotate(0); } 12% { opacity: 1; } 38% { transform: translate3d(var(--mid-drift), -42vh, 0) rotate(120deg); } 68% { opacity: .9; transform: translate3d(var(--drift), -42vh, 0) rotate(var(--spin)); } 78% { opacity: 0; transform: translate3d(var(--drift), -40vh, 0) rotate(var(--spin)); } 100% { opacity: 0; transform: translate3d(var(--drift), -8vh, 0) rotate(var(--spin)); } }
 @keyframes confetti-fall-right { 0% { opacity: 0; transform: translate3d(0, 16vh, 0) rotate(0); } 12% { opacity: 1; } 38% { transform: translate3d(var(--mid-drift), -42vh, 0) rotate(120deg); } 68% { opacity: .9; transform: translate3d(var(--drift), -42vh, 0) rotate(var(--spin)); } 78% { opacity: 0; transform: translate3d(var(--drift), -40vh, 0) rotate(var(--spin)); } 100% { opacity: 0; transform: translate3d(var(--drift), -8vh, 0) rotate(var(--spin)); } }
 @media (prefers-reduced-motion: reduce) { .tutorial-card, .tutorial-spotlight, .tutorial-arrow { animation: none; transition: none; } }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   SPORT MODE
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Sport toggle button */
+.sport-toggle { position: relative; font-size: 19px; transition: transform .2s, filter .2s; }
+.sport-toggle:hover { transform: rotate(-8deg) scale(1.1); }
+.sport-toggle.is-active { filter: drop-shadow(0 0 8px rgba(255, 165, 0, .82)); }
+
+/* ── Per-sport ambient colour overrides ─────────────────────────────────────── */
+
+/* Basketball – warm orange */
+body.sport-basketball { --blue: #e07a2a; --blue-dark: #c96918; }
+body.sport-basketball .ambient-scene { filter: saturate(122%); }
+body.sport-basketball .orb-blue { background: #ffd5a8; }
+body.sport-basketball .orb-lilac { background: #ffe3b8; }
+body.sport-basketball .orb-peach { background: #ffba68; }
+body.sport-basketball .eyebrow { color: #b85e00; }
+body.sport-basketball .step-button { color: #b85e00; background: rgba(255, 210, 160, .72); }
+body.sport-basketball .step-button:hover { background: #ffd5a8; }
+body.dark-mode.sport-basketball { --blue: #ff9a45; --blue-dark: #ffb472; background: radial-gradient(circle at 8% 4%, #3a2010 0, transparent 27%), radial-gradient(circle at 93% 48%, #3f260e 0, transparent 25%), radial-gradient(circle at 44% 100%, #3a2208 0, var(--soft) 34%); }
+body.dark-mode.sport-basketball .orb-blue { background: #e07a2a; }
+body.dark-mode.sport-basketball .orb-lilac { background: #c96918; }
+body.dark-mode.sport-basketball .orb-peach { background: #ff9a45; }
+body.dark-mode.sport-basketball .eyebrow { color: #ff9a45; }
+
+/* Soccer – vibrant green */
+body.sport-soccer { --blue: #1e9e38; --blue-dark: #187d2d; }
+body.sport-soccer .ambient-scene { filter: saturate(116%); }
+body.sport-soccer .orb-blue { background: #b0f0c4; }
+body.sport-soccer .orb-lilac { background: #c4f5d2; }
+body.sport-soccer .orb-peach { background: #8ee8a8; }
+body.sport-soccer .eyebrow { color: #136a24; }
+body.sport-soccer .step-button { color: #136a24; background: rgba(170, 235, 190, .72); }
+body.sport-soccer .step-button:hover { background: #b0f0c4; }
+body.dark-mode.sport-soccer { --blue: #3fd468; --blue-dark: #5de082; background: radial-gradient(circle at 8% 4%, #0a2e14 0, transparent 27%), radial-gradient(circle at 93% 48%, #0e3318 0, transparent 25%), radial-gradient(circle at 44% 100%, #0a2810 0, var(--soft) 34%); }
+body.dark-mode.sport-soccer .orb-blue { background: #1e9e38; }
+body.dark-mode.sport-soccer .orb-lilac { background: #187d2d; }
+body.dark-mode.sport-soccer .orb-peach { background: #3fd468; }
+body.dark-mode.sport-soccer .eyebrow { color: #3fd468; }
+
+/* Tennis – yellow-lime */
+body.sport-tennis { --blue: #8ea000; --blue-dark: #758600; }
+body.sport-tennis .ambient-scene { filter: saturate(122%); }
+body.sport-tennis .orb-blue { background: #e0ee6c; }
+body.sport-tennis .orb-lilac { background: #d8e85a; }
+body.sport-tennis .orb-peach { background: #ccdc44; }
+body.sport-tennis .eyebrow { color: #627000; }
+body.sport-tennis .step-button { color: #627000; background: rgba(210, 228, 80, .72); }
+body.sport-tennis .step-button:hover { background: #e0ee6c; }
+body.dark-mode.sport-tennis { --blue: #c4da38; --blue-dark: #d6ec50; background: radial-gradient(circle at 8% 4%, #252a00 0, transparent 27%), radial-gradient(circle at 93% 48%, #2c3200 0, transparent 25%), radial-gradient(circle at 44% 100%, #222700 0, var(--soft) 34%); }
+body.dark-mode.sport-tennis .orb-blue { background: #8ea000; }
+body.dark-mode.sport-tennis .orb-lilac { background: #758600; }
+body.dark-mode.sport-tennis .orb-peach { background: #c4da38; }
+body.dark-mode.sport-tennis .eyebrow { color: #c4da38; }
+
+/* ── Sport guide banner ─────────────────────────────────────────────────────── */
+.sport-guide { display: flex; align-items: center; gap: 14px; margin: -8px 0 22px; padding: 14px 18px; border-radius: 15px; backdrop-filter: blur(20px) saturate(135%); -webkit-backdrop-filter: blur(20px) saturate(135%); animation: rise-in .55s cubic-bezier(.2,.7,.2,1) both; }
+.sport-guide[hidden] { display: none; }
+
+.sport-basketball .sport-guide { border: 1px solid rgba(224, 122, 42, .3); background: rgba(255, 225, 190, .48); box-shadow: inset 0 1px rgba(255,255,255,.8); }
+.sport-soccer .sport-guide { border: 1px solid rgba(30, 158, 56, .3); background: rgba(195, 240, 210, .48); box-shadow: inset 0 1px rgba(255,255,255,.8); }
+.sport-tennis .sport-guide { border: 1px solid rgba(142, 160, 0, .3); background: rgba(225, 242, 155, .48); box-shadow: inset 0 1px rgba(255,255,255,.8); }
+
+.dark-mode.sport-basketball .sport-guide { border-color: rgba(224, 122, 42, .22); background: rgba(100, 50, 10, .48); box-shadow: inset 0 1px rgba(255,255,255,.1); }
+.dark-mode.sport-soccer .sport-guide { border-color: rgba(30, 158, 56, .22); background: rgba(8, 68, 22, .48); box-shadow: inset 0 1px rgba(255,255,255,.1); }
+.dark-mode.sport-tennis .sport-guide { border-color: rgba(142, 160, 0, .22); background: rgba(50, 60, 0, .48); box-shadow: inset 0 1px rgba(255,255,255,.1); }
+
+.sport-guide-icon { display: grid; flex: 0 0 36px; place-items: center; width: 36px; height: 36px; border-radius: 11px; font-size: 20px; }
+.sport-basketball .sport-guide-icon { background: rgba(224, 122, 42, .2); }
+.sport-soccer .sport-guide-icon { background: rgba(30, 158, 56, .2); }
+.sport-tennis .sport-guide-icon { background: rgba(142, 160, 0, .2); }
+
+.sport-guide-title { margin: 0 0 3px; font-size: 12px; font-weight: 800; letter-spacing: .7px; text-transform: uppercase; }
+.sport-basketball .sport-guide-title { color: #b85e00; }
+.sport-soccer .sport-guide-title { color: #136a24; }
+.sport-tennis .sport-guide-title { color: #627000; }
+.dark-mode.sport-basketball .sport-guide-title { color: #ff9a45; }
+.dark-mode.sport-soccer .sport-guide-title { color: #3fd468; }
+.dark-mode.sport-tennis .sport-guide-title { color: #c4da38; }
+
+.sport-guide-copy { margin: 0; font-size: 13px; line-height: 1.45; }
+.sport-basketball .sport-guide-copy { color: #8a5220; }
+.sport-soccer .sport-guide-copy { color: #145220; }
+.sport-tennis .sport-guide-copy { color: #556000; }
+.dark-mode .sport-guide-copy { color: #c8bfa0; }
+
+/* Sport-guide inner layout */
+.sport-guide-info { flex: 1; min-width: 0; }
+
+/* Sport switcher pills */
+.sport-switcher { display: flex; gap: 5px; flex: 0 0 auto; }
+.sport-switch-btn { width: 34px; height: 34px; border: 1.5px solid rgba(255,255,255,.65); border-radius: 10px; background: rgba(255,255,255,.45); font-size: 16px; line-height: 1; transition: background .18s, border-color .18s, transform .16s, box-shadow .18s; }
+.sport-switch-btn:hover { transform: scale(1.12); background: rgba(255,255,255,.72); }
+.sport-switch-btn.is-active { border-color: rgba(0,0,0,.18); background: rgba(255,255,255,.9); box-shadow: 0 2px 8px rgba(0,0,0,.14); transform: scale(1.08); }
+.dark-mode .sport-switch-btn { border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.1); }
+.dark-mode .sport-switch-btn:hover { background: rgba(255,255,255,.2); }
+.dark-mode .sport-switch-btn.is-active { border-color: rgba(255,255,255,.42); background: rgba(255,255,255,.22); box-shadow: 0 2px 8px rgba(0,0,0,.32); }
+
+/* ── Sport picker modal ─────────────────────────────────────────────────────── */
+.sport-picker { position: fixed; z-index: 150; inset: 0; display: flex; align-items: center; justify-content: center; }
+.sport-picker[hidden] { display: none; }
+.sport-picker-backdrop { position: absolute; inset: 0; background: rgba(10, 16, 28, .58); backdrop-filter: blur(10px) saturate(125%); -webkit-backdrop-filter: blur(10px) saturate(125%); }
+.sport-picker-panel { position: relative; z-index: 1; width: min(400px, calc(100vw - 40px)); padding: 28px 26px 24px; border: 1px solid rgba(255,255,255,.8); border-radius: 22px; background: rgba(255,255,255,.92); box-shadow: 0 32px 90px rgba(8,15,29,.28), inset 0 1px rgba(255,255,255,.96); backdrop-filter: blur(32px) saturate(155%); -webkit-backdrop-filter: blur(32px) saturate(155%); animation: tutorial-in .4s cubic-bezier(.2,.7,.2,1) both; }
+.dark-mode .sport-picker-panel { border-color: rgba(255,255,255,.15); background: rgba(20,28,44,.95); box-shadow: 0 32px 90px rgba(0,0,0,.58), inset 0 1px rgba(255,255,255,.12); }
+
+.sport-picker-title { margin: 0 0 5px; font-family: Manrope, sans-serif; font-size: 26px; letter-spacing: -.8px; }
+.sport-picker-sub { margin: 0 0 22px; color: var(--muted); font-size: 13px; }
+
+.sport-option-list { display: flex; flex-direction: column; gap: 9px; margin-bottom: 18px; }
+.sport-option { display: flex; align-items: center; gap: 14px; padding: 14px 15px; border: 1.5px solid var(--line); border-radius: 14px; color: var(--ink); background: rgba(255,255,255,.6); text-align: left; transition: border-color .18s, background .18s, transform .15s, box-shadow .18s; }
+.dark-mode .sport-option { background: rgba(255,255,255,.04); }
+.sport-option:hover { border-color: var(--blue); background: rgba(65,105,225,.06); transform: translateX(4px); box-shadow: 0 6px 22px rgba(65,105,225,.12); }
+.sport-option-emoji { font-size: 32px; line-height: 1; flex: 0 0 auto; }
+.sport-option-info { flex: 1 1 auto; min-width: 0; }
+.sport-option-name { display: block; font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+.sport-option-desc { display: block; color: var(--muted); font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sport-option-chevron { flex: 0 0 auto; color: var(--muted); font-size: 26px; font-weight: 300; line-height: 1; transition: transform .18s, color .18s; }
+.sport-option:hover .sport-option-chevron { color: var(--blue); transform: translateX(3px); }
+
+.sport-picker-cancel { width: 100%; border: 1.5px solid var(--line); border-radius: 11px; padding: 12px; color: var(--muted); background: transparent; font-size: 13px; font-weight: 700; transition: color .15s, border-color .15s, background .15s; }
+.sport-picker-cancel:hover { color: var(--ink); border-color: #9aa6b5; background: rgba(0,0,0,.03); }
+.dark-mode .sport-picker-cancel:hover { background: rgba(255,255,255,.06); }
+
+/* ── Sport mode grid & hidden elements ──────────────────────────────────────── */
+.sport-mode .counter-grid { grid-template-columns: repeat(2, 1fr); }
+.sport-mode #add-counter { display: none; }
+.sport-mode .counter-search { display: none; }
+@media (max-width: 500px) { .sport-mode .counter-grid { grid-template-columns: 1fr; } }
+
+/* ── Sport card ─────────────────────────────────────────────────────────────── */
+.sport-card { display: flex; flex-direction: column; min-height: 300px; }
+
+.sport-undo { width: 28px; height: 28px; border: 1px solid var(--line); border-radius: 8px; color: var(--muted); background: transparent; font-size: 13px; flex: 0 0 auto; transition: color .15s, background .15s, border-color .15s; }
+.sport-undo:hover { color: var(--ink); border-color: #9aa6b5; background: rgba(0,0,0,.05); }
+.dark-mode .sport-undo:hover { background: rgba(255,255,255,.09); }
+
+/* ── Sport score display ────────────────────────────────────────────────────── */
+.sport-score-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 14px 0 8px; }
+.sport-score { font-family: Manrope, sans-serif; font-size: 62px; letter-spacing: -4px; line-height: 1; transition: color .35s, transform .25s; }
+.sport-score-won .sport-score { letter-spacing: -3px; }
+.sport-basketball .sport-score-won .sport-score { color: #e07a2a; }
+.sport-soccer .sport-score-won .sport-score { color: #1e9e38; }
+.sport-tennis .sport-score-won .sport-score { color: #8ea000; }
+.dark-mode.sport-basketball .sport-score-won .sport-score { color: #ff9a45; }
+.dark-mode.sport-soccer .sport-score-won .sport-score { color: #3fd468; }
+.dark-mode.sport-tennis .sport-score-won .sport-score { color: #c4da38; }
+
+.sport-score-raw { margin-top: 4px; color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; }
+
+.sport-won-badge { display: block; margin: 0 auto 10px; padding: 4px 14px; border-radius: 20px; color: #fff; font-size: 11px; font-weight: 800; letter-spacing: .5px; text-align: center; animation: rise-in .4s cubic-bezier(.2,.7,.2,1) both; }
+.sport-basketball .sport-won-badge { background: linear-gradient(135deg, #e07a2a, #c96918); }
+.sport-soccer .sport-won-badge { background: linear-gradient(135deg, #1e9e38, #187d2d); }
+.sport-tennis .sport-won-badge { background: linear-gradient(135deg, #8ea000, #758600); }
+
+/* ── Sport action buttons ───────────────────────────────────────────────────── */
+.sport-actions { display: grid; gap: 8px; margin-top: auto; padding-top: 6px; }
+.sport-basketball .sport-actions { grid-template-columns: repeat(3, 1fr); }
+.sport-soccer .sport-actions { grid-template-columns: 1fr; }
+.sport-tennis .sport-actions { grid-template-columns: 1fr; }
+
+.sport-action { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; min-height: 52px; padding: 8px 4px; border-radius: 11px; font-size: 10px; cursor: pointer; transition: transform .15s, background .15s, box-shadow .15s, border-color .15s, opacity .15s; }
+.sport-action:hover:not(:disabled) { transform: translateY(-2px); }
+.sport-action:active:not(:disabled) { transform: scale(.94); }
+.sport-action:disabled { opacity: .32; cursor: not-allowed; transform: none !important; }
+
+/* Basketball orange action buttons */
+.sport-basketball .sport-action { border: 1.5px solid rgba(224, 122, 42, .28); color: #b85e00; background: rgba(224, 122, 42, .08); }
+.sport-basketball .sport-action:hover:not(:disabled) { background: rgba(224, 122, 42, .16); box-shadow: 0 6px 16px rgba(224, 122, 42, .2); border-color: rgba(224, 122, 42, .5); }
+.dark-mode .sport-basketball .sport-action { color: #ff9a45; border-color: rgba(255, 154, 69, .22); background: rgba(255, 154, 69, .08); }
+.dark-mode .sport-basketball .sport-action:hover:not(:disabled) { background: rgba(255, 154, 69, .16); border-color: rgba(255, 154, 69, .48); box-shadow: 0 6px 16px rgba(255, 154, 69, .18); }
+
+/* Soccer green action buttons */
+.sport-soccer .sport-action { border: 1.5px solid rgba(30, 158, 56, .28); color: #136a24; background: rgba(30, 158, 56, .08); min-height: 64px; }
+.sport-soccer .sport-action:hover:not(:disabled) { background: rgba(30, 158, 56, .16); box-shadow: 0 6px 16px rgba(30, 158, 56, .2); border-color: rgba(30, 158, 56, .5); }
+.dark-mode .sport-soccer .sport-action { color: #3fd468; border-color: rgba(63, 212, 104, .22); background: rgba(63, 212, 104, .08); }
+.dark-mode .sport-soccer .sport-action:hover:not(:disabled) { background: rgba(63, 212, 104, .16); border-color: rgba(63, 212, 104, .48); box-shadow: 0 6px 16px rgba(63, 212, 104, .18); }
+
+/* Tennis lime action buttons */
+.sport-tennis .sport-action { border: 1.5px solid rgba(142, 160, 0, .28); color: #627000; background: rgba(142, 160, 0, .08); min-height: 64px; }
+.sport-tennis .sport-action:hover:not(:disabled) { background: rgba(142, 160, 0, .16); box-shadow: 0 6px 16px rgba(142, 160, 0, .2); border-color: rgba(142, 160, 0, .5); }
+.dark-mode .sport-tennis .sport-action { color: #c4da38; border-color: rgba(196, 218, 56, .22); background: rgba(196, 218, 56, .08); }
+.dark-mode .sport-tennis .sport-action:hover:not(:disabled) { background: rgba(196, 218, 56, .16); border-color: rgba(196, 218, 56, .48); box-shadow: 0 6px 16px rgba(196, 218, 56, .18); }
+
+.sport-action-short { font-size: 12px; font-weight: 800; letter-spacing: .6px; }
+.sport-soccer .sport-action-short, .sport-tennis .sport-action-short { font-size: 15px; }
+.sport-action-pts { font-size: 9px; font-weight: 700; opacity: .7; }
+.sport-soccer .sport-action-pts, .sport-tennis .sport-action-pts { font-size: 11px; }
+
+/* Compact basketball buttons on narrow screens */
+@media (max-width: 600px) {
+  .sport-score { font-size: 50px; }
+  .sport-basketball .sport-action { min-height: 46px; }
+}
+@media (prefers-reduced-motion: reduce) { .sport-guide, .sport-won-badge { animation: none; } }
