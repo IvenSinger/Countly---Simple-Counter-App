@@ -252,9 +252,16 @@ function positionLanguageMenu() {
 }
 
 function applyHuntMode() {
-  ["hunt-yellow", "hunt-red", "hunt-blue", "hunt-green", "hunt-pink"].forEach(c => document.body.classList.remove(c));
+  ["hunt-yellow", "hunt-red", "hunt-blue", "hunt-green", "hunt-pink"].forEach(c => {
+    document.body.classList.remove(c);
+    document.documentElement.classList.remove(c);
+  });
   document.body.classList.toggle("hunt-mode", huntMode);
-  if (huntMode) document.body.classList.add(`hunt-${huntColor}`);
+  document.documentElement.classList.toggle("hunt-mode", huntMode);
+  if (huntMode) {
+    document.body.classList.add(`hunt-${huntColor}`);
+    document.documentElement.classList.add(`hunt-${huntColor}`);
+  }
 
   huntGuide.hidden = !huntMode;
   huntToggle.classList.toggle("is-active", huntMode);
@@ -384,8 +391,12 @@ function renderSport() {
 }
 
 function applySportMode() {
-  ["sport-basketball", "sport-soccer", "sport-tennis"].forEach(c => document.body.classList.remove(c));
+  ["sport-basketball", "sport-soccer", "sport-tennis"].forEach(c => {
+    document.body.classList.remove(c);
+    document.documentElement.classList.remove(c);
+  });
   document.body.classList.toggle("sport-mode", sportMode);
+  document.documentElement.classList.toggle("sport-mode", sportMode);
 
   const sportGuide  = document.querySelector("#sport-guide");
   const sportToggle = document.querySelector("#sport-toggle");
@@ -396,6 +407,7 @@ function applySportMode() {
 
   if (sportMode) {
     document.body.classList.add(`sport-${sportType}`);
+    document.documentElement.classList.add(`sport-${sportType}`);
     const config = SPORT_CONFIGS[sportType];
     document.querySelector("#sport-guide-icon").textContent  = config.emoji;
     document.querySelector("#sport-guide-title").textContent = config.name;
