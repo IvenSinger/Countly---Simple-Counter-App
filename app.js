@@ -973,6 +973,14 @@ redoTutorial.addEventListener("click", () => {
   tutorialIndex = 0;
   showTutorialStep();
 });
+document.querySelector(".brand").addEventListener("click", (e) => {
+  e.preventDefault();
+  if (sportMode) exitSportMode();
+  if (huntMode) exitHuntMode();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  tutorialIndex = 0;
+  showTutorialStep();
+});
 
 // ── About Modal ─────────────────────────────────────────────────────────────
 const aboutModal = document.querySelector("#about-modal");
