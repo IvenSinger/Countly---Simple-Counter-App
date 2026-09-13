@@ -417,7 +417,7 @@ html.dark-mode.sport-tennis .eyebrow { color: #c4da38; }
 .dark-mode .sport-picker-panel { border-color: var(--glass-border); background: rgba(28,28,30,.92); }
 .sport-picker-title { margin: 0 0 5px; font-size: 26px; font-weight: 700; letter-spacing: -.8px; }
 .sport-picker-sub { margin: 0 0 22px; color: var(--muted); font-size: 13px; }
-.sport-option-list { display: flex; flex-direction: column; gap: 9px; margin-bottom: 18px; }
+.sport-option-list { display: flex; flex-direction: column; gap: 9px; margin-bottom: 18px; max-height: 50vh; overflow-y: auto; overflow-x: hidden; padding-right: 4px; }
 .sport-option { display: flex; align-items: center; gap: 14px; padding: 14px 15px; border: .5px solid var(--glass-border); border-radius: var(--radius-lg); color: var(--ink); background: var(--glass-bg); box-shadow: var(--specular); text-align: left; transition: all .25s cubic-bezier(.2,.7,.35,1); }
 .dark-mode .sport-option { background: var(--glass-bg); }
 .sport-option:hover { border-color: var(--blue); background: rgba(0,122,255,.06); transform: translateX(4px); box-shadow: var(--specular), 0 6px 20px rgba(0,122,255,.1); }
