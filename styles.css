@@ -86,6 +86,10 @@ button { font: inherit; cursor: pointer; }
 .language-menu { position: fixed; z-index: 200; width: 200px; padding: 6px; border: .5px solid var(--glass-border); border-radius: var(--radius-lg); background: var(--glass-bg-elevated); box-shadow: var(--specular-strong), var(--glass-shadow-hover); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); animation: glass-in .25s cubic-bezier(.2,.7,.35,1) both; }
 .language-menu[hidden] { display: none; }
 .language-menu-title { margin: 6px 10px 4px; color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; }
+.language-search { width: 100%; padding: 8px 10px; margin-bottom: 6px; border: 1px solid var(--glass-border); border-radius: var(--radius-sm); background: rgba(0,0,0,.03); color: var(--ink); font-size: 13px; font-family: inherit; transition: all .2s; outline: none; box-sizing: border-box; }
+.language-search:focus { background: rgba(0,0,0,.06); border-color: rgba(0,122,255,.4); box-shadow: 0 0 0 2px rgba(0,122,255,.15); }
+.dark-mode .language-search { background: rgba(255,255,255,.05); }
+.dark-mode .language-search:focus { background: rgba(255,255,255,.1); border-color: rgba(10,132,255,.4); box-shadow: 0 0 0 2px rgba(10,132,255,.2); }
 .language-menu button { display: flex; align-items: center; justify-content: space-between; width: 100%; border: 0; border-radius: var(--radius-sm); padding: 10px 12px; color: var(--ink); background: transparent; font-size: 13px; text-align: left; transition: background .2s; }
 .language-menu button:hover { background: rgba(0,122,255,.08); }
 .language-menu button span { color: var(--blue); font-weight: 700; }

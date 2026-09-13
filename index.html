@@ -104,12 +104,13 @@
 
     <div class="language-menu" id="language-menu" hidden>
       <p class="language-menu-title" data-i18n="language">Language</p>
-      <button type="button" data-language="en">English <span>✓</span></button>
-      <button type="button" data-language="de">Deutsch <span></span></button>
-      <button type="button" data-language="es">Español <span></span></button>
-      <button type="button" data-language="zh">中文 · Mandarin <span></span></button>
-      <button type="button" data-language="hi">हिन्दी · Hindi <span></span></button>
-      <button type="button" data-language="it">Italiano · Italian <span></span></button>
+      <input type="search" id="language-search" class="language-search" placeholder="Search language..." aria-label="Search language" autocomplete="off">
+      <button type="button" data-language="en" data-search-terms="english en ingles englisch">English <span>✓</span></button>
+      <button type="button" data-language="de" data-search-terms="deutsch german de aleman tedeesco">Deutsch <span></span></button>
+      <button type="button" data-language="es" data-search-terms="español spanish es spanisch">Español <span></span></button>
+      <button type="button" data-language="zh" data-search-terms="中文 mandarin chinese zh chinesisch chino">中文 · Mandarin <span></span></button>
+      <button type="button" data-language="hi" data-search-terms="हिन्दी hindi hi indio">हिन्दी · Hindi <span></span></button>
+      <button type="button" data-language="it" data-search-terms="italiano italian it italienisch">Italiano · Italian <span></span></button>
     </div>
 
     <div class="tutorial-overlay" id="tutorial-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
