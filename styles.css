@@ -608,3 +608,37 @@ html.dark-mode body.skin-ocean .ambient-orb:nth-child(3) { background: #90e0ef; 
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* Dynamic Sea Creatures for Ocean Skin */
+.sea-creature-animated {
+  position: absolute;
+  top: 0;
+  will-change: transform;
+  pointer-events: none;
+  filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
+  z-index: 10;
+}
+.sea-creature-animated.swim-ltr {
+  left: 0;
+  animation: swim-ltr-anim var(--travel-time) linear both;
+}
+.sea-creature-animated.swim-rtl {
+  right: 0;
+  animation: swim-rtl-anim var(--travel-time) linear both;
+}
+
+@keyframes swim-ltr-anim {
+  0% { transform: translate(-10vw, var(--start-y)) scaleX(-1); }
+  25% { transform: translate(25vw, calc(var(--start-y) - 2vh)) scaleX(-1) rotate(5deg); }
+  50% { transform: translate(50vw, calc((var(--start-y) + var(--end-y)) / 2)) scaleX(-1) rotate(-5deg); }
+  75% { transform: translate(75vw, calc(var(--end-y) + 2vh)) scaleX(-1) rotate(5deg); }
+  100% { transform: translate(110vw, var(--end-y)) scaleX(-1); }
+}
+
+@keyframes swim-rtl-anim {
+  0% { transform: translate(10vw, var(--start-y)) scaleX(1); }
+  25% { transform: translate(-25vw, calc(var(--start-y) - 2vh)) scaleX(1) rotate(-5deg); }
+  50% { transform: translate(-50vw, calc((var(--start-y) + var(--end-y)) / 2)) scaleX(1) rotate(5deg); }
+  75% { transform: translate(-75vw, calc(var(--end-y) + 2vh)) scaleX(1) rotate(-5deg); }
+  100% { transform: translate(-110vw, var(--end-y)) scaleX(1); }
+}
