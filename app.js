@@ -217,8 +217,8 @@ function applyTheme(theme) {
 }
 
 function applySkin() {
-  document.body.classList.remove("skin-classic", "skin-glitch");
-  document.documentElement.classList.remove("skin-classic", "skin-glitch");
+  document.body.classList.remove("skin-classic", "skin-glitch", "skin-neon", "skin-ocean");
+  document.documentElement.classList.remove("skin-classic", "skin-glitch", "skin-neon", "skin-ocean");
   
   if (currentSkin !== "default") {
     document.body.classList.add(`skin-${currentSkin}`);

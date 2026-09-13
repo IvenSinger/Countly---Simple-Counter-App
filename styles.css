@@ -608,3 +608,23 @@ html.dark-mode body.skin-ocean .ambient-orb:nth-child(3) { background: #90e0ef; 
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* Sea creatures for ocean skin */
+.sea-creatures { display: none; position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+html.skin-ocean .sea-creatures { display: block; }
+.sea-creature { position: absolute; font-size: 2rem; opacity: 0.6; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2)); }
+.sea-creature:nth-child(1) { top: 15%; animation: swim-right 25s linear infinite; }
+.sea-creature:nth-child(2) { top: 45%; animation: swim-left 30s linear infinite -5s; }
+.sea-creature:nth-child(3) { top: 75%; animation: swim-right 20s linear infinite -10s; font-size: 1.5rem; }
+.sea-creature:nth-child(4) { top: 85%; animation: swim-left 35s linear infinite -2s; font-size: 2.5rem; opacity: 0.8; }
+.sea-creature:nth-child(5) { top: 25%; animation: swim-right 28s linear infinite -15s; font-size: 3rem; }
+.sea-creature:nth-child(6) { top: 60%; animation: swim-left 40s linear infinite -8s; font-size: 4rem; opacity: 0.4; }
+
+@keyframes swim-right {
+  0% { transform: translateX(-15vw) scaleX(-1); }
+  100% { transform: translateX(115vw) scaleX(-1); }
+}
+@keyframes swim-left {
+  0% { transform: translateX(115vw) scaleX(1); }
+  100% { transform: translateX(-15vw) scaleX(1); }
+}
