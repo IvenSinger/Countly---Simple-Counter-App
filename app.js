@@ -232,8 +232,8 @@ function applyTheme(theme) {
 }
 
 function applySkin() {
-  document.body.classList.remove("skin-classic", "skin-glitch", "skin-neon", "skin-ocean");
-  document.documentElement.classList.remove("skin-classic", "skin-glitch", "skin-neon", "skin-ocean");
+  document.body.classList.remove("skin-classic", "skin-glitch", "skin-neon", "skin-ocean", "skin-nature", "skin-sunset", "skin-space", "skin-minimal", "skin-retro");
+  document.documentElement.classList.remove("skin-classic", "skin-glitch", "skin-neon", "skin-ocean", "skin-nature", "skin-sunset", "skin-space", "skin-minimal", "skin-retro");
   
   if (currentSkin !== "default") {
     document.body.classList.add(`skin-${currentSkin}`);
@@ -244,6 +244,12 @@ function applySkin() {
     startOceanAnimation();
   } else {
     stopOceanAnimation();
+  }
+
+  if (currentSkin === "space") {
+    startSpaceAnimation();
+  } else {
+    stopSpaceAnimation();
   }
   
   const dark = document.body.classList.contains("dark-mode");
@@ -866,6 +872,48 @@ function stopOceanAnimation() {
     oceanInterval = null;
   }
   document.querySelectorAll(".sea-creature-animated").forEach(el => el.remove());
+}
+
+let spaceInterval;
+const spaceStars = ["✨", "🌟", "💫", "⭐"];
+
+function spawnSpaceStar() {
+  if (document.hidden || currentSkin !== "space") return;
+  const star = document.createElement("div");
+  star.className = "space-star float-anim";
+  star.textContent = spaceStars[Math.floor(Math.random() * spaceStars.length)];
+  
+  const startX = Math.random() * 100;
+  const driftX = (Math.random() - 0.5) * 20;
+  const travelTime = 10 + Math.random() * 20;
+  const size = 1 + Math.random() * 1.5;
+  const maxOpacity = 0.3 + Math.random() * 0.5;
+  
+  star.style.setProperty("--start-x", `${startX}vw`);
+  star.style.setProperty("--drift-x", `${driftX}vw`);
+  star.style.setProperty("--travel-time", `${travelTime}s`);
+  star.style.setProperty("--max-opacity", maxOpacity);
+  star.style.fontSize = `${size}rem`;
+  
+  const ambientScene = document.querySelector(".ambient-scene");
+  if (ambientScene) ambientScene.appendChild(star);
+  
+  star.addEventListener("animationend", () => star.remove());
+}
+
+function startSpaceAnimation() {
+  if (!spaceInterval) {
+    for(let i = 0; i < 6; i++) setTimeout(spawnSpaceStar, Math.random() * 3000);
+    spaceInterval = setInterval(spawnSpaceStar, 2000);
+  }
+}
+
+function stopSpaceAnimation() {
+  if (spaceInterval) {
+    clearInterval(spaceInterval);
+    spaceInterval = null;
+  }
+  document.querySelectorAll(".space-star").forEach(el => el.remove());
 }
 
 requestAnimationFrame(() => {
