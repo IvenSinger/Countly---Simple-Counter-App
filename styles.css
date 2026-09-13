@@ -487,3 +487,74 @@ body.dark-mode.sport-tennis .eyebrow { color: #c4da38; }
   .sport-basketball .sport-action { min-height: 46px; }
 }
 @media (prefers-reduced-motion: reduce) { .sport-guide, .sport-won-badge { animation: none; } }
+
+/* ── Skin: Classic ───────────────────────────────────────────────────────── */
+body.skin-classic {
+  --glass-bg: #ffffff;
+  --glass-bg-elevated: #ffffff;
+  --glass-border: rgba(0,0,0,0.1);
+  --glass-border-subtle: rgba(0,0,0,0.05);
+  --glass-blur: none;
+  --specular: 0 4px 12px rgba(0,0,0,0.08);
+  --specular-strong: 0 8px 24px rgba(0,0,0,0.12);
+  --inner-depth: none;
+}
+body.skin-classic.dark-mode {
+  --glass-bg: #1c1c1e;
+  --glass-bg-elevated: #2c2c2e;
+  --glass-border: rgba(255,255,255,0.1);
+  --glass-border-subtle: rgba(255,255,255,0.05);
+  --specular: 0 4px 12px rgba(0,0,0,0.5);
+  --specular-strong: 0 8px 24px rgba(0,0,0,0.8);
+}
+body.skin-classic .ambient-scene, body.skin-classic .vehicle-layer { display: none; }
+body.skin-classic .app-shell, body.skin-classic .counter-card, body.skin-classic .sport-picker-panel, body.skin-classic .tutorial-card {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-radius: 8px;
+}
+
+/* ── Skin: Glitch ────────────────────────────────────────────────────────── */
+body.skin-glitch {
+  --blue: #00ffcc;
+  --blue-dark: #ff00ff;
+  --glass-bg: rgba(10, 10, 20, 0.7);
+  --glass-bg-elevated: rgba(20, 20, 35, 0.85);
+  --glass-border: rgba(0, 255, 204, 0.5);
+  --specular: -2px 0 #ff00ff, 2px 0 #00ffcc;
+  font-family: 'Courier New', Courier, monospace, sans-serif;
+  background: #000;
+}
+body.skin-glitch .ambient-scene {
+  animation: glitch-color 2s infinite linear alternate;
+}
+body.skin-glitch .counter-card, body.skin-glitch .hero h1 {
+  animation: glitch-skew 3s infinite linear alternate-reverse;
+}
+body.skin-glitch .count-value {
+  text-shadow: -2px 0 #ff00ff, 2px 0 #00ffcc;
+}
+body.skin-glitch button {
+  border-radius: 0;
+  border: 1px solid var(--blue);
+}
+body.skin-glitch .add-button {
+  background: transparent;
+  color: var(--blue);
+}
+
+@keyframes glitch-color {
+  0% { filter: hue-rotate(0deg) saturate(200%) contrast(150%); }
+  50% { filter: hue-rotate(180deg) saturate(300%) contrast(100%); }
+  100% { filter: hue-rotate(360deg) saturate(200%) contrast(200%); }
+}
+
+@keyframes glitch-skew {
+  0% { transform: skew(0deg, 0deg); }
+  5% { transform: skew(2deg, -2deg); }
+  10% { transform: skew(0deg, 0deg); }
+  40% { transform: skew(0deg, 0deg); }
+  45% { transform: skew(-3deg, 1deg); filter: invert(0.1); }
+  50% { transform: skew(0deg, 0deg); filter: invert(0); }
+  100% { transform: skew(0deg, 0deg); }
+}
