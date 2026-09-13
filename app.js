@@ -729,6 +729,18 @@ redoTutorial.addEventListener("click", () => {
   tutorialIndex = 0;
   showTutorialStep();
 });
+
+// ── About Modal ─────────────────────────────────────────────────────────────
+const aboutModal = document.querySelector("#about-modal");
+document.querySelector("#about-button").addEventListener("click", () => {
+  aboutModal.hidden = false;
+});
+document.querySelector("#close-about").addEventListener("click", () => {
+  aboutModal.hidden = true;
+});
+document.querySelector("#about-backdrop").addEventListener("click", () => {
+  aboutModal.hidden = true;
+});
 window.addEventListener("resize", () => { if (!tutorialOverlay.hidden) positionTutorial(); if (!languageMenu.hidden) positionLanguageMenu(); });
 window.addEventListener("scroll", () => { if (!tutorialOverlay.hidden) positionTutorial(); }, { passive: true });
 languageToggle.addEventListener("click", () => toggleLanguageMenu());
