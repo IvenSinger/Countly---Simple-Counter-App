@@ -511,26 +511,116 @@ function showTutorialStep() {
 }
 
 function launchConfetti() {
-  const colors = ["#4169e1", "#ffd24d", "#ff9d72", "#8ed1c4", "#b79aff"];
-  const release = (side) => {
-    for (let index = 0; index < 32; index += 1) {
-      const piece = document.createElement("span");
-      piece.className = `confetti-piece confetti-${side}`;
-      piece.style.left = side === "left" ? `${Math.random() * 10}vw` : `${90 + Math.random() * 10}vw`;
-      piece.style.top = `${86 + Math.random() * 14}vh`;
-      piece.style.background = colors[index % colors.length];
-      piece.style.animationDelay = `${(Math.random() * .22).toFixed(2)}s`;
-      piece.style.animationDuration = `${(1.6 + Math.random() * 1.3).toFixed(2)}s`;
-      const drift = Math.round(90 + Math.random() * 230) * (side === "left" ? 1 : -1);
-      piece.style.setProperty("--drift", `${drift}px`);
-      piece.style.setProperty("--mid-drift", `${Math.round(drift * .45)}px`);
-      piece.style.setProperty("--spin", `${Math.round(240 + Math.random() * 600)}deg`);
-      document.body.appendChild(piece);
-      piece.addEventListener("animationend", () => piece.remove());
+  const canvas = document.createElement("canvas");
+  canvas.style.cssText = "position:fixed;inset:0;z-index:120;pointer-events:none;";
+  canvas.width = window.innerWidth * devicePixelRatio;
+  canvas.height = window.innerHeight * devicePixelRatio;
+  canvas.style.width = "100vw";
+  canvas.style.height = "100vh";
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext("2d");
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+
+  const W = window.innerWidth;
+  const H = window.innerHeight;
+  const colors = [
+    "#4169e1", "#ffd24d", "#ff9d72", "#8ed1c4", "#b79aff",
+    "#ff6b8a", "#47d7ac", "#f9a03f", "#a78bfa", "#34d399"
+  ];
+  const PARTICLE_COUNT = 120;
+  const GRAVITY = 520;       // px/s²
+  const DRAG = 0.97;
+  const WIND = 18;           // gentle horizontal drift (px/s)
+  const particles = [];
+
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    const angle = -Math.PI / 2 + (Math.random() - 0.5) * 1.6; // fan upward ±~46°
+    const speed = 420 + Math.random() * 560;
+    const side = Math.random() < 0.5 ? -1 : 1;
+    const originX = W / 2 + side * (Math.random() * W * 0.32);
+    const originY = H * 0.92 + Math.random() * H * 0.08;      // bottom region
+    particles.push({
+      x: originX,
+      y: originY,
+      vx: Math.cos(angle) * speed * (Math.random() < 0.5 ? 1 : -1),
+      vy: Math.sin(angle) * speed,
+      color: colors[i % colors.length],
+      w: 5 + Math.random() * 6,
+      h: 7 + Math.random() * 9,
+      shape: Math.random() < 0.45 ? "rect" : Math.random() < 0.6 ? "circle" : "ribbon",
+      rotation: Math.random() * Math.PI * 2,
+      spin: (2 + Math.random() * 8) * (Math.random() < 0.5 ? 1 : -1),
+      wobblePhase: Math.random() * Math.PI * 2,
+      wobbleSpeed: 2 + Math.random() * 4,
+      opacity: 1,
+      life: 2.4 + Math.random() * 1.8, // seconds before fading
+      age: -Math.random() * 0.25,       // stagger start
+    });
+  }
+
+  let lastTime = performance.now();
+  let running = true;
+
+  function tick(now) {
+    if (!running) return;
+    const dt = Math.min((now - lastTime) / 1000, 0.05);
+    lastTime = now;
+
+    ctx.clearRect(0, 0, W, H);
+    let alive = 0;
+
+    for (const p of particles) {
+      p.age += dt;
+      if (p.age < 0) { alive++; continue; } // still staggering
+
+      // physics
+      p.vy += GRAVITY * dt;
+      p.vx += WIND * Math.sin(p.wobblePhase + p.age * p.wobbleSpeed) * dt;
+      p.vx *= DRAG;
+      p.vy *= DRAG;
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+      p.rotation += p.spin * dt;
+
+      // fade out near end of life
+      const fadeStart = p.life * 0.65;
+      if (p.age > fadeStart) {
+        p.opacity = Math.max(0, 1 - (p.age - fadeStart) / (p.life * 0.35));
+      }
+
+      if (p.opacity <= 0 || p.y > H + 60) continue;
+      alive++;
+
+      ctx.save();
+      ctx.globalAlpha = p.opacity;
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rotation);
+      // 3D-ish wobble: scale X by a sine wave
+      const scaleX = 0.4 + 0.6 * Math.abs(Math.cos(p.age * p.wobbleSpeed + p.wobblePhase));
+      ctx.scale(scaleX, 1);
+      ctx.fillStyle = p.color;
+
+      if (p.shape === "circle") {
+        ctx.beginPath();
+        ctx.arc(0, 0, p.w / 2, 0, Math.PI * 2);
+        ctx.fill();
+      } else if (p.shape === "ribbon") {
+        ctx.fillRect(-p.w * 0.5, -p.h * 0.8, p.w * 0.6, p.h * 1.6);
+      } else {
+        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      }
+      ctx.restore();
     }
-  };
-  release("left");
-  setTimeout(() => release("right"), 360);
+
+    if (alive > 0) {
+      requestAnimationFrame(tick);
+    } else {
+      canvas.remove();
+      running = false;
+    }
+  }
+
+  requestAnimationFrame(tick);
 }
 
 function closeTutorial(completed = false) {
