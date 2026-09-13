@@ -217,8 +217,8 @@ function applyTheme(theme) {
 }
 
 function applySkin() {
-  document.body.classList.remove("skin-classic", "skin-glitch");
-  document.documentElement.classList.remove("skin-classic", "skin-glitch");
+  document.body.classList.remove("skin-classic", "skin-glitch", "skin-neon", "skin-ocean");
+  document.documentElement.classList.remove("skin-classic", "skin-glitch", "skin-neon", "skin-ocean");
   
   if (currentSkin !== "default") {
     document.body.classList.add(`skin-${currentSkin}`);
@@ -807,6 +807,52 @@ applyHuntMode();
     render();
   }
 })();
+
+// ── Ocean Skin Animation ──────────────────────────────────────────────────────
+let oceanInterval = null;
+const seaEmojis = ["🐟", "🐠", "🐡", "🐢", "🐬", "🐙", "🦀", "🦑"];
+
+function spawnSeaCreature() {
+  if (document.hidden || currentSkin !== "ocean") return;
+  const creature = document.createElement("div");
+  creature.className = "sea-creature-animated";
+  creature.textContent = seaEmojis[Math.floor(Math.random() * seaEmojis.length)];
+  
+  const isRightToLeft = Math.random() > 0.5;
+  const startY = 10 + Math.random() * 80;
+  const endY = startY + (Math.random() * 40 - 20);
+  const travelTime = 15 + Math.random() * 15;
+  const size = 2 + Math.random() * 3;
+  
+  creature.style.setProperty("--start-y", `${startY}vh`);
+  creature.style.setProperty("--end-y", `${endY}vh`);
+  creature.style.setProperty("--travel-time", `${travelTime}s`);
+  creature.style.fontSize = `${size}rem`;
+  creature.style.opacity = 0.4 + Math.random() * 0.4;
+  
+  creature.classList.add(isRightToLeft ? "swim-rtl" : "swim-ltr");
+  
+  const ambientScene = document.querySelector(".ambient-scene");
+  if (ambientScene) ambientScene.appendChild(creature);
+  
+  creature.addEventListener("animationend", () => creature.remove());
+}
+
+function startOceanAnimation() {
+  if (!oceanInterval) {
+    for(let i = 0; i < 4; i++) setTimeout(spawnSeaCreature, Math.random() * 2000);
+    oceanInterval = setInterval(spawnSeaCreature, 4000);
+  }
+}
+
+function stopOceanAnimation() {
+  if (oceanInterval) {
+    clearInterval(oceanInterval);
+    oceanInterval = null;
+  }
+  document.querySelectorAll(".sea-creature-animated").forEach(el => el.remove());
+}
+
 requestAnimationFrame(() => {
   document.body.classList.add("app-ready");
   if (!localStorage.getItem(TUTORIAL_KEY)) setTimeout(showTutorialStep, 760);
