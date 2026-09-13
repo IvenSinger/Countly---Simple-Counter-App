@@ -383,6 +383,14 @@ html.dark-mode.sport-tennis .eyebrow { color: #c4da38; }
 .dark-mode .sport-switch-btn:hover { background: var(--glass-bg-elevated); }
 .dark-mode .sport-switch-btn.is-active { border-color: rgba(255,255,255,.25); box-shadow: var(--specular), 0 2px 8px rgba(0,0,0,.2); }
 
+/* ── Picker Tutorial Card ─────────────────────────────────────────────────── */
+.picker-tutorial-card { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px; padding: 16px; border: .5px solid var(--glass-border); border-radius: var(--radius-lg); background: var(--glass-bg); box-shadow: var(--specular), var(--inner-depth), var(--glass-shadow); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); animation: fade-in .4s ease-out; }
+.picker-tutorial-icon { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; font-size: 20px; border-radius: 50%; background: rgba(0,122,255,.1); border: .5px solid rgba(0,122,255,.2); color: var(--blue-dark); }
+.picker-tutorial-text { flex: 1 1 auto; }
+.picker-tutorial-title { display: block; margin-bottom: 4px; font-size: 14px; font-weight: 700; color: var(--ink); letter-spacing: -.2px; }
+.picker-tutorial-copy { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.4; }
+.dark-mode .picker-tutorial-card { background: rgba(30,30,30,.4); border-color: rgba(255,255,255,.1); }
+
 /* ── Sport picker modal ────────────────────────────────────────────────────── */
 .sport-picker { position: fixed; z-index: 150; inset: 0; display: flex; align-items: center; justify-content: center; }
 .sport-picker[hidden] { display: none; }
