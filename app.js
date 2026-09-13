@@ -1,6 +1,7 @@
 const STORAGE_KEY = "countly-counters";
 const HUNT_COUNTERS_KEY = "countly-yellow-hunt-counters";
 const THEME_KEY = "countly-theme";
+const SKIN_KEY = "countly-skin";
 const HUNT_KEY = "countly-yellow-hunt";
 const HUNT_COLOR_KEY = "countly-hunt-color";
 const TUTORIAL_KEY = "countly-tutorial-seen";
@@ -138,6 +139,7 @@ const legacyCounters = readCounters(STORAGE_KEY);
 const savedHuntCounters = readCounters(HUNT_COUNTERS_KEY);
 let huntMode = localStorage.getItem(HUNT_KEY) === "true";
 let huntColor = localStorage.getItem(HUNT_COLOR_KEY) || "yellow";
+let currentSkin = localStorage.getItem(SKIN_KEY) || "default";
 let counters = huntMode
   ? savedHuntCounters ?? (isYellowHuntCounters(legacyCounters) ? legacyCounters : createYellowHuntCounters())
   : (isYellowHuntCounters(legacyCounters) ? starterCounters : legacyCounters ?? starterCounters);
@@ -177,6 +179,13 @@ function applyTheme(theme) {
   document.body.classList.toggle("dark-mode", dark);
   themeToggle.title = dark ? t("lightMode") : t("darkMode");
   themeToggle.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
+}
+
+function applySkin() {
+  document.body.classList.remove("skin-classic", "skin-glitch");
+  if (currentSkin !== "default") {
+    document.body.classList.add(`skin-${currentSkin}`);
+  }
 }
 
 function applyLanguage(language) {
@@ -747,6 +756,24 @@ languageToggle.addEventListener("click", () => toggleLanguageMenu());
 languageChoices.forEach((choice) => choice.addEventListener("click", () => { applyLanguage(choice.dataset.language); toggleLanguageMenu(false); }));
 document.addEventListener("click", (event) => { if (!event.target.closest(".language-picker, #language-menu")) toggleLanguageMenu(false); });
 applyLanguage(localStorage.getItem(LANGUAGE_KEY) || "en");
+applySkin();
+
+// ── Skin Picker event listeners ───────────────────────────────────────────────
+const skinPicker = document.querySelector("#skin-picker");
+function openSkinPicker() { skinPicker.hidden = false; }
+function closeSkinPicker() { skinPicker.hidden = true; }
+
+document.querySelector("#skin-toggle").addEventListener("click", openSkinPicker);
+document.querySelector("#skin-picker-cancel").addEventListener("click", closeSkinPicker);
+document.querySelector("#skin-picker-backdrop").addEventListener("click", closeSkinPicker);
+document.querySelectorAll(".sport-option[data-skin]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    currentSkin = btn.dataset.skin;
+    localStorage.setItem(SKIN_KEY, currentSkin);
+    applySkin();
+    closeSkinPicker();
+  });
+});
 
 // ── Sport mode event listeners ────────────────────────────────────────────────
 document.querySelector("#sport-toggle").addEventListener("click", () => {
