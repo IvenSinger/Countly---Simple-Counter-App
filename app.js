@@ -250,7 +250,7 @@ function applyLanguage(language) {
   languageChoices.forEach((choice) => { choice.querySelector("span").textContent = choice.dataset.language === selected ? "✓" : ""; });
   document.querySelectorAll("[data-i18n]").forEach((element) => {
     const value = t(element.dataset.i18n);
-    if (element.dataset.i18n === "guideCopy") element.innerHTML = value;
+    if (element.dataset.i18n === "guideCopy" || element.dataset.i18n === "aboutDesc") element.innerHTML = value;
     else element.textContent = value;
   });
   document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => { element.placeholder = t(element.dataset.i18nPlaceholder); });
