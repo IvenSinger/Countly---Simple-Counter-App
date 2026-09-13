@@ -191,23 +191,46 @@ footer span { padding: 0 2px; color: var(--muted); opacity: .5; }
    ═══════════════════════════════════════════════════════════════════════════════ */
 .hunt-toggle { position: relative; font-size: 21px; filter: grayscale(.15); transition: all .3s cubic-bezier(.2,.7,.35,1); }
 .hunt-toggle:hover { transform: rotate(-8deg) scale(1.08); filter: grayscale(0); }
-.hunt-toggle.is-active { filter: drop-shadow(0 0 8px rgba(255,193,54,.7)); }
-.yellow-hunt { --blue: #e4a900; --blue-dark: #c98f00; --glass-bg: rgba(255,248,220,.2); --glass-bg-elevated: rgba(255,248,220,.32); --glass-border: rgba(255,220,120,.35); --glass-border-subtle: rgba(255,220,120,.2); }
-.yellow-hunt .ambient-scene { filter: saturate(130%); }
-.yellow-hunt .orb-blue { background: #fff0a0; }
-.yellow-hunt .orb-lilac { background: #ffe39a; }
-.yellow-hunt .orb-peach { background: #ffd070; }
-.yellow-hunt .eyebrow { color: #d59a00; }
-.yellow-hunt .hero h1 { letter-spacing: -2px; }
-.yellow-hunt .step-button { color: #b77e00; }
-.yellow-hunt .step-button:hover { background: rgba(255,235,157,.35); }
-.dark-mode.yellow-hunt { --blue: #ffd24d; --blue-dark: #ffe07a; --glass-bg: rgba(120,90,20,.12); --glass-bg-elevated: rgba(120,90,20,.2); --glass-border: rgba(255,211,70,.15); --glass-border-subtle: rgba(255,211,70,.1); background: radial-gradient(ellipse at 15% 5%, #332810 0, transparent 40%), radial-gradient(ellipse at 85% 35%, #3a2a0e 0, transparent 35%), radial-gradient(ellipse at 50% 100%, #2e1f08 0, var(--soft) 40%); }
-.dark-mode.yellow-hunt .orb-blue { background: #ffd84d; }
-.dark-mode.yellow-hunt .orb-lilac { background: #ffa928; }
-.dark-mode.yellow-hunt .orb-peach { background: #ffcf5b; }
-.dark-mode.yellow-hunt .eyebrow { color: #ffd24d; }
-.dark-mode.yellow-hunt .step-button { color: #ffd24d; }
-.dark-mode.yellow-hunt .step-button:hover { background: rgba(107,78,20,.5); }
+.hunt-toggle.is-active { filter: drop-shadow(0 0 8px var(--blue)); }
+/* Base Hunt Mode (Yellow by default) */
+.hunt-mode { --blue: #e4a900; --blue-dark: #c98f00; --glass-bg: rgba(255,248,220,.2); --glass-bg-elevated: rgba(255,248,220,.32); --glass-border: rgba(255,220,120,.35); --glass-border-subtle: rgba(255,220,120,.2); }
+.hunt-mode .ambient-scene { filter: saturate(130%); }
+.hunt-mode .orb-blue { background: #fff0a0; }
+.hunt-mode .orb-lilac { background: #ffe39a; }
+.hunt-mode .orb-peach { background: #ffd070; }
+.hunt-mode .eyebrow { color: var(--blue); }
+.hunt-mode .hero h1 { letter-spacing: -2px; }
+.hunt-mode .step-button { color: var(--blue); }
+.hunt-mode .step-button:hover { background: var(--glass-bg-elevated); }
+
+.dark-mode.hunt-mode { --blue: #ffd24d; --blue-dark: #ffe07a; --glass-bg: rgba(120,90,20,.12); --glass-bg-elevated: rgba(120,90,20,.2); --glass-border: rgba(255,211,70,.15); --glass-border-subtle: rgba(255,211,70,.1); background: radial-gradient(ellipse at 15% 5%, #332810 0, transparent 40%), radial-gradient(ellipse at 85% 35%, #3a2a0e 0, transparent 35%), radial-gradient(ellipse at 50% 100%, #2e1f08 0, var(--soft) 40%); }
+.dark-mode.hunt-mode .orb-blue { background: #ffd84d; }
+.dark-mode.hunt-mode .orb-lilac { background: #ffa928; }
+.dark-mode.hunt-mode .orb-peach { background: #ffcf5b; }
+
+/* Hunt Color Variants */
+.hunt-red { --blue: #e03c3c; --blue-dark: #b92b2b; --glass-bg: rgba(255,230,230,.2); --glass-bg-elevated: rgba(255,230,230,.32); --glass-border: rgba(255,120,120,.35); --glass-border-subtle: rgba(255,120,120,.2); }
+.hunt-red .ambient-scene { filter: saturate(140%) hue-rotate(-60deg); }
+.dark-mode.hunt-red { --blue: #ff6b6b; --blue-dark: #ff8e8e; --glass-bg: rgba(120,30,30,.12); --glass-bg-elevated: rgba(120,30,30,.2); --glass-border: rgba(255,100,100,.15); --glass-border-subtle: rgba(255,100,100,.1); background: radial-gradient(ellipse at 15% 5%, #331010 0, transparent 40%), radial-gradient(ellipse at 85% 35%, #3a0e0e 0, transparent 35%), radial-gradient(ellipse at 50% 100%, #2e0808 0, var(--soft) 40%); }
+
+.hunt-blue { --blue: #007aff; --blue-dark: #005bb5; --glass-bg: rgba(230,240,255,.2); --glass-bg-elevated: rgba(230,240,255,.32); --glass-border: rgba(120,180,255,.35); --glass-border-subtle: rgba(120,180,255,.2); }
+.hunt-blue .ambient-scene { filter: saturate(110%) hue-rotate(180deg); }
+.dark-mode.hunt-blue { --blue: #4d9fff; --blue-dark: #7abaff; --glass-bg: rgba(20,60,120,.12); --glass-bg-elevated: rgba(20,60,120,.2); --glass-border: rgba(70,150,255,.15); --glass-border-subtle: rgba(70,150,255,.1); background: radial-gradient(ellipse at 15% 5%, #102033 0, transparent 40%), radial-gradient(ellipse at 85% 35%, #0e1e3a 0, transparent 35%), radial-gradient(ellipse at 50% 100%, #08122e 0, var(--soft) 40%); }
+
+.hunt-green { --blue: #34c759; --blue-dark: #248a3d; --glass-bg: rgba(235,255,240,.2); --glass-bg-elevated: rgba(235,255,240,.32); --glass-border: rgba(130,255,160,.35); --glass-border-subtle: rgba(130,255,160,.2); }
+.hunt-green .ambient-scene { filter: saturate(120%) hue-rotate(60deg); }
+.dark-mode.hunt-green { --blue: #30d158; --blue-dark: #5ee07e; --glass-bg: rgba(20,90,40,.12); --glass-bg-elevated: rgba(20,90,40,.2); --glass-border: rgba(70,220,100,.15); --glass-border-subtle: rgba(70,220,100,.1); background: radial-gradient(ellipse at 15% 5%, #10331a 0, transparent 40%), radial-gradient(ellipse at 85% 35%, #0e3a18 0, transparent 35%), radial-gradient(ellipse at 50% 100%, #082e14 0, var(--soft) 40%); }
+
+.hunt-pink { --blue: #ff2d55; --blue-dark: #cc2444; --glass-bg: rgba(255,230,240,.2); --glass-bg-elevated: rgba(255,230,240,.32); --glass-border: rgba(255,120,160,.35); --glass-border-subtle: rgba(255,120,160,.2); }
+.hunt-pink .ambient-scene { filter: saturate(130%) hue-rotate(240deg); }
+.dark-mode.hunt-pink { --blue: #ff375f; --blue-dark: #ff6b8b; --glass-bg: rgba(120,20,50,.12); --glass-bg-elevated: rgba(120,20,50,.2); --glass-border: rgba(255,70,120,.15); --glass-border-subtle: rgba(255,70,120,.1); background: radial-gradient(ellipse at 15% 5%, #33101c 0, transparent 40%), radial-gradient(ellipse at 85% 35%, #3a0e1b 0, transparent 35%), radial-gradient(ellipse at 50% 100%, #2e0814 0, var(--soft) 40%); }
+
+/* Vehicle Color Rotations */
+.hunt-red .passing-vehicle { filter: hue-rotate(-60deg) saturate(1.5); }
+.hunt-blue .passing-vehicle { filter: hue-rotate(180deg) saturate(1.2); }
+.hunt-green .passing-vehicle { filter: hue-rotate(60deg) saturate(1.2); }
+.hunt-pink .passing-vehicle { filter: hue-rotate(240deg) saturate(1.5); }
+
 
 /* ── Hunt actions & guide ──────────────────────────────────────────────────── */
 .hunt-actions { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 16px; }
@@ -247,14 +270,14 @@ footer span { padding: 0 2px; color: var(--muted); opacity: .5; }
 .tutorial-overlay[hidden] { display: none; }
 .tutorial-spotlight { position: fixed; border: 1px solid rgba(0,122,255,.75); border-radius: var(--radius-md); box-shadow: 0 0 0 9999px rgba(0,0,0,.48), 0 0 0 4px rgba(0,122,255,.1), 0 0 28px rgba(0,122,255,.2); pointer-events: none; transition: left .35s ease, top .35s ease, width .35s ease, height .35s ease; }
 .dark-mode .tutorial-spotlight { border-color: rgba(10,132,255,.85); box-shadow: 0 0 0 9999px rgba(0,0,0,.65), 0 0 0 4px rgba(10,132,255,.1), 0 0 28px rgba(10,132,255,.25); }
-.yellow-hunt .tutorial-spotlight { border-color: rgba(255,211,70,.9); box-shadow: 0 0 0 9999px rgba(0,0,0,.48), 0 0 0 4px rgba(255,211,70,.12), 0 0 28px rgba(255,211,70,.3); }
-.dark-mode.yellow-hunt .tutorial-spotlight { box-shadow: 0 0 0 9999px rgba(0,0,0,.65), 0 0 0 4px rgba(255,211,70,.12), 0 0 28px rgba(255,211,70,.35); }
+.hunt-mode .tutorial-spotlight { border-color: var(--blue); box-shadow: 0 0 0 9999px rgba(0,0,0,.48), 0 0 0 4px var(--glass-border-subtle), 0 0 28px var(--glass-border); }
+.dark-mode.hunt-mode .tutorial-spotlight { box-shadow: 0 0 0 9999px rgba(0,0,0,.65), 0 0 0 4px var(--glass-border-subtle), 0 0 28px var(--glass-border); }
 .tutorial-arrow { position: fixed; z-index: 1; height: 2px; border-radius: 3px; background: linear-gradient(90deg, rgba(255,255,255,.12), rgba(0,122,255,.85)); transform-origin: left center; pointer-events: none; transition: left .35s ease, top .35s ease, width .35s ease, transform .35s ease; }
 .tutorial-arrow::after { position: absolute; top: 50%; right: -1px; width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 8px solid #007AFF; content: ""; transform: translateY(-50%); }
 .dark-mode .tutorial-arrow { background: linear-gradient(90deg, rgba(255,255,255,.08), rgba(10,132,255,.85)); }
 .dark-mode .tutorial-arrow::after { border-left-color: #0A84FF; }
-.yellow-hunt .tutorial-arrow { background: linear-gradient(90deg, rgba(255,255,255,.12), rgba(255,211,70,.9)); }
-.yellow-hunt .tutorial-arrow::after { border-left-color: #ffd34a; }
+.hunt-mode .tutorial-arrow { background: linear-gradient(90deg, rgba(255,255,255,.12), var(--blue)); }
+.hunt-mode .tutorial-arrow::after { border-left-color: var(--blue); }
 .tutorial-card { position: fixed; z-index: 2; width: min(340px, calc(100vw - 32px)); padding: 24px; border: .5px solid var(--glass-border); border-radius: var(--radius-xl); color: var(--ink); background: var(--glass-bg-elevated); box-shadow: var(--specular-strong), var(--inner-depth), var(--glass-shadow-hover); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); pointer-events: auto; animation: glass-in .45s cubic-bezier(.2,.7,.35,1) both; }
 .dark-mode .tutorial-card { border-color: var(--glass-border); background: rgba(30,30,30,.9); }
 .tutorial-kicker { display: flex; justify-content: space-between; margin-bottom: 12px; color: var(--blue); font-size: 10px; font-weight: 700; letter-spacing: 1.2px; }
@@ -325,6 +348,23 @@ body.dark-mode.sport-tennis .orb-blue { background: #8ea000; }
 body.dark-mode.sport-tennis .orb-lilac { background: #758600; }
 body.dark-mode.sport-tennis .orb-peach { background: #c4da38; }
 body.dark-mode.sport-tennis .eyebrow { color: #c4da38; }
+
+/* ── Sport & Hunt Pickers ──────────────────────────────────────────────────── */
+.sport-picker { position: fixed; inset: 0; z-index: 100; display: flex; align-items: flex-end; justify-content: center; padding: 16px; pointer-events: none; }
+.sport-picker[hidden] { display: none; }
+.sport-picker-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.25); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); pointer-events: auto; animation: fade-in .3s ease both; }
+.dark-mode .sport-picker-backdrop { background: rgba(0,0,0,.4); }
+.sport-picker-panel { position: relative; z-index: 1; width: 100%; max-width: 400px; padding: 24px; border: .5px solid var(--glass-border); border-radius: var(--radius-xl); background: var(--glass-bg-elevated); box-shadow: var(--specular-strong), var(--inner-depth), 0 24px 64px rgba(0,0,0,.15); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); pointer-events: auto; animation: slide-up-in .4s cubic-bezier(.2,.7,.35,1) both; }
+.dark-mode .sport-picker-panel { border-color: var(--glass-border); background: rgba(30,30,30,.85); box-shadow: var(--specular-strong), var(--inner-depth), 0 24px 64px rgba(0,0,0,.4); }
+
+.sport-picker-title { margin: 0 0 6px; font-size: 20px; font-weight: 700; letter-spacing: -.5px; text-align: center; }
+.sport-picker-sub { margin: 0 0 20px; color: var(--muted); font-size: 13px; text-align: center; }
+
+.sport-option-list { display: grid; gap: 8px; }
+.sport-option { display: flex; align-items: center; gap: 16px; padding: 12px 16px; border: .5px solid var(--glass-border-subtle); border-radius: var(--radius-lg); background: var(--glass-bg); text-align: left; transition: all .25s cubic-bezier(.2,.7,.35,1); cursor: pointer; }
+.sport-option:hover { transform: scale(1.02); background: var(--glass-bg-elevated); border-color: var(--glass-border); box-shadow: var(--specular), var(--glass-shadow-hover); }
+.dark-mode .sport-option { border-color: rgba(255,255,255,.08); background: rgba(255,255,255,.04); }
+.dark-mode .sport-option:hover { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.15); }
 
 /* ── Sport guide banner ────────────────────────────────────────────────────── */
 .sport-guide { display: flex; align-items: center; gap: 14px; margin: -8px 0 24px; padding: 15px 20px; border-radius: var(--radius-lg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); animation: rise-in .55s cubic-bezier(.2,.7,.35,1) both; }

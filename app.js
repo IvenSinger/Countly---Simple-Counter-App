@@ -2,6 +2,7 @@ const STORAGE_KEY = "countly-counters";
 const HUNT_COUNTERS_KEY = "countly-yellow-hunt-counters";
 const THEME_KEY = "countly-theme";
 const HUNT_KEY = "countly-yellow-hunt";
+const HUNT_COLOR_KEY = "countly-hunt-color";
 const TUTORIAL_KEY = "countly-tutorial-seen";
 const LANGUAGE_KEY = "countly-language";
 const SPORT_KEY = "countly-sport-mode";
@@ -136,6 +137,7 @@ function isYellowHuntCounters(value) {
 const legacyCounters = readCounters(STORAGE_KEY);
 const savedHuntCounters = readCounters(HUNT_COUNTERS_KEY);
 let huntMode = localStorage.getItem(HUNT_KEY) === "true";
+let huntColor = localStorage.getItem(HUNT_COLOR_KEY) || "yellow";
 let counters = huntMode
   ? savedHuntCounters ?? (isYellowHuntCounters(legacyCounters) ? legacyCounters : createYellowHuntCounters())
   : (isYellowHuntCounters(legacyCounters) ? starterCounters : legacyCounters ?? starterCounters);
@@ -217,15 +219,20 @@ function positionLanguageMenu() {
 }
 
 function applyHuntMode() {
-  document.body.classList.toggle("yellow-hunt", huntMode);
+  ["hunt-yellow", "hunt-red", "hunt-blue", "hunt-green", "hunt-pink"].forEach(c => document.body.classList.remove(c));
+  document.body.classList.toggle("hunt-mode", huntMode);
+  if (huntMode) document.body.classList.add(`hunt-${huntColor}`);
+
   huntGuide.hidden = !huntMode;
   huntToggle.classList.toggle("is-active", huntMode);
   huntToggle.title = huntMode ? t("exitHunt") : t("activateHunt");
   huntToggle.setAttribute("aria-label", huntToggle.title);
-  eyebrow.textContent = huntMode ? "Yellow Hunt" : t("yourCounters");
+  
+  const colorName = huntColor.charAt(0).toUpperCase() + huntColor.slice(1);
+  eyebrow.textContent = huntMode ? `${colorName} Car Hunt` : t("yourCounters");
   heroTitle.textContent = huntMode ? "Spot it. Count it. Win it." : t("heroTitle");
   appHint.innerHTML = huntMode
-    ? `<span class="hint-key">${t("play")}</span> ${currentLanguage === "de" ? "Erfasse ein gelbes Auto, wenn du eines siehst" : currentLanguage === "es" ? "Registra un coche amarillo cuando lo veas" : currentLanguage === "zh" ? "发现黄色汽车时记录" : currentLanguage === "hi" ? "पीली कार दिखे तो दर्ज करें" : "Log a yellow car when you spot one"}`
+    ? `<span class="hint-key">${t("play")}</span> Log a ${colorName.toLowerCase()} car when you spot one`
     : `<span class="hint-key">${t("tip")}</span> <span data-i18n="renameHint">${t("renameHint")}</span>`;
 }
 
@@ -375,15 +382,9 @@ function openSportPicker()  { document.querySelector("#sport-picker").hidden = f
 function closeSportPicker() { document.querySelector("#sport-picker").hidden = true;  }
 
 function enterSportMode(type) {
-  // Mutually exclusive with Yellow Hunt
+  // Mutually exclusive with Hunt Mode
   if (huntMode) {
-    huntMode = false;
-    counters = readCounters(STORAGE_KEY);
-    if (!counters || isYellowHuntCounters(counters)) counters = starterCounters;
-    localStorage.setItem(HUNT_KEY, "false");
-    document.body.classList.remove("yellow-hunt");
-    huntToggle.classList.remove("is-active");
-    huntGuide.hidden = true;
+    exitHuntMode();
   }
   sportMode   = true;
   sportType   = type;
@@ -645,25 +646,47 @@ document.querySelector("#reset-all").addEventListener("click", () => {
     counters.forEach(counter => { counter.count = 0; }); save(); render();
   }
 });
-huntToggle.addEventListener("click", () => {
-  // Mutually exclusive with Sport Mode
+function openHuntPicker() { document.querySelector("#hunt-picker").hidden = false; }
+function closeHuntPicker() { document.querySelector("#hunt-picker").hidden = true; }
+
+function enterHuntMode(color) {
   if (sportMode) {
-    sportMode = false;
-    localStorage.setItem(SPORT_KEY, "false");
-    applySportMode();
+    exitSportMode();
   }
-  const enteringHuntMode = !huntMode;
-  huntMode = enteringHuntMode;
-  if (enteringHuntMode) {
-    counters = readCounters(HUNT_COUNTERS_KEY) ?? (isYellowHuntCounters(legacyCounters) ? legacyCounters : createYellowHuntCounters());
-  } else {
-    counters = readCounters(STORAGE_KEY);
-    if (!counters || isYellowHuntCounters(counters)) counters = starterCounters;
-  }
+  huntMode = true;
+  huntColor = color;
+  localStorage.setItem(HUNT_KEY, "true");
+  localStorage.setItem(HUNT_COLOR_KEY, color);
+  counters = readCounters(HUNT_COUNTERS_KEY) ?? (isYellowHuntCounters(legacyCounters) ? legacyCounters : createYellowHuntCounters());
   save();
-  localStorage.setItem(HUNT_KEY, huntMode);
+  closeHuntPicker();
   applyHuntMode();
   render();
+}
+
+function exitHuntMode() {
+  huntMode = false;
+  localStorage.setItem(HUNT_KEY, "false");
+  counters = readCounters(STORAGE_KEY);
+  if (!counters || isYellowHuntCounters(counters)) counters = starterCounters;
+  save();
+  applyHuntMode();
+  render();
+}
+
+huntToggle.addEventListener("click", () => {
+  if (huntMode) {
+    exitHuntMode();
+  } else {
+    openHuntPicker();
+  }
+});
+
+// ── Hunt Picker Event Listeners ───────────────────────────────────────────────
+document.querySelector("#hunt-picker-cancel").addEventListener("click", closeHuntPicker);
+document.querySelector("#hunt-picker-backdrop").addEventListener("click", closeHuntPicker);
+document.querySelectorAll(".sport-option[data-hunt-color]").forEach(btn => {
+  btn.addEventListener("click", () => enterHuntMode(btn.dataset.huntColor));
 });
 themeToggle.addEventListener("click", () => {
   const nextTheme = document.body.classList.contains("dark-mode") ? "light" : "dark";
