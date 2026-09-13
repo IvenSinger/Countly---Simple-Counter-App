@@ -177,14 +177,38 @@ function tutorialSteps() { return tutorialTargets.map((target, index) => ({ targ
 function applyTheme(theme) {
   const dark = theme === "dark";
   document.body.classList.toggle("dark-mode", dark);
+  document.documentElement.classList.toggle("dark-mode", dark);
+  
+  const metaThemeColor = document.getElementById("meta-theme-color");
+  if (metaThemeColor) {
+    if (currentSkin === "glitch") {
+      metaThemeColor.setAttribute("content", "#000000");
+    } else {
+      metaThemeColor.setAttribute("content", dark ? "#000000" : "#f5f5f7");
+    }
+  }
+
   themeToggle.title = dark ? t("lightMode") : t("darkMode");
   themeToggle.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
 }
 
 function applySkin() {
   document.body.classList.remove("skin-classic", "skin-glitch");
+  document.documentElement.classList.remove("skin-classic", "skin-glitch");
+  
   if (currentSkin !== "default") {
     document.body.classList.add(`skin-${currentSkin}`);
+    document.documentElement.classList.add(`skin-${currentSkin}`);
+  }
+  
+  const dark = document.body.classList.contains("dark-mode");
+  const metaThemeColor = document.getElementById("meta-theme-color");
+  if (metaThemeColor) {
+    if (currentSkin === "glitch") {
+      metaThemeColor.setAttribute("content", "#000000");
+    } else {
+      metaThemeColor.setAttribute("content", dark ? "#000000" : "#f5f5f7");
+    }
   }
 }
 
