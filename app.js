@@ -188,6 +188,7 @@ const tutorialCopy = document.querySelector("#tutorial-copy");
 const continueTutorial = document.querySelector("#continue-tutorial");
 const languageToggle = document.querySelector("#language-toggle");
 const languageMenu = document.querySelector("#language-menu");
+const languageSearch = document.querySelector("#language-search");
 const languageChoices = [...document.querySelectorAll("[data-language]")];
 const redoTutorial = document.querySelector("#redo-tutorial");
 let tutorialIndex = 0;
@@ -269,7 +270,14 @@ function toggleLanguageMenu(force) {
   const shouldOpen = typeof force === "boolean" ? force : languageMenu.hidden;
   languageMenu.hidden = !shouldOpen;
   languageToggle.setAttribute("aria-expanded", String(shouldOpen));
-  if (shouldOpen) positionLanguageMenu();
+  if (shouldOpen) {
+    positionLanguageMenu();
+    if (languageSearch) {
+      languageSearch.value = "";
+      languageChoices.forEach(choice => choice.style.display = "");
+      languageSearch.focus();
+    }
+  }
 }
 
 function positionLanguageMenu() {
@@ -822,6 +830,20 @@ document.querySelector("#about-backdrop").addEventListener("click", () => {
 window.addEventListener("resize", () => { if (!tutorialOverlay.hidden) positionTutorial(); if (!languageMenu.hidden) positionLanguageMenu(); });
 window.addEventListener("scroll", () => { if (!tutorialOverlay.hidden) positionTutorial(); }, { passive: true });
 languageToggle.addEventListener("click", () => toggleLanguageMenu());
+if (languageSearch) {
+  languageSearch.addEventListener("input", (e) => {
+    const query = e.target.value.toLowerCase().trim();
+    languageChoices.forEach(choice => {
+      const terms = choice.getAttribute("data-search-terms") || "";
+      const text = choice.textContent.toLowerCase();
+      if (terms.includes(query) || text.includes(query)) {
+        choice.style.display = "";
+      } else {
+        choice.style.display = "none";
+      }
+    });
+  });
+}
 languageChoices.forEach((choice) => choice.addEventListener("click", () => { applyLanguage(choice.dataset.language); toggleLanguageMenu(false); }));
 document.addEventListener("click", (event) => { if (!event.target.closest(".language-picker, #language-menu")) toggleLanguageMenu(false); });
 applyLanguage(localStorage.getItem(LANGUAGE_KEY) || "en");
