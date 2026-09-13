@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" id="meta-theme-color" content="#f5f5f7" />
     <title>Countly — Simple counters</title>
+    <meta name="description" content="Modern counters with a playful Yellow Hunt mode, sport scoreboards, and themes." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
-    <link rel="icon" type="image/png" href="/countly-favicon.png">
+    <link rel="icon" type="image/png" href="./countly-favicon.png">
   </head>
   <body>
     <div class="ambient-scene" aria-hidden="true">
@@ -97,7 +98,7 @@
       <footer>
         <div>Countly <span>•</span> <span data-i18n="keepItSimple">Keep it simple.</span></div>
         <button class="redo-tutorial" id="redo-tutorial" type="button" data-i18n="viewTutorial">View tutorial again</button>
-        <button class="redo-tutorial" id="about-button" type="button">About Countly</button>
+        <button class="redo-tutorial" id="about-button" type="button" data-i18n="aboutCountly">About Countly</button>
       </footer>
     </main>
 
@@ -114,7 +115,7 @@
       <div class="tutorial-spotlight" id="tutorial-spotlight" aria-hidden="true"></div>
       <div class="tutorial-arrow" id="tutorial-arrow" aria-hidden="true"></div>
       <section class="tutorial-card" id="tutorial-card">
-        <div class="tutorial-kicker"><span data-i18n="quickTour">QUICK TOUR</span> <span id="tutorial-step">1 / 6</span></div>
+        <div class="tutorial-kicker"><span data-i18n="quickTour">QUICK TOUR</span> <span id="tutorial-step">1 / 7</span></div>
         <h2 id="tutorial-title"></h2>
         <p id="tutorial-copy"></p>
         <div class="tutorial-actions">
@@ -216,12 +217,12 @@
     <div class="sport-picker about-modal" id="about-modal" hidden role="dialog" aria-modal="true" aria-labelledby="about-title">
       <div class="sport-picker-backdrop" id="about-backdrop"></div>
       <div class="sport-picker-panel" style="text-align: center;">
-        <h2 class="sport-picker-title" id="about-title" style="margin-bottom: 12px;">About Countly</h2>
-        <p class="sport-picker-sub" style="margin-bottom: 24px; line-height: 1.5;">
+        <h2 class="sport-picker-title" id="about-title" style="margin-bottom: 12px;" data-i18n="aboutCountly">About Countly</h2>
+        <p class="sport-picker-sub" style="margin-bottom: 24px; line-height: 1.5;" data-i18n="aboutDesc">
           Created with precision by <strong>Iven Singer</strong>.<br><br>
           Countly is a beautiful, modern counter app designed to keep track of what matters. Features a stunning Liquid Glass aesthetic, specialized sport scoreboards, and mini-games.
         </p>
-        <button class="continue-tutorial" id="close-about" type="button" style="width: 100%; display: block; text-align: center;"><span>Close</span></button>
+        <button class="continue-tutorial" id="close-about" type="button" style="width: 100%; display: block; text-align: center;" data-i18n="close">Close</button>
       </div>
     </div>
 
