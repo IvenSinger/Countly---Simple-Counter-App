@@ -118,6 +118,49 @@ const SPORT_CONFIGS = {
     ],
     formatScore: (score, opp = 0) => formatTennisScore(score, opp),
   },
+  football: {
+    emoji: "🏈", name: "Am. Football", defaultTeams: ["Home", "Away"], scoreUnit: "pts",
+    actions: [
+      { label: "Touchdown", short: "TD", points: 6 },
+      { label: "Field Goal", short: "FG", points: 3 },
+      { label: "Safety", short: "SAF", points: 2 },
+      { label: "2-Pt Conv", short: "2PT", points: 2 },
+      { label: "Extra Point", short: "XP", points: 1 },
+    ],
+    formatScore: (score)        => String(score),
+  },
+  f1: {
+    emoji: "🏎️", name: "Formula 1", defaultTeams: ["Driver 1", "Driver 2"], scoreUnit: "pts",
+    actions: [
+      { label: "Win (1st)", short: "1ST", points: 25 },
+      { label: "2nd Place", short: "2ND", points: 18 },
+      { label: "3rd Place", short: "3RD", points: 15 },
+      { label: "Fastest Lap", short: "FL", points: 1 },
+      { label: "Point", short: "PT", points: 1 },
+    ],
+    formatScore: (score)        => String(score),
+  },
+  baseball: {
+    emoji: "⚾", name: "Baseball", defaultTeams: ["Home", "Away"], scoreUnit: "runs",
+    actions: [
+      { label: "Run", short: "RUN", points: 1 },
+    ],
+    formatScore: (score)        => String(score),
+  },
+  hockey: {
+    emoji: "🏒", name: "Ice Hockey", defaultTeams: ["Home", "Away"], scoreUnit: "goals",
+    actions: [
+      { label: "Goal", short: "GOAL", points: 1 },
+    ],
+    formatScore: (score)        => String(score),
+  },
+  volleyball: {
+    emoji: "🏐", name: "Volleyball", defaultTeams: ["Home", "Away"], scoreUnit: "pts",
+    actions: [
+      { label: "Point", short: "PT", points: 1 },
+    ],
+    formatScore: (score)        => String(score),
+  },
 };
 const starterCounters = [
   { id: generateId(), name: "Water glasses", count: 4 },
@@ -454,7 +497,7 @@ function renderSport() {
 }
 
 function applySportMode() {
-  ["sport-basketball", "sport-soccer", "sport-tennis"].forEach(c => {
+  ["sport-basketball", "sport-soccer", "sport-tennis", "sport-football", "sport-f1", "sport-baseball", "sport-hockey", "sport-volleyball"].forEach(c => {
     document.body.classList.remove(c);
     document.documentElement.classList.remove(c);
   });
