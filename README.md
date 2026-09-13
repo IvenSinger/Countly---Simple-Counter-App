@@ -11,9 +11,12 @@ Countly is a clean, modern counter app for keeping track of multiple things at o
 - Light mode and dark mode
 - Language selector with English, German, Spanish, Mandarin Chinese, and Hindi options
 - Animated glass-style interface
-- Yellow Hunt mode for the German yellow-car spotting game
-- Yellow car logging for `+1` point
-- Animated yellow vehicles with exhaust trails
+- App Skins (Default Liquid Glass, Classic, and Glitched)
+- Sport Mode for Basketball, Soccer, and Tennis
+- Multi-color Car Hunt mode for the road trip spotting game
+- Car logging for `+1` point
+- Animated vehicles with exhaust trails
+- Search for counters by name
 - Counters and preferences saved automatically in the browser
 - Responsive layout for desktop and mobile screens
 
@@ -38,13 +41,13 @@ Click `+` or `−` on a counter to change its value. Click a counter name to edi
 
 The theme button switches between light and dark mode. Countly remembers your choice for the next visit.
 
-## Yellow Hunt mode
+## Car Hunt mode
 
-Select the taxi icon in the top bar to activate Yellow Hunt mode. The mode includes a short explanation of the game and gives each counter two special actions:
+Select the taxi icon in the top bar to activate Car Hunt mode and choose your car color. The mode includes a short explanation of the game and gives each counter a special action:
 
-- Yellow car: adds 1 point
+- Color car: adds 1 point
 
-Each find triggers a playful vehicle animation across the screen. Select the taxi icon again to return to regular counter mode.
+Each find triggers a playful vehicle animation across the screen. Select the taxi icon again to exit or change color.
 
 ## Data and privacy
 

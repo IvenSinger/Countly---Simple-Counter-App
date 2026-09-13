@@ -9,13 +9,31 @@ const LANGUAGE_KEY = "countly-language";
 const SPORT_KEY = "countly-sport-mode";
 const SPORT_TYPE_KEY = "countly-sport-type";
 const SPORT_SCORES_KEY = "countly-sport-scores";
+
+function generateId() {
+  return typeof crypto !== "undefined" && crypto.randomUUID
+    ? crypto.randomUUID()
+    : "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
+        const r = (Math.random() * 16) | 0;
+        return (c === "x" ? r : (r & 0x3 | 0x8)).toString(16);
+      });
+}
+
+const HUNT_CONFIG = {
+  yellow: { emoji: "🚕", label: "Yellow Car" },
+  red: { emoji: "🚗", label: "Red Car" },
+  blue: { emoji: "🚙", label: "Blue Car" },
+  green: { emoji: "🛻", label: "Green Car" },
+  pink: { emoji: "🚘", label: "Pink Car" }
+};
+
 const translations = {
   en: {
     language: "Language", yourCounters: "Your counters", heroTitle: "Keep track of what matters.", addCounter: "Add new counter", howToPlay: "How to play",
     guideCopy: "Spot a yellow car for <strong>1 point</strong>. Log each find and see who can spot the most.",
     totalCount: "Total count", activeCounters: "Active counters", renameHint: "Click a counter’s name to rename it", keepItSimple: "Keep it simple.", viewTutorial: "View tutorial again", quickTour: "QUICK TOUR", skipIntro: "Skip Tutorial", continue: "Continue", finish: "Finish",
     tip: "TIP", play: "PLAY", car: "Car", tapToAdjust: "Tap to adjust", untitled: "Untitled counter", counter: "Counter", resetConfirm: "Reset all counters to zero?", emptyTitle: "Your counter space is ready.", emptyCopy: "Add a counter to get started.",
-    chooseLanguage: "Choose language", darkMode: "Switch to dark mode", lightMode: "Switch to light mode", activateHunt: "Activate Yellow Hunt mode", exitHunt: "Exit Yellow Hunt mode", resetAll: "Reset all counters", counterName: "Counter name", searchCounters: "Search counters", noMatchingCounters: "No counters match your search.", remove: "Remove", increase: "Increase", decrease: "Decrease", carAria: "Log a yellow car for",
+    chooseLanguage: "Choose language", darkMode: "Switch to dark mode", lightMode: "Switch to light mode", activateHunt: "Activate Yellow Hunt mode", exitHunt: "Exit Yellow Hunt mode", resetAll: "Reset all counters", counterName: "Counter name", searchCounters: "Search counters", noMatchingCounters: "No counters match your search.", aboutCountly: "About Countly", aboutDesc: "Created with precision by <strong>Iven Singer</strong>.<br><br>Countly is a beautiful, modern counter app designed to keep track of what matters. Features a stunning Liquid Glass aesthetic, specialized sport scoreboards, and mini-games.", close: "Close", resetSport: "Reset %s scores to zero?", remove: "Remove", increase: "Increase", decrease: "Decrease", carAria: "Log a %s for",
     tutorials: [
       ["Make it yours", "Add as many counters as you need, then give each one a name so everything stays easy to find."],
       ["Count in a tap", "Use the plus and minus controls on any card to keep your numbers moving. Your progress is saved automatically."],
@@ -26,17 +44,17 @@ const translations = {
       ["Start fresh", "Use reset whenever you want to bring every counter back to zero and begin a new round."]
     ]
   },
-  de: {
-    language: "Sprache", yourCounters: "Deine Zähler", heroTitle: "Behalte im Blick, was zählt.", addCounter: "Neuen Zähler hinzufügen", howToPlay: "So wird gespielt", guideCopy: "Entdecke ein gelbes Auto für <strong>1 Punkt</strong>. Erfasse jeden Fund und finde die meisten.", totalCount: "Gesamtzahl", activeCounters: "Aktive Zähler", renameHint: "Klicke auf den Namen eines Zählers, um ihn umzubenennen", keepItSimple: "Einfach halten.", viewTutorial: "Tutorial erneut ansehen", quickTour: "KURZTOUR", skipIntro: "Intro überspringen", continue: "Weiter", finish: "Fertig", tip: "TIPP", play: "SPIEL", car: "Auto", tapToAdjust: "Antippen zum Ändern", untitled: "Unbenannter Zähler", counter: "Zähler", resetConfirm: "Alle Zähler auf null zurücksetzen?", emptyTitle: "Dein Zählerbereich ist bereit.", emptyCopy: "Füge einen Zähler hinzu.", chooseLanguage: "Sprache auswählen", darkMode: "Dunkelmodus aktivieren", lightMode: "Hellmodus aktivieren", activateHunt: "Yellow Hunt aktivieren", exitHunt: "Yellow Hunt beenden", resetAll: "Alle Zähler zurücksetzen", counterName: "Name des Zählers", remove: "Zähler entfernen", increase: "Erhöhen", decrease: "Verringern", carAria: "Gelbes Auto für", tutorials: [["Mach es zu deinem", "Füge beliebig viele Zähler hinzu und gib ihnen Namen, damit alles leicht zu finden bleibt."], ["Mit einem Tipp zählen", "Nutze Plus und Minus auf jeder Karte. Dein Fortschritt wird automatisch gespeichert."], ["Sport-Modus ausprobieren", "Tippe auf das 🏆 Pokal-Symbol und wähle eine Sportart – Basketball, Fußball oder Tennis. Jede hat eigene Punkte-Buttons und Farben."], ["Yellow Hunt ausprobieren", "Aktiviere Yellow Hunt: Gelbe Autos zählen 1 Punkt."], ["Sprache auswählen", "Öffne das Globusmenü und wähle deine Sprache."], ["Stimmung festlegen", "Wechsle jederzeit zwischen hellem und dunklem Modus."], ["Neu beginnen", "Setze alle Zähler zurück, um eine neue Runde zu starten."]]
+    de: {
+    language: "Sprache", yourCounters: "Deine Zähler", heroTitle: "Behalte im Blick, was zählt.", addCounter: "Neuen Zähler hinzufügen", howToPlay: "So wird gespielt", guideCopy: "Entdecke ein gelbes Auto für <strong>1 Punkt</strong>. Erfasse jeden Fund und finde die meisten.", totalCount: "Gesamtzahl", activeCounters: "Aktive Zähler", renameHint: "Klicke auf den Namen eines Zählers, um ihn umzubenennen", keepItSimple: "Einfach halten.", viewTutorial: "Tutorial erneut ansehen", quickTour: "KURZTOUR", skipIntro: "Intro überspringen", continue: "Weiter", finish: "Fertig", tip: "TIPP", play: "SPIEL", car: "Auto", tapToAdjust: "Antippen zum Ändern", untitled: "Unbenannter Zähler", counter: "Zähler", resetConfirm: "Alle Zähler auf null zurücksetzen?", emptyTitle: "Dein Zählerbereich ist bereit.", emptyCopy: "Füge einen Zähler hinzu.", chooseLanguage: "Sprache auswählen", darkMode: "Dunkelmodus aktivieren", lightMode: "Hellmodus aktivieren", activateHunt: "Yellow Hunt aktivieren", exitHunt: "Yellow Hunt beenden", resetAll: "Alle Zähler zurücksetzen", counterName: "Name des Zählers", searchCounters: "Zähler suchen", noMatchingCounters: "Keine Zähler entsprechen deiner Suche.", aboutCountly: "Über Countly", aboutDesc: "Mit Präzision erstellt von <strong>Iven Singer</strong>.<br><br>Countly ist eine schöne, moderne Zähler-App. Bietet eine atemberaubende Liquid-Glass-Ästhetik, spezielle Sport-Anzeigetafeln und Minispiele.", close: "Schließen", resetSport: "%s-Spielstände auf null zurücksetzen?", remove: "Zähler entfernen", increase: "Erhöhen", decrease: "Verringern", carAria: "Erfasse ein %s für", tutorials: [["Mach es zu deinem", "Füge beliebig viele Zähler hinzu und gib ihnen Namen, damit alles leicht zu finden bleibt."], ["Mit einem Tipp zählen", "Nutze Plus und Minus auf jeder Karte. Dein Fortschritt wird automatisch gespeichert."], ["Sport-Modus ausprobieren", "Tippe auf das 🏆 Pokal-Symbol und wähle eine Sportart – Basketball, Fußball oder Tennis. Jede hat eigene Punkte-Buttons und Farben."], ["Yellow Hunt ausprobieren", "Aktiviere Yellow Hunt: Gelbe Autos zählen 1 Punkt."], ["Sprache auswählen", "Öffne das Globusmenü und wähle deine Sprache."], ["Stimmung festlegen", "Wechsle jederzeit zwischen hellem und dunklem Modus."], ["Neu beginnen", "Setze alle Zähler zurück, um eine neue Runde zu starten."]]
   },
   es: {
-    language: "Idioma", yourCounters: "Tus contadores", heroTitle: "Lleva el control de lo que importa.", addCounter: "Añadir nuevo contador", howToPlay: "Cómo jugar", guideCopy: "Encuentra un coche amarillo por <strong>1 punto</strong>. Registra cada hallazgo y descubre quién encuentra más.", totalCount: "Cuenta total", activeCounters: "Contadores activos", renameHint: "Haz clic en el nombre para cambiarlo", keepItSimple: "Mantenlo simple.", viewTutorial: "Ver tutorial de nuevo", quickTour: "GUÍA RÁPIDA", skipIntro: "Omitir introducción", continue: "Continuar", finish: "Terminar", tip: "CONSEJO", play: "JUEGO", car: "Coche", tapToAdjust: "Toca para ajustar", untitled: "Contador sin título", counter: "Contador", resetConfirm: "¿Restablecer todos los contadores a cero?", emptyTitle: "Tu espacio de contadores está listo.", emptyCopy: "Añade un contador para empezar.", chooseLanguage: "Elegir idioma", darkMode: "Cambiar a modo oscuro", lightMode: "Cambiar a modo claro", activateHunt: "Activar Yellow Hunt", exitHunt: "Salir de Yellow Hunt", resetAll: "Restablecer contadores", counterName: "Nombre del contador", remove: "Eliminar contador", increase: "Aumentar", decrease: "Disminuir", carAria: "Coche amarillo para", tutorials: [["Hazlo tuyo", "Añade los contadores que necesites y ponles nombre para encontrar todo fácilmente."], ["Cuenta con un toque", "Usa los controles más y menos. Tu progreso se guarda automáticamente."], ["Prueba el modo Sport", "Toca el trofeo 🏆 para elegir un deporte: Baloncesto, Fútbol o Tenis. Cada uno tiene sus propios botones de puntuación y colores."], ["Prueba Yellow Hunt", "Activa Yellow Hunt: los coches amarillos valen 1 punto."], ["Elige tu idioma", "Abre el menú del globo para elegir idioma."], ["Cambia el ambiente", "Alterna entre el modo claro y oscuro cuando quieras."], ["Empieza de cero", "Restablece los contadores para comenzar una ronda nueva."]]
+    language: "Idioma", yourCounters: "Tus contadores", heroTitle: "Lleva el control de lo que importa.", addCounter: "Añadir nuevo contador", howToPlay: "Cómo jugar", guideCopy: "Encuentra un coche amarillo por <strong>1 punto</strong>. Registra cada hallazgo y descubre quién encuentra más.", totalCount: "Cuenta total", activeCounters: "Contadores activos", renameHint: "Haz clic en el nombre para cambiarlo", keepItSimple: "Mantenlo simple.", viewTutorial: "Ver tutorial de nuevo", quickTour: "GUÍA RÁPIDA", skipIntro: "Omitir introducción", continue: "Continuar", finish: "Terminar", tip: "CONSEJO", play: "JUEGO", car: "Coche", tapToAdjust: "Toca para ajustar", untitled: "Contador sin título", counter: "Contador", resetConfirm: "¿Restablecer todos los contadores a cero?", emptyTitle: "Tu espacio de contadores está listo.", emptyCopy: "Añade un contador para empezar.", chooseLanguage: "Elegir idioma", darkMode: "Cambiar a modo oscuro", lightMode: "Cambiar a modo claro", activateHunt: "Activar Yellow Hunt", exitHunt: "Salir de Yellow Hunt", resetAll: "Restablecer contadores", counterName: "Nombre del contador", searchCounters: "Buscar contadores", noMatchingCounters: "Ningún contador coincide con tu búsqueda.", aboutCountly: "Acerca de Countly", aboutDesc: "Creado con precisión por <strong>Iven Singer</strong>.<br><br>Countly es una hermosa y moderna aplicación de contadores. Cuenta con una impresionante estética de Liquid Glass, marcadores deportivos y minijuegos.", close: "Cerrar", resetSport: "¿Restablecer las puntuaciones de %s a cero?", remove: "Eliminar contador", increase: "Aumentar", decrease: "Disminuir", carAria: "Registra un %s para", tutorials: [["Hazlo tuyo", "Añade los contadores que necesites y ponles nombre para encontrar todo fácilmente."], ["Cuenta con un toque", "Usa los controles más y menos. Tu progreso se guarda automáticamente."], ["Prueba el modo Sport", "Toca el trofeo 🏆 para elegir un deporte: Baloncesto, Fútbol o Tenis. Cada uno tiene sus propios botones de puntuación y colores."], ["Prueba Yellow Hunt", "Activa Yellow Hunt: los coches amarillos valen 1 punto."], ["Elige tu idioma", "Abre el menú del globo para elegir idioma."], ["Cambia el ambiente", "Alterna entre el modo claro y oscuro cuando quieras."], ["Empieza de cero", "Restablece los contadores para comenzar una ronda nueva."]]
   },
   zh: {
-    language: "语言", yourCounters: "你的计数器", heroTitle: "记录重要的事情。", addCounter: "添加新计数器", howToPlay: "玩法", guideCopy: "发现黄色汽车得<strong>1分</strong>。记录每次发现，看看谁发现得最多。", totalCount: "总计数", activeCounters: "活动计数器", renameHint: "点击计数器名称即可重命名", keepItSimple: "保持简单。", viewTutorial: "再次查看教程", quickTour: "快速导览", skipIntro: "跳过介绍", continue: "继续", finish: "完成", tip: "提示", play: "游戏", car: "汽车", tapToAdjust: "点击调整", untitled: "未命名计数器", counter: "计数器", resetConfirm: "将所有计数器重置为零？", emptyTitle: "计数器空间已准备好。", emptyCopy: "添加一个计数器开始吧。", chooseLanguage: "选择语言", darkMode: "切换到深色模式", lightMode: "切换到浅色模式", activateHunt: "开启 Yellow Hunt", exitHunt: "退出 Yellow Hunt", resetAll: "重置所有计数器", counterName: "计数器名称", remove: "删除计数器", increase: "增加", decrease: "减少", carAria: "记录黄色汽车，计数器为", tutorials: [["打造专属计数器", "添加需要的计数器并命名，让一切都易于查找。"], ["轻触即可计数", "使用加减按钮更新数字，进度会自动保存。"], ["试试运动模式", "点击 🏆 奖杯按钮选择运动项目——篮球、足球或网球。每项运动有专属得分按钮和配色。"], ["试试 Yellow Hunt", "开启 Yellow Hunt：黄色汽车得1分。"], ["选择语言", "打开地球图标菜单选择语言。"], ["调整氛围", "随时切换浅色和深色模式。"], ["重新开始", "重置所有计数器，开始新一轮。"]]
+    language: "语言", yourCounters: "你的计数器", heroTitle: "记录重要的事情。", addCounter: "添加新计数器", howToPlay: "玩法", guideCopy: "发现黄色汽车得<strong>1分</strong>。记录每次发现，看看谁发现得最多。", totalCount: "总计数", activeCounters: "活动计数器", renameHint: "点击计数器名称即可重命名", keepItSimple: "保持简单。", viewTutorial: "再次查看教程", quickTour: "快速导览", skipIntro: "跳过介绍", continue: "继续", finish: "完成", tip: "提示", play: "游戏", car: "汽车", tapToAdjust: "点击调整", untitled: "未命名计数器", counter: "计数器", resetConfirm: "将所有计数器重置为零？", emptyTitle: "计数器空间已准备好。", emptyCopy: "添加一个计数器开始吧。", chooseLanguage: "选择语言", darkMode: "切换到深色模式", lightMode: "切换到浅色模式", activateHunt: "开启 Yellow Hunt", exitHunt: "退出 Yellow Hunt", resetAll: "重置所有计数器", counterName: "计数器名称", searchCounters: "搜索计数器", noMatchingCounters: "没有符合您搜索的计数器。", aboutCountly: "关于 Countly", aboutDesc: "由 <strong>Iven Singer</strong> 精心制作。<br><br>Countly 是一款精美的现代计数器应用。具有令人惊叹的液态玻璃美学、专门的运动计分板和迷你游戏。", close: "关闭", resetSport: "将 %s 的分数重置为零？", remove: "删除计数器", increase: "增加", decrease: "减少", carAria: "记录 %s，计数器为", tutorials: [["打造专属计数器", "添加需要的计数器并命名，让一切都易于查找。"], ["轻触即可计数", "使用加减按钮更新数字，进度会自动保存。"], ["试试运动模式", "点击 🏆 奖杯按钮选择运动项目——篮球、足球或网球。每项运动有专属得分按钮和配色。"], ["试试 Yellow Hunt", "开启 Yellow Hunt：黄色汽车得1分。"], ["选择语言", "打开地球图标菜单选择语言。"], ["调整氛围", "随时切换浅色和深色模式。"], ["重新开始", "重置所有计数器，开始新一轮。"]]
   },
   hi: {
-    language: "भाषा", yourCounters: "आपके काउंटर", heroTitle: "जो ज़रूरी है उसका हिसाब रखें।", addCounter: "नया काउंटर जोड़ें", howToPlay: "कैसे खेलें", guideCopy: "पीली कार के लिए <strong>1 अंक</strong> पाएं। हर खोज दर्ज करें और देखें किसने सबसे ज़्यादा पाया।", totalCount: "कुल गिनती", activeCounters: "सक्रिय काउंटर", renameHint: "नाम बदलने के लिए काउंटर के नाम पर क्लिक करें", keepItSimple: "सरल रखें।", viewTutorial: "ट्यूटोरियल फिर देखें", quickTour: "त्वरित परिचय", skipIntro: "परिचय छोड़ें", continue: "जारी रखें", finish: "समाप्त", tip: "सुझाव", play: "खेल", car: "कार", tapToAdjust: "बदलने के लिए टैप करें", untitled: "बिना नाम का काउंटर", counter: "काउंटर", resetConfirm: "सभी काउंटर शून्य पर रीसेट करें?", emptyTitle: "आपका काउंटर स्थान तैयार है।", emptyCopy: "शुरू करने के लिए काउंटर जोड़ें।", chooseLanguage: "भाषा चुनें", darkMode: "डार्क मोड पर जाएं", lightMode: "लाइट मोड पर जाएं", activateHunt: "Yellow Hunt शुरू करें", exitHunt: "Yellow Hunt से बाहर निकलें", resetAll: "सभी काउंटर रीसेट करें", counterName: "काउंटर का नाम", remove: "काउंटर हटाएं", increase: "बढ़ाएं", decrease: "घटाएं", carAria: "पीली कार दर्ज करें, काउंटर", tutorials: [["इसे अपना बनाएं", "जितने काउंटर चाहिए जोड़ें और उन्हें नाम दें ताकि सब आसानी से मिल सके।"], ["एक टैप में गिनें", "प्लस और माइनस बटन का उपयोग करें। प्रगति अपने आप सेव होती है।"], ["स्पोर्ट मोड आज़माएं", "🏆 ट्रॉफी बटन टैप करें और खेल चुनें — बास्केटबॉल, सॉकर या टेनिस। हर खेल के अपने स्कोरिंग बटन और रंग हैं।"], ["Yellow Hunt आज़माएं", "Yellow Hunt चालू करें: पीली कार 1 अंक देती है।"], ["भाषा चुनें", "भाषा चुनने के लिए ग्लोब मेनू खोलें।"], ["मूड सेट करें", "जब चाहें लाइट और डार्क मोड बदलें।"], ["फिर से शुरू करें", "नई शुरुआत के लिए सभी काउंटर रीसेट करें।"]]
+    language: "भाषा", yourCounters: "आपके काउंटर", heroTitle: "जो ज़रूरी है उसका हिसाब रखें।", addCounter: "नया काउंटर जोड़ें", howToPlay: "कैसे खेलें", guideCopy: "पीली कार के लिए <strong>1 अंक</strong> पाएं। हर खोज दर्ज करें और देखें किसने सबसे ज़्यादा पाया।", totalCount: "कुल गिनती", activeCounters: "सक्रिय काउंटर", renameHint: "नाम बदलने के लिए काउंटर के नाम पर क्लिक करें", keepItSimple: "सरल रखें।", viewTutorial: "ट्यूटोरियल फिर देखें", quickTour: "त्वरित परिचय", skipIntro: "परिचय छोड़ें", continue: "जारी रखें", finish: "समाप्त", tip: "सुझाव", play: "खेल", car: "कार", tapToAdjust: "बदलने के लिए टैप करें", untitled: "बिना नाम का काउंटर", counter: "काउंटर", resetConfirm: "सभी काउंटर शून्य पर रीसेट करें?", emptyTitle: "आपका काउंटर स्थान तैयार है।", emptyCopy: "शुरू करने के लिए काउंटर जोड़ें।", chooseLanguage: "भाषा चुनें", darkMode: "डार्क मोड पर जाएं", lightMode: "लाइट मोड पर जाएं", activateHunt: "Yellow Hunt शुरू करें", exitHunt: "Yellow Hunt से बाहर निकलें", resetAll: "सभी काउंटर रीसेट करें", counterName: "काउंटर का नाम", searchCounters: "काउंटर खोजें", noMatchingCounters: "कोई काउंटर आपकी खोज से मेल नहीं खाता।", aboutCountly: "Countly के बारे में", aboutDesc: "<strong>Iven Singer</strong> द्वारा सटीकता से बनाया गया।<br><br>Countly एक सुंदर, आधुनिक काउंटर ऐप है। इसमें शानदार लिक्विड ग्लास एस्थेटिक, स्पोर्ट्स स्कोरबोर्ड और मिनी-गेम शामिल हैं।", close: "बंद करें", resetSport: "क्या %s के स्कोर शून्य पर रीसेट करें?", remove: "काउंटर हटाएं", increase: "बढ़ाएं", decrease: "घटाएं", carAria: "एक %s दर्ज करें, काउंटर", tutorials: [["इसे अपना बनाएं", "जितने काउंटर चाहिए जोड़ें और उन्हें नाम दें ताकि सब आसानी से मिल सके।"], ["एक टैप में गिनें", "प्लस और माइनस बटन का उपयोग करें। प्रगति अपने आप सेव होती है।"], ["स्पोर्ट मोड आज़माएं", "🏆 ट्रॉफी बटन टैप करें और खेल चुनें — बास्केटबॉल, सॉकर या टेनिस। हर खेल के अपने स्कोरिंग बटन और रंग हैं।"], ["Yellow Hunt आज़माएं", "Yellow Hunt चालू करें: पीली कार 1 अंक देती है।"], ["भाषा चुनें", "भाषा चुनने के लिए ग्लोब मेनू खोलें।"], ["मूड सेट करें", "जब चाहें लाइट और डार्क मोड बदलें।"], ["फिर से शुरू करें", "नई शुरुआत के लिए सभी काउंटर रीसेट करें।"]]
   }
 };
 let currentLanguage = "en";
@@ -84,9 +102,9 @@ const SPORT_CONFIGS = {
   },
 };
 const starterCounters = [
-  { id: crypto.randomUUID(), name: "Water glasses", count: 4 },
-  { id: crypto.randomUUID(), name: "Daily steps", count: 1250 },
-  { id: crypto.randomUUID(), name: "Books read", count: 2 },
+  { id: generateId(), name: "Water glasses", count: 4 },
+  { id: generateId(), name: "Daily steps", count: 1250 },
+  { id: generateId(), name: "Books read", count: 2 },
 ];
 const starterCounterNames = {
   en: ["Water glasses", "Daily steps", "Books read"],
@@ -116,7 +134,7 @@ function localizeStarterCounters(language) {
 
 function createYellowHuntCounters() {
   return [1, 2, 3].map((player) => ({
-    id: crypto.randomUUID(),
+    id: generateId(),
     name: `Player ${player}`,
     count: Math.floor(Math.random() * 10) + 1,
   }));
@@ -125,7 +143,9 @@ function createYellowHuntCounters() {
 function readCounters(key) {
   try {
     const stored = localStorage.getItem(key);
-    return stored === null ? null : JSON.parse(stored);
+    if (stored === null) return null;
+    const parsed = JSON.parse(stored);
+    return Array.isArray(parsed) ? parsed : null;
   } catch {
     return null;
   }
@@ -233,7 +253,12 @@ function applyLanguage(language) {
   applyHuntMode();
   huntGuide.setAttribute("aria-label", `${t("howToPlay")} Yellow Hunt`);
   if (tutorialOverlay && !tutorialOverlay.hidden) showTutorialStep();
-  render();
+  if (sportMode) {
+    applySportMode();
+    renderSport();
+  } else {
+    render();
+  }
   localStorage.setItem(LANGUAGE_KEY, selected);
 }
 
@@ -286,7 +311,7 @@ const summaryLabelTotal  = document.querySelector("#total-count + .summary-label
 const summaryLabelActive = document.querySelector("#counter-count + .summary-label");
 
 function createSportScores(type) {
-  return SPORT_CONFIGS[type].defaultTeams.map(name => ({ id: crypto.randomUUID(), name, score: 0 }));
+  return SPORT_CONFIGS[type].defaultTeams.map(name => ({ id: generateId(), name, score: 0 }));
 }
 function saveSportScores() {
   localStorage.setItem(`${SPORT_SCORES_KEY}-${sportType}`, JSON.stringify(sportScores));
@@ -344,7 +369,7 @@ function renderSport() {
 
     // Raw numeric score shown below formatted display (basketball/soccer only)
     const rawHtml = config.scoreUnit
-      ? `<div class="sport-score-raw">${team.score} ${config.scoreUnit}</div>`
+      ? `<div class="sport-score-raw">${team.score} ${team.score === 1 && config.scoreUnit === "goals" ? "goal" : config.scoreUnit}</div>`
       : "";
 
     // Tennis: also show raw point count in small muted text
@@ -477,7 +502,7 @@ function render() {
         <button class="step-button decrement" type="button" aria-label="${t("decrease")} ${escapeHtml(counter.name)}">−</button>
       </div>
       ${huntMode ? `<div class="hunt-actions">
-        <button class="hunt-action car-action" type="button" aria-label="${t("carAria")} ${escapeHtml(counter.name)}"><span class="hunt-emoji">🚕</span><span>${t("car")} <b>+1</b></span></button>
+        <button class="hunt-action car-action" type="button" aria-label="${t("carAria").replace('%s', HUNT_CONFIG[huntColor].label)} ${escapeHtml(counter.name)}"><span class="hunt-emoji">${HUNT_CONFIG[huntColor].emoji}</span><span>${t("car")} <b>+1</b></span></button>
       </div>` : `<p class="card-caption">${t("tapToAdjust")}</p>`}`;
     card.querySelector(".increment").addEventListener("click", () => {
       updateCount(counter.id, 1);
@@ -512,7 +537,7 @@ function showVehicle() {
   vehicle.style.setProperty("--mid-y", `${midY}vh`);
   vehicle.style.setProperty("--end-y", `${endY}vh`);
   vehicle.style.setProperty("--travel-time", `${(3.5 + Math.random() * 1.2).toFixed(2)}s`);
-  vehicle.textContent = "🚕";
+  vehicle.textContent = HUNT_CONFIG[huntColor]?.emoji || "🚕";
   vehicleLayer.appendChild(vehicle);
   vehicle.addEventListener("animationend", () => vehicle.remove());
 }
@@ -520,7 +545,10 @@ function showVehicle() {
 function positionTutorial() {
   const step = tutorialSteps()[tutorialIndex];
   const target = document.querySelector(step.target);
-  if (!target) return;
+  if (!target || target.hidden || target.offsetParent === null) {
+    if (tutorialOverlay && !tutorialOverlay.hidden) closeTutorial();
+    return;
+  }
   const targetRect = target.getBoundingClientRect();
   const cardRect = tutorialCard.getBoundingClientRect();
   const gap = 24;
@@ -676,14 +704,16 @@ function closeTutorial(completed = false) {
 }
 
 document.querySelector("#add-counter").addEventListener("click", () => {
-  counters.push({ id: crypto.randomUUID(), name: `${t("counter")} ${counters.length + 1}`, count: 0 });
+  searchQuery = "";
+  counterSearch.value = "";
+  counters.push({ id: generateId(), name: `${t("counter")} ${counters.length + 1}`, count: 0 });
   save(); render();
   setTimeout(() => grid.lastElementChild?.querySelector(".counter-name")?.select(), 0);
 });
 document.querySelector("#reset-all").addEventListener("click", () => {
   if (sportMode) {
     const config = SPORT_CONFIGS[sportType];
-    if (confirm(`Reset ${config.name} scores to zero?`)) {
+    if (confirm(t("resetSport").replace('%s', config.name))) {
       sportScores.forEach(team => { team.score = 0; });
       saveSportScores(); renderSport();
     }

@@ -96,14 +96,10 @@ button { font: inherit; cursor: pointer; }
 .theme-toggle .moon-icon { display: none; }
 .dark-mode .theme-toggle .sun-icon { display: none; }
 .dark-mode .theme-toggle .moon-icon { display: block; }
-.avatar { width: 38px; height: 38px; border-radius: 50%; color: #fff; background: #ffaf72; font-size: 12px; font-weight: 600; box-shadow: 0 4px 12px rgba(255,175,114,.2); }
-
 /* ── Hero ───────────────────────────────────────────────────────────────────── */
 .hero { align-items: end; justify-content: space-between; margin: 82px 0 34px; }
 .eyebrow { margin: 0 0 10px; color: var(--blue); font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
 .hero h1 { margin: 0; font-size: clamp(30px, 4vw, 44px); font-weight: 700; letter-spacing: -1.5px; line-height: 1.08; }
-.subheading { margin: 12px 0 0; color: var(--muted); font-size: 15px; font-weight: 400; }
-
 /* ── Add button ────────────────────────────────────────────────────────────── */
 .add-button { border: .5px solid rgba(255,255,255,.25); border-radius: var(--radius-pill); padding: 13px 22px 13px 17px; color: white; background: var(--blue); font-size: 14px; font-weight: 600; box-shadow: inset 0 .5px 0 0 rgba(255,255,255,.3), 0 4px 16px rgba(0,122,255,.25); transition: all .3s cubic-bezier(.2,.7,.35,1); }
 .add-button:hover { background: var(--blue-dark); transform: translateY(-2px); box-shadow: inset 0 .5px 0 0 rgba(255,255,255,.4), 0 8px 24px rgba(0,122,255,.3); }
@@ -318,8 +314,8 @@ body.sport-basketball .step-button:hover { background: rgba(255,210,160,.3); }
 html.dark-mode.sport-basketball { --blue: #ff9a45; --blue-dark: #ffb472; --glass-bg: rgba(100,50,10,.1); --glass-bg-elevated: rgba(100,50,10,.18); --glass-border: rgba(224,122,42,.15); --glass-border-subtle: rgba(224,122,42,.08); background: radial-gradient(ellipse at 15% 5%, #3a2010 0, transparent 40%), radial-gradient(ellipse at 85% 35%, #3f260e 0, transparent 35%), radial-gradient(ellipse at 50% 100%, #3a2208 0, var(--soft) 40%); }
 html.dark-mode.sport-basketball .orb-blue { background: #e07a2a; }
 html.dark-mode.sport-basketball .orb-lilac { background: #c96918; }
-body.dark-mode.sport-basketball .orb-peach { background: #ff9a45; }
-body.dark-mode.sport-basketball .eyebrow { color: #ff9a45; }
+html.dark-mode.sport-basketball .orb-peach { background: #ff9a45; }
+html.dark-mode.sport-basketball .eyebrow { color: #ff9a45; }
 
 /* Soccer – vibrant green */
 body.sport-soccer { --blue: #1e9e38; --blue-dark: #187d2d; --glass-bg: rgba(170,235,190,.1); --glass-bg-elevated: rgba(170,235,190,.2); --glass-border: rgba(30,158,56,.2); --glass-border-subtle: rgba(30,158,56,.12); }
@@ -333,8 +329,8 @@ body.sport-soccer .step-button:hover { background: rgba(170,235,190,.3); }
 html.dark-mode.sport-soccer { --blue: #3fd468; --blue-dark: #5de082; --glass-bg: rgba(8,68,22,.1); --glass-bg-elevated: rgba(8,68,22,.18); --glass-border: rgba(30,158,56,.15); --glass-border-subtle: rgba(30,158,56,.08); background: radial-gradient(ellipse at 15% 5%, #0a2e14 0, transparent 40%), radial-gradient(ellipse at 85% 35%, #0e3318 0, transparent 35%), radial-gradient(ellipse at 50% 100%, #0a2810 0, var(--soft) 40%); }
 html.dark-mode.sport-soccer .orb-blue { background: #1e9e38; }
 html.dark-mode.sport-soccer .orb-lilac { background: #187d2d; }
-body.dark-mode.sport-soccer .orb-peach { background: #3fd468; }
-body.dark-mode.sport-soccer .eyebrow { color: #3fd468; }
+html.dark-mode.sport-soccer .orb-peach { background: #3fd468; }
+html.dark-mode.sport-soccer .eyebrow { color: #3fd468; }
 
 /* Tennis – yellow-lime */
 body.sport-tennis { --blue: #8ea000; --blue-dark: #758600; --glass-bg: rgba(210,228,80,.1); --glass-bg-elevated: rgba(210,228,80,.18); --glass-border: rgba(142,160,0,.2); --glass-border-subtle: rgba(142,160,0,.12); }
@@ -348,25 +344,8 @@ body.sport-tennis .step-button:hover { background: rgba(210,228,80,.3); }
 html.dark-mode.sport-tennis { --blue: #c4da38; --blue-dark: #d6ec50; --glass-bg: rgba(50,60,0,.1); --glass-bg-elevated: rgba(50,60,0,.18); --glass-border: rgba(142,160,0,.15); --glass-border-subtle: rgba(142,160,0,.08); background: radial-gradient(ellipse at 15% 5%, #252a00 0, transparent 40%), radial-gradient(ellipse at 85% 35%, #2c3200 0, transparent 35%), radial-gradient(ellipse at 50% 100%, #222700 0, var(--soft) 40%); }
 html.dark-mode.sport-tennis .orb-blue { background: #8ea000; }
 html.dark-mode.sport-tennis .orb-lilac { background: #758600; }
-body.dark-mode.sport-tennis .orb-peach { background: #c4da38; }
-body.dark-mode.sport-tennis .eyebrow { color: #c4da38; }
-
-/* ── Sport & Hunt Pickers ──────────────────────────────────────────────────── */
-.sport-picker { position: fixed; inset: 0; z-index: 100; display: flex; align-items: flex-end; justify-content: center; padding: 16px; pointer-events: none; }
-.sport-picker[hidden] { display: none; }
-.sport-picker-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.25); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); pointer-events: auto; animation: fade-in .3s ease both; }
-.dark-mode .sport-picker-backdrop { background: rgba(0,0,0,.4); }
-.sport-picker-panel { position: relative; z-index: 1; width: 100%; max-width: 400px; padding: 24px; border: .5px solid var(--glass-border); border-radius: var(--radius-xl); background: var(--glass-bg-elevated); box-shadow: var(--specular-strong), var(--inner-depth), 0 24px 64px rgba(0,0,0,.15); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); pointer-events: auto; animation: slide-up-in .4s cubic-bezier(.2,.7,.35,1) both; }
-.dark-mode .sport-picker-panel { border-color: var(--glass-border); background: rgba(30,30,30,.85); box-shadow: var(--specular-strong), var(--inner-depth), 0 24px 64px rgba(0,0,0,.4); }
-
-.sport-picker-title { margin: 0 0 6px; font-size: 20px; font-weight: 700; letter-spacing: -.5px; text-align: center; }
-.sport-picker-sub { margin: 0 0 20px; color: var(--muted); font-size: 13px; text-align: center; }
-
-.sport-option-list { display: grid; gap: 8px; }
-.sport-option { display: flex; align-items: center; gap: 16px; padding: 12px 16px; border: .5px solid var(--glass-border-subtle); border-radius: var(--radius-lg); background: var(--glass-bg); text-align: left; transition: all .25s cubic-bezier(.2,.7,.35,1); cursor: pointer; }
-.sport-option:hover { transform: scale(1.02); background: var(--glass-bg-elevated); border-color: var(--glass-border); box-shadow: var(--specular), var(--glass-shadow-hover); }
-.dark-mode .sport-option { border-color: rgba(255,255,255,.08); background: rgba(255,255,255,.04); }
-.dark-mode .sport-option:hover { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.15); }
+html.dark-mode.sport-tennis .orb-peach { background: #c4da38; }
+html.dark-mode.sport-tennis .eyebrow { color: #c4da38; }
 
 /* ── Sport guide banner ────────────────────────────────────────────────────── */
 .sport-guide { display: flex; align-items: center; gap: 14px; margin: -8px 0 24px; padding: 15px 20px; border-radius: var(--radius-lg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); animation: rise-in .55s cubic-bezier(.2,.7,.35,1) both; }
@@ -520,6 +499,8 @@ body.skin-classic .app-shell, body.skin-classic .counter-card, body.skin-classic
 body.skin-glitch {
   --blue: #00ffcc;
   --blue-dark: #ff00ff;
+  --ink: #00ffcc;
+  --muted: rgba(0, 255, 204, 0.7);
   --glass-bg: rgba(10, 10, 20, 0.7);
   --glass-bg-elevated: rgba(20, 20, 35, 0.85);
   --glass-border: rgba(0, 255, 204, 0.5);
@@ -533,7 +514,7 @@ body.skin-glitch .ambient-scene {
 body.skin-glitch .counter-card, body.skin-glitch .hero h1 {
   animation: glitch-skew 3s infinite linear alternate-reverse;
 }
-body.skin-glitch .count-value {
+body.skin-glitch .count, body.skin-glitch .summary-value, body.skin-glitch .sport-score {
   text-shadow: -2px 0 #ff00ff, 2px 0 #00ffcc;
 }
 body.skin-glitch button {
@@ -559,4 +540,14 @@ body.skin-glitch .add-button {
   45% { transform: skew(-3deg, 1deg); filter: invert(0.1); }
   50% { transform: skew(0deg, 0deg); filter: invert(0); }
   100% { transform: skew(0deg, 0deg); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-up-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
