@@ -208,7 +208,8 @@ const translations = {
     skinRetro: "Retro",
     skinRetroDesc: "Nostalgic 8-bit arcade aesthetic",
     viewOnGithub: "View on GitHub",
-    prevBtn: "Back"
+    prevBtn: "Back",
+    brainrotHint: "Hint: Scroll to the bottom of the language menu for a surprise... 💀"
   },
   de: {
     language: "Sprache",
@@ -353,7 +354,8 @@ const translations = {
     skinRetro: "Retro",
     skinRetroDesc: "Nostalgische 8-Bit-Arcade-Ästhetik",
     viewOnGithub: "Auf GitHub ansehen",
-    prevBtn: "Zurück"
+    prevBtn: "Zurück",
+    brainrotHint: "Tipp: Scrolle zum Ende des Sprachmenüs für eine Überraschung... 💀"
   },
   es: {
     language: "Idioma",
@@ -498,7 +500,8 @@ const translations = {
     skinRetro: "Retro",
     skinRetroDesc: "Estética nostálgica de arcade de 8 bits",
     viewOnGithub: "Ver en GitHub",
-    prevBtn: "Atrás"
+    prevBtn: "Atrás",
+    brainrotHint: "Pista: Desplázate hasta el final del menú de idiomas para una sorpresa... 💀"
   },
   zh: {
     language: "语言",
@@ -643,7 +646,8 @@ const translations = {
     skinRetro: "复古",
     skinRetroDesc: "怀旧的8位街机美学",
     viewOnGithub: "在GitHub上查看",
-    prevBtn: "返回"
+    prevBtn: "返回",
+    brainrotHint: "提示：滚动到语言菜单底部发现惊喜... 💀"
   },
   hi: {
     language: "भाषा",
@@ -788,7 +792,8 @@ const translations = {
     skinRetro: "रेट्रो",
     skinRetroDesc: "उदासीन 8-बिट आर्केड सौंदर्य",
     viewOnGithub: "GitHub पर देखें",
-    prevBtn: "पीछे"
+    prevBtn: "पीछे",
+    brainrotHint: "संकेत: एक आश्चर्य के लिए भाषा मेनू के नीचे स्क्रॉल करें... 💀"
   },
   it: {
     language: "Lingua",
@@ -933,7 +938,8 @@ const translations = {
     skinRetro: "Retro",
     skinRetroDesc: "Estetica nostalgica arcade a 8 bit",
     viewOnGithub: "Vedi su GitHub",
-    prevBtn: "Indietro"
+    prevBtn: "Indietro",
+    brainrotHint: "Suggerimento: Scorri fino in fondo al menu delle lingue per una sorpresa... 💀"
   },
   fr: {
     language: "Langue",
@@ -1078,7 +1084,8 @@ const translations = {
     skinRetro: "Rétro",
     skinRetroDesc: "Esthétique nostalgique d'arcade 8 bits",
     viewOnGithub: "Voir sur GitHub",
-    prevBtn: "Retour"
+    prevBtn: "Retour",
+    brainrotHint: "Astuce : Faites défiler jusqu'en bas du menu des langues pour une surprise... 💀"
   },
   pt: {
     language: "Idioma",
@@ -1223,7 +1230,8 @@ const translations = {
     skinRetro: "Retrô",
     skinRetroDesc: "Estética nostálgica de fliperama 8 bits",
     viewOnGithub: "Ver no GitHub",
-    prevBtn: "Voltar"
+    prevBtn: "Voltar",
+    brainrotHint: "Dica: Role até o final do menu de idiomas para uma surpresa... 💀"
   },
   ko: {
     language: "언어",
@@ -1368,7 +1376,8 @@ const translations = {
     skinRetro: "레트로",
     skinRetroDesc: "향수를 불러일으키는 8비트 아케이드 미학",
     viewOnGithub: "GitHub에서 보기",
-    prevBtn: "이전"
+    prevBtn: "이전",
+    brainrotHint: "힌트: 언어 메뉴 하단으로 스크롤하여 깜짝 선물을 확인하세요... 💀"
   },
   ja: {
     language: "言語",
@@ -1513,7 +1522,8 @@ const translations = {
     skinRetro: "レトロ",
     skinRetroDesc: "ノスタルジックな8ビットアーケードの美学",
     viewOnGithub: "GitHubで表示",
-    prevBtn: "戻る"
+    prevBtn: "戻る",
+    brainrotHint: "ヒント：言語メニューの一番下までスクロールしてサプライズを見つけてください... 💀"
   },
   tr: {
     language: "Dil",
@@ -1658,7 +1668,154 @@ const translations = {
     skinRetro: "Retro",
     skinRetroDesc: "Nostaljik 8-bit arcade estetiği",
     viewOnGithub: "GitHub'da Gör",
-    prevBtn: "Geri"
+    prevBtn: "Geri",
+    brainrotHint: "İpucu: Sürpriz için dil menüsünün en altına kaydırın... 💀"
+  },
+  "en-online": {
+    language: "Language (no cap)",
+    yourCounters: "Your Ws & Ls",
+    heroTitle: "Keep track of the vibes.",
+    addCounter: "Drop a new counter",
+    howToPlay: "How to grind",
+    howItWorks: "The lore",
+    sportTutorial: "Turn your counters into tryhard scoreboards. Each sport got custom rules and drip.",
+    huntTutorial: "The OG road trip game. Pick a color, spot cars, tap for Ws. See who's got the most rizz!",
+    skinTutorial: "Level up your aesthetic. Skins change the drip, textures, and vibes of your counters.",
+    guideCopy: "Spot a yellow car for <strong>1 W</strong>. Log it and see who's the goat.",
+    totalCount: "Total Ws",
+    activeCounters: "Active grinds",
+    renameHint: "Click a counter's name to change its vibe",
+    keepItSimple: "Keep it bussin.",
+    viewTutorial: "Run that back",
+    quickTour: "VIBE CHECK",
+    skipIntro: "Nah, skip",
+    continue: "Bet",
+    finish: "Donezo",
+    tip: "LIFE HACK",
+    play: "GRIND",
+    car: "Whip",
+    tapToAdjust: "Tap to fix",
+    untitled: "Nameless af",
+    counter: "Tracker",
+    resetConfirm: "Nuke all counters to zero? Fr?",
+    emptyTitle: "Your space is bare af.",
+    emptyCopy: "Drop a counter to start cooking.",
+    chooseLanguage: "Pick your slang",
+    darkMode: "Dark Mode",
+    lightMode: "Light Mode",
+    activateHunt: "Turn on Yellow Hunt",
+    exitHunt: "Dip out of Yellow Hunt",
+    resetAll: "Nuke all counters",
+    counterName: "Counter vibe",
+    searchCounters: "Search the stash",
+    noMatchingCounters: "Ain't finding nothing like that.",
+    aboutCountly: "The Tea on Countly",
+    aboutDesc: "Cooked up with precision by <strong>Iven Singer</strong>.<br><br>Countly is a cracked counter app. It brings crazy liquid glass drip, sport scoreboards, and mini games.",
+    close: "Yeet",
+    resetSport: "Nuke %s's score? No cap?",
+    remove: "Delete",
+    increase: "W",
+    decrease: "L",
+    carAria: "%s spotted:",
+    tutorials: [
+      [
+        "Make it yours",
+        "Add as many trackers as you want and name them so you know what's cooking."
+      ],
+      [
+        "Tap to grind",
+        "Use the plus and minus buttons to change the number. Your grind auto-saves."
+      ],
+      [
+        "Try Sport Mode",
+        "Tap the 🏆 to pick Basketball, Soccer, or Tennis. Each sport got its own drip and buttons."
+      ],
+      [
+        "Try Yellow Hunt",
+        "Turn on Yellow Hunt for road trips: yellow whips are 1 point."
+      ],
+      [
+        "Pick a Skin",
+        "Change up your aesthetic. Skins change the colors, textures, and vibes of the app."
+      ],
+      [
+        "Choose Language",
+        "Open the globe menu to pick your slang."
+      ],
+      [
+        "Set the Vibe",
+        "Swap between Light and Dark mode whenever you want."
+      ],
+      [
+        "Start Fresh",
+        "Use reset when you want to nuke everything back to zero and start a new era."
+      ]
+    ],
+    navCounters: "Trackers",
+    navSports: "Tryhard",
+    navHistory: "Lore",
+    navGames: "Grind",
+    navSettings: "Vibes",
+    sportsHeroTitle: "Track every W.",
+    chooseSport: "Pick your poison",
+    chooseSportDesc: "Choose a game to start tracking Ws",
+    sportBasketball: "Hoops",
+    descBasketball: "Free Throw · Field Goal · 3-Pointer",
+    sportSoccer: "Futbol",
+    descSoccer: "Log Ws for Home & Away",
+    sportTennis: "Tennis",
+    descTennis: "Love · 15 · 30 · 40 · Deuce · Ad",
+    sportFootball: "Gridiron",
+    descFootball: "TDs, FGs, and Safeties",
+    sportF1: "Formula 1",
+    descF1: "Podiums and points",
+    sportBaseball: "Baseball",
+    descBaseball: "Runs for Home & Away",
+    sportHockey: "Hockey",
+    descHockey: "Goals on the ice",
+    sportVolleyball: "Volleyball",
+    descVolleyball: "Points and sets",
+    cancelBtn: "Nah",
+    sportGuide: "Tap buttons to score. Tap a team name to change the vibe.",
+    endGame: "GG",
+    historyHeroTitle: "Your lore.",
+    comingSoon: "Cooking soon",
+    historyDesc: "Lore will show your grind over time — streaks, daily totals, and personal Ws.",
+    gamesHero: "Mini Games",
+    gamesHeroTitle: "Play and grind.",
+    gameCarHunt: "Whip Hunt",
+    settingsHeroTitle: "Your vibes.",
+    settingsAppearance: "Drip",
+    settingsDarkMode: "Dark Mode",
+    settingsSkin: "Aesthetic",
+    skinDefault: "Vanilla",
+    settingsLanguage: "Slang",
+    settingsGeneral: "Basic af",
+    chooseSkin: "Pick an Aesthetic",
+    chooseSkinDesc: "Choose a vibe for Countly",
+    skinDefaultName: "Vanilla (Liquid Glass)",
+    skinDefaultDesc: "The clean modern drip",
+    skinClassic: "Boomer",
+    skinClassicDesc: "Clean, flat, simple af",
+    skinGlitched: "Glitched",
+    skinGlitchedDesc: "Crazy cyberpunk vibes",
+    skinNeon: "Neon",
+    skinNeonDesc: "Loud synthwave colors",
+    skinOcean: "Ocean",
+    skinOceanDesc: "Deep sea drip",
+    skinNature: "Grass",
+    skinNatureDesc: "Go touch grass",
+    skinSunset: "Sunset",
+    skinSunsetDesc: "Golden hour vibes",
+    skinSpace: "Space",
+    skinSpaceDesc: "Floating in the cosmos",
+    skinMinimal: "Tryhard Minimal",
+    skinMinimalDesc: "Sweaty monochrome focus",
+    skinRetro: "Retro",
+    skinRetroDesc: "Old school 8-bit aesthetic",
+    viewOnGithub: "Check the GitHub",
+    prevBtn: "Wait, go back",
+    brainrotHint: "Pro tip: Scroll to the bottom of the language menu for some crazy drip... 💀"
   }
 };
 let currentLanguage = "en";
