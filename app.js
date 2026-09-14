@@ -1660,7 +1660,7 @@ const translations = {
     viewOnGithub: "GitHub'da Gör",
     prevBtn: "Geri"
   },
-  en-online: {
+  "en-online": {
     language: "Language (no cap)",
     yourCounters: "Your Ws & Ls",
     heroTitle: "Keep track of the vibes.",
