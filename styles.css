@@ -1149,14 +1149,14 @@ body.skin-retro button:active {
 html.appearance-clear {
   --glass-blur: blur(12px) saturate(140%);
 }
-html.appearance-clear .card, html.appearance-clear .sport-picker-panel, html.appearance-clear .qc-save-sheet-panel, html.appearance-clear .onboarding-modal {
+html.appearance-clear .counter-card, html.appearance-clear .summary, html.appearance-clear .settings-list, html.appearance-clear .counter-search input, html.appearance-clear .bottom-nav, html.appearance-clear .sport-picker-panel, html.appearance-clear .qc-save-sheet-panel, html.appearance-clear .onboarding-modal {
   background: color-mix(in srgb, var(--glass-bg) 30%, transparent) !important;
 }
 
 html.appearance-tinted {
   --glass-blur: blur(80px) saturate(220%);
 }
-html.appearance-tinted .card, html.appearance-tinted .sport-picker-panel, html.appearance-tinted .qc-save-sheet-panel, html.appearance-tinted .onboarding-modal {
+html.appearance-tinted .counter-card, html.appearance-tinted .summary, html.appearance-tinted .settings-list, html.appearance-tinted .counter-search input, html.appearance-tinted .bottom-nav, html.appearance-tinted .sport-picker-panel, html.appearance-tinted .qc-save-sheet-panel, html.appearance-tinted .onboarding-modal {
   background: color-mix(in srgb, var(--glass-bg) 70%, var(--ink) 15%) !important;
 }
 
