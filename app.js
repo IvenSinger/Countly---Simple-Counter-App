@@ -2046,6 +2046,10 @@ const legacyCounters = readCounters(STORAGE_KEY);
 const savedHuntCounters = readCounters(HUNT_COUNTERS_KEY);
 let huntMode = localStorage.getItem(HUNT_KEY) === "true";
 let huntColor = localStorage.getItem(HUNT_COLOR_KEY) || "yellow";
+
+let appearance = localStorage.getItem("countlyAppearance") || "standard";
+document.documentElement.classList.add("appearance-" + appearance);
+
 let currentSkin = localStorage.getItem(SKIN_KEY) || "default";
 let counters = huntMode
   ? savedHuntCounters ?? (isYellowHuntCounters(legacyCounters) ? legacyCounters : createYellowHuntCounters())
