@@ -627,6 +627,19 @@
       </div>
     </div>
 
+    <!-- Goal Picker Modal -->
+    <div class="qc-save-sheet" id="goal-picker" style="position: fixed;" hidden="" role="dialog" aria-modal="true">
+      <div class="qc-save-sheet-backdrop" id="goal-picker-backdrop"></div>
+      <div class="qc-save-sheet-panel">
+        <h3 id="goal-picker-title">Set Goal</h3>
+        <input type="number" id="goal-picker-input" class="qc-input" placeholder="e.g. 100" autocomplete="off" min="1">
+        <div class="qc-save-actions">
+          <button class="qc-btn-secondary" id="goal-picker-cancel" type="button" data-i18n="cancelBtn">Cancel</button>
+          <button class="qc-btn-primary" id="goal-picker-save" type="button" data-i18n="saveBtn">Save</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Onboarding Modal -->
     <div class="onboarding-overlay" id="tutorial-overlay" hidden="" role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
       <div class="onboarding-modal" id="onboarding-modal">

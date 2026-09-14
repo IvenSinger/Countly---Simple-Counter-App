@@ -2495,17 +2495,7 @@ function render() {
     if (goalBtn) {
       goalBtn.addEventListener("click", () => {
         const currentStr = counter.goal !== undefined ? String(counter.goal) : "";
-        const input = prompt("Set a target goal for this counter:", currentStr);
-        if (input !== null) {
-          const parsed = parseInt(input.trim(), 10);
-          if (!isNaN(parsed) && parsed > 0) {
-            counter.goal = parsed;
-          } else if (input.trim() === "") {
-            delete counter.goal;
-          }
-          saveCounters();
-          render();
-        }
+        openGoalPicker(counter.id);
       });
     }
     card.querySelector(".counter-name").addEventListener("change", (event) => {
@@ -3074,6 +3064,13 @@ const qcSaveSheetBackdrop = document.getElementById("qc-save-sheet-backdrop");
 const qcNameInput = document.getElementById("qc-name-input");
 const qcDiscardBtn = document.getElementById("qc-discard-btn");
 const qcSaveBtn = document.getElementById("qc-save-btn");
+
+const goalPicker = document.getElementById("goal-picker");
+const goalPickerBackdrop = document.getElementById("goal-picker-backdrop");
+const goalPickerInput = document.getElementById("goal-picker-input");
+const goalPickerCancelBtn = document.getElementById("goal-picker-cancel");
+const goalPickerSaveBtn = document.getElementById("goal-picker-save");
+let activeGoalCounterId = null;
 const qcProgressRing = document.getElementById("qc-progress-ring");
 const qcProgressFill = document.getElementById("qc-progress-fill");
 
@@ -3144,16 +3141,7 @@ qcDecreaseBtn.addEventListener("click", (e) => {
 
 qcGoalBtn.addEventListener("click", () => {
   const currentStr = qcGoal !== null ? String(qcGoal) : "";
-  const input = prompt("Set a target goal for this counter:", currentStr);
-  if (input !== null) {
-    const parsed = parseInt(input.trim(), 10);
-    if (!isNaN(parsed) && parsed > 0) {
-      qcGoal = parsed;
-    } else if (input.trim() === "") {
-      qcGoal = null; // Clear goal
-    }
-    updateQcUI();
-  }
+  openGoalPicker("quick-count");
 });
 
 qcFinishBtn.addEventListener("click", () => {
