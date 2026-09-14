@@ -1,0 +1,50 @@
+--- app.js
++++ app.js
+@@ -473,7 +473,8 @@
+ 
+ function renderSport() {
+   if (document.body.classList.contains("app-ready")) document.body.classList.add("counter-rendered");
+-  grid.innerHTML = "";
++  const sportGrid = document.querySelector("#sport-grid");
++  sportGrid.innerHTML = "";
+   if (!sportScores || sportScores.length < 2) return;
+   const config   = SPORT_CONFIGS[sportType];
+   const [t0, t1] = sportScores;
+@@ -522,7 +523,7 @@
+         </div>
+       </div>
+     `;
+-    grid.appendChild(card);
++    sportGrid.appendChild(card);
+ 
+     // Add action listeners
+     card.querySelectorAll(".sport-action").forEach(btn => {
+@@ -556,6 +557,11 @@
+   document.body.classList.toggle("sport-mode", sportMode);
+   document.documentElement.classList.toggle("sport-mode", sportMode);
+ 
++  const sportsStart = document.querySelector("#sports-start");
++  if (sportsStart) sportsStart.hidden = sportMode;
++  const sportsActions = document.querySelector("#sports-tab-actions");
++  if (sportsActions) sportsActions.hidden = !sportMode;
++
+   const sportGuide  = document.querySelector("#sport-guide");
+   if (sportGuide) sportGuide.hidden = !sportMode;
+ 
+@@ -594,7 +600,7 @@
+   closeSportPicker();
+   applySportMode();
+   renderSport();
+-  navigateTo("counters");
++  navigateTo("sports");
+ }
+ 
+ function exitSportMode() {
+@@ -633,7 +639,6 @@
+ }
+ 
+ function render() {
+-  if (sportMode) { renderSport(); return; }
+   if (document.body.classList.contains("app-ready")) document.body.classList.add("counter-rendered");
+   grid.innerHTML = "";
+   const visibleCounters = searchQuery.trim()

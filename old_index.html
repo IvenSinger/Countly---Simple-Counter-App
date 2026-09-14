@@ -1,0 +1,617 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" id="meta-theme-color" content="#f5f5f7" />
+    <title>Countly — Simple counters</title>
+    <meta name="description" content="Modern counters with a playful Yellow Hunt mode, sport scoreboards, and themes." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" type="image/png" href="./countly-favicon.png">
+  </head>
+  <body>
+    <div class="ambient-scene" aria-hidden="true">
+      <div class="ambient-orb orb-blue"></div>
+      <div class="ambient-orb orb-lilac"></div>
+      <div class="ambient-orb orb-peach"></div>
+      <div class="glass-noise"></div>
+    </div>
+    <div class="vehicle-layer" id="vehicle-layer" aria-hidden="true"></div>
+
+    <main class="app-shell">
+
+      <!-- ── Slim Topbar ─────────────────────────────────────────────────── -->
+      <header class="topbar">
+        <a class="brand" href="./" aria-label="Countly home">
+          <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+          <span>countly</span>
+        </a>
+        <div class="topbar-actions">
+          <button class="icon-button skin-toggle" id="skin-toggle" type="button" title="Choose Skin" aria-label="Choose Skin">
+            <img src="assets/skin_mode_icon.jpg" alt="Skin Selector" class="liquid-icon">
+          </button>
+        </div>
+      </header>
+
+      <!-- ════════════════════════════════════════════════════════════════════
+           TAB: COUNTERS
+           ════════════════════════════════════════════════════════════════════ -->
+      <section class="tab-section" id="tab-counters" aria-label="Counters">
+
+        <section class="hero">
+          <div>
+            <p class="eyebrow" id="eyebrow" data-i18n="yourCounters">Your counters</p>
+            <h1 id="hero-title" data-i18n="heroTitle">Keep track of what matters.</h1>
+          </div>
+          <button class="add-button" id="add-counter" type="button"><span aria-hidden="true">+</span> <span data-i18n="addCounter">Add new counter</span></button>
+        </section>
+
+
+
+        <section class="summary" aria-label="Counter summary">
+          <div class="summary-item"><span class="summary-value" id="total-count">0</span><span class="summary-label" data-i18n="totalCount">Total count</span></div>
+          <div class="summary-divider"></div>
+          <div class="summary-item"><span class="summary-value" id="counter-count">0</span><span class="summary-label" data-i18n="activeCounters">Active counters</span></div>
+        </section>
+
+        <div class="counter-search">
+          <label class="sr-only" for="counter-search-input" data-i18n="searchCounters">Search counters</label>
+          <span class="counter-search-icon" aria-hidden="true">⌕</span>
+          <input id="counter-search-input" type="search" autocomplete="off" data-i18n-placeholder="searchCounters" placeholder="Search counters" />
+        </div>
+
+        <section class="counter-grid" id="counter-grid" aria-live="polite"></section>
+
+        <p class="hint" id="app-hint"><span class="hint-key">TIP</span> <span data-i18n="renameHint">Click a counter's name to rename it</span></p>
+
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════════════
+           TAB: SPORTS
+           ════════════════════════════════════════════════════════════════════ -->
+      <section class="tab-section" id="tab-sports" aria-label="Sports" hidden>
+
+        <section class="tab-hero">
+          <p class="eyebrow">Sports</p>
+          <h1>Track every score.</h1>
+        </section>
+
+        <section class="sport-guide" id="sport-guide" aria-label="Sport mode active" hidden>
+          <div class="sport-guide-icon" id="sport-guide-icon" aria-hidden="true">🏀</div>
+          <div class="sport-guide-info">
+            <p class="sport-guide-title" id="sport-guide-title">Basketball</p>
+            <p class="sport-guide-copy" id="sport-guide-copy">Score points using the action buttons. Tap a team name to rename it.</p>
+          </div>
+          <div class="sport-switcher" id="sport-switcher" role="group" aria-label="Switch sport">
+            <button class="sport-switch-btn" type="button" data-switch-sport="basketball" title="Switch to Basketball" aria-label="Switch to Basketball">🏀</button>
+            <button class="sport-switch-btn" type="button" data-switch-sport="soccer" title="Switch to Soccer" aria-label="Switch to Soccer">⚽</button>
+            <button class="sport-switch-btn" type="button" data-switch-sport="tennis" title="Switch to Tennis" aria-label="Switch to Tennis">🎾</button>
+          </div>
+        </section>
+
+        <!-- Sport start screen (shown when not in sport mode) -->
+        <div class="sports-start" id="sports-start">
+          <div class="sports-start-grid">
+            <button class="sport-quick-btn" type="button" data-sport="basketball">
+              <span class="sport-quick-emoji">🏀</span>
+              <span class="sport-quick-name">Basketball</span>
+            </button>
+            <button class="sport-quick-btn" type="button" data-sport="soccer">
+              <span class="sport-quick-emoji">⚽</span>
+              <span class="sport-quick-name">Soccer</span>
+            </button>
+            <button class="sport-quick-btn" type="button" data-sport="tennis">
+              <span class="sport-quick-emoji">🎾</span>
+              <span class="sport-quick-name">Tennis</span>
+            </button>
+            <button class="sport-quick-btn" type="button" data-sport="football">
+              <span class="sport-quick-emoji">🏈</span>
+              <span class="sport-quick-name">Football</span>
+            </button>
+            <button class="sport-quick-btn" type="button" data-sport="f1">
+              <span class="sport-quick-emoji">🏎️</span>
+              <span class="sport-quick-name">Formula 1</span>
+            </button>
+            <button class="sport-quick-btn" type="button" data-sport="baseball">
+              <span class="sport-quick-emoji">⚾</span>
+              <span class="sport-quick-name">Baseball</span>
+            </button>
+            <button class="sport-quick-btn" type="button" data-sport="hockey">
+              <span class="sport-quick-emoji">🏒</span>
+              <span class="sport-quick-name">Ice Hockey</span>
+            </button>
+            <button class="sport-quick-btn" type="button" data-sport="volleyball">
+              <span class="sport-quick-emoji">🏐</span>
+              <span class="sport-quick-name">Volleyball</span>
+            </button>
+          </div>
+        </div>
+
+        <section class="counter-grid" id="sport-grid" aria-live="polite"></section>
+
+        <div class="sports-tab-actions" id="sports-tab-actions" hidden>
+          <button class="sport-exit-btn" id="sport-exit-btn" type="button">End Game</button>
+          <button class="icon-button" id="reset-sport-btn" type="button" title="Reset scores" aria-label="Reset scores">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8.1 8.1 0 0 0-15.5-2M4 5v4h4M4 13a8.1 8.1 0 0 0 15.5 2M20 19v-4h-4" /></svg>
+          </button>
+        </div>
+
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════════════
+           TAB: HISTORY
+           ════════════════════════════════════════════════════════════════════ -->
+      <section class="tab-section" id="tab-history" aria-label="History" hidden>
+        <section class="tab-hero">
+          <p class="eyebrow">History</p>
+          <h1>Your counting story.</h1>
+        </section>
+        <div class="history-placeholder">
+          <div class="history-placeholder-icon">📊</div>
+          <p class="history-placeholder-title">Coming soon</p>
+          <p class="history-placeholder-copy">History will show your counting activity over time — streaks, totals by day, and personal bests.</p>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════════════
+           TAB: GAMES
+           ════════════════════════════════════════════════════════════════════ -->
+      <section class="tab-section" id="tab-games" aria-label="Games" hidden>
+        <section class="tab-hero">
+          <p class="eyebrow">Mini Games</p>
+          <h1>Play and count.</h1>
+        </section>
+        <div class="sports-start">
+          <div class="sports-start-grid">
+            <button class="sport-quick-btn" type="button" id="games-hunt-btn">
+              <span class="sport-quick-emoji">🚕</span>
+              <span class="sport-quick-name">Car Hunt</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════════════
+           TAB: SETTINGS
+           ════════════════════════════════════════════════════════════════════ -->
+      <section class="tab-section" id="tab-settings" aria-label="Settings" hidden>
+
+        <!-- Settings main screen -->
+        <div class="settings-screen" id="settings-main">
+          <section class="tab-hero">
+            <p class="eyebrow">Settings</p>
+            <h1>Preferences.</h1>
+          </section>
+
+          <!-- Appearance group -->
+          <div class="settings-group">
+            <p class="settings-group-label">Appearance</p>
+            <div class="settings-list">
+              <button class="settings-row" id="settings-theme-row" type="button">
+                <span class="settings-row-icon">🌙</span>
+                <span class="settings-row-label" id="settings-theme-label">Dark Mode</span>
+                <span class="settings-row-chevron" aria-hidden="true">
+                  <span class="theme-toggle-pill" id="theme-toggle-pill"></span>
+                </span>
+              </button>
+              <button class="settings-row" id="settings-skin-row" type="button">
+                <span class="settings-row-icon">🎨</span>
+                <span class="settings-row-label">Skin</span>
+                <span class="settings-row-value" id="settings-skin-value">Default</span>
+                <span class="settings-row-chevron" aria-hidden="true">›</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Language group -->
+          <div class="settings-group">
+            <p class="settings-group-label">Language</p>
+            <div class="settings-list">
+              <button class="settings-row" id="settings-language-row" type="button">
+                <span class="settings-row-icon">🌐</span>
+                <span class="settings-row-label">Language</span>
+                <span class="settings-row-value" id="settings-language-value">English</span>
+                <span class="settings-row-chevron" aria-hidden="true">›</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- General group -->
+          <div class="settings-group">
+            <p class="settings-group-label">General</p>
+            <div class="settings-list">
+              <button class="settings-row" id="settings-about-row" type="button">
+                <span class="settings-row-icon">ℹ️</span>
+                <span class="settings-row-label" data-i18n="aboutCountly">About Countly</span>
+                <span class="settings-row-chevron" aria-hidden="true">›</span>
+              </button>
+              <button class="settings-row settings-row-danger" id="settings-reset-row" type="button">
+                <span class="settings-row-icon">↺</span>
+                <span class="settings-row-label" data-i18n="resetAll">Reset all counters</span>
+                <span class="settings-row-chevron" aria-hidden="true">›</span>
+              </button>
+            </div>
+          </div>
+
+          <footer class="settings-footer">
+            <div>Countly <span>•</span> <span data-i18n="keepItSimple">Keep it simple.</span></div>
+            <button class="redo-tutorial" id="redo-tutorial" type="button" data-i18n="viewTutorial">View tutorial again</button>
+          </footer>
+        </div>
+
+        <!-- Language sub-screen -->
+        <div class="settings-screen settings-subscreen" id="settings-language-screen" hidden>
+          <div class="subscreen-header">
+            <button class="subscreen-back" id="lang-screen-back" type="button" aria-label="Back to Settings">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+              Settings
+            </button>
+            <span class="subscreen-title">Language</span>
+          </div>
+
+          <div class="settings-list lang-list" id="lang-list">
+            <button class="settings-row lang-row" type="button" data-language="en">
+              <span class="settings-row-icon">🇬🇧</span>
+              <span class="settings-row-label">English</span>
+              <span class="settings-row-check lang-check" aria-hidden="true">✓</span>
+            </button>
+            <button class="settings-row lang-row" type="button" data-language="de">
+              <span class="settings-row-icon">🇩🇪</span>
+              <span class="settings-row-label">Deutsch</span>
+              <span class="settings-row-check lang-check" aria-hidden="true"></span>
+            </button>
+            <button class="settings-row lang-row" type="button" data-language="es">
+              <span class="settings-row-icon">🇪🇸</span>
+              <span class="settings-row-label">Español</span>
+              <span class="settings-row-check lang-check" aria-hidden="true"></span>
+            </button>
+            <button class="settings-row lang-row" type="button" data-language="zh">
+              <span class="settings-row-icon">🇨🇳</span>
+              <span class="settings-row-label">简体中文</span>
+              <span class="settings-row-check lang-check" aria-hidden="true"></span>
+            </button>
+            <button class="settings-row lang-row" type="button" data-language="hi">
+              <span class="settings-row-icon">🇮🇳</span>
+              <span class="settings-row-label">हिन्दी</span>
+              <span class="settings-row-check lang-check" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- ── Bottom Navigation ───────────────────────────────────────────────── -->
+    <nav class="bottom-nav" id="bottom-nav" aria-label="Main navigation">
+      <button class="nav-tab is-active" type="button" data-tab="counters" id="nav-counters" aria-label="Counters" aria-current="page">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+          <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+          <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+          <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+        </svg>
+        <span class="nav-label">Counters</span>
+      </button>
+      <button class="nav-tab" type="button" data-tab="sports" id="nav-sports" aria-label="Sports">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M12 3a9 9 0 0 0-4.2 7.5M12 3a9 9 0 0 1 4.2 7.5M3.6 9h16.8M3.6 15h16.8M12 21a9 9 0 0 1-4.2-7.5M12 21a9 9 0 0 0 4.2-7.5"/>
+        </svg>
+        <span class="nav-label">Sports</span>
+      </button>
+      <button class="nav-tab" type="button" data-tab="history" id="nav-history" aria-label="History">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 3v18h18"/>
+          <path d="M7 16l4-4 4 4 4-7"/>
+        </svg>
+        <span class="nav-label">History</span>
+      </button>
+      <button class="nav-tab" type="button" data-tab="games" id="nav-games" aria-label="Games">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2" y="6" width="20" height="12" rx="2" ry="2"/>
+          <path d="M6 12h4M8 10v4M15 13h.01M18 11h.01"/>
+        </svg>
+        <span class="nav-label">Games</span>
+      </button>
+      <button class="nav-tab" type="button" data-tab="settings" id="nav-settings" aria-label="Settings">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+        <span class="nav-label">Settings</span>
+      </button>
+    </nav>
+
+    <!-- ── Modals (unchanged, still global) ─────────────────────────────── -->
+
+    <!-- Sport picker modal -->
+    <div class="sport-picker" id="sport-picker" hidden role="dialog" aria-modal="true" aria-labelledby="sport-picker-title">
+      <div class="sport-picker-backdrop" id="sport-picker-backdrop"></div>
+      <div class="sport-picker-panel">
+        <h2 class="sport-picker-title" id="sport-picker-title">Choose a Sport</h2>
+        <p class="sport-picker-sub">Pick a game to start tracking scores</p>
+        <div class="picker-tutorial-card">
+          <div class="picker-tutorial-icon">💡</div>
+          <div class="picker-tutorial-text">
+            <span class="picker-tutorial-title" data-i18n="howItWorks">How it works</span>
+            <p class="picker-tutorial-copy" data-i18n="sportTutorial">Transform your counters into specialized scoreboards. Each sport features custom scoring rules and a unique theme.</p>
+          </div>
+        </div>
+        <div class="sport-option-list">
+          <button class="sport-option" type="button" data-sport="basketball" id="sport-opt-basketball">
+            <span class="sport-option-emoji">🏀</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name">Basketball</span>
+              <span class="sport-option-desc">Free Throw · Field Goal · 3-Pointer</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+          <button class="sport-option" type="button" data-sport="soccer" id="sport-opt-soccer">
+            <span class="sport-option-emoji">⚽</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name">Soccer</span>
+              <span class="sport-option-desc">Log goals for Home &amp; Away</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+          <button class="sport-option" type="button" data-sport="tennis" id="sport-opt-tennis">
+            <span class="sport-option-emoji">🎾</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name">Tennis</span>
+              <span class="sport-option-desc">Love · 15 · 30 · 40 · Deuce · Ad</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+          <button class="sport-option" type="button" data-sport="football" id="sport-opt-football">
+            <span class="sport-option-emoji">🏈</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name">Am. Football</span>
+              <span class="sport-option-desc">TDs, FGs, and Safeties</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+          <button class="sport-option" type="button" data-sport="f1" id="sport-opt-f1">
+            <span class="sport-option-emoji">🏎️</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name">Formula 1</span>
+              <span class="sport-option-desc">Podium finishes and points</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+          <button class="sport-option" type="button" data-sport="baseball" id="sport-opt-baseball">
+            <span class="sport-option-emoji">⚾</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name">Baseball</span>
+              <span class="sport-option-desc">Runs for Home &amp; Away</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+          <button class="sport-option" type="button" data-sport="hockey" id="sport-opt-hockey">
+            <span class="sport-option-emoji">🏒</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name">Ice Hockey</span>
+              <span class="sport-option-desc">Goals on the ice</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+          <button class="sport-option" type="button" data-sport="volleyball" id="sport-opt-volleyball">
+            <span class="sport-option-emoji">🏐</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name">Volleyball</span>
+              <span class="sport-option-desc">Points and sets</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+        </div>
+        <button class="sport-picker-cancel" id="sport-picker-cancel" type="button">Cancel</button>
+      </div>
+    </div>
+
+    <!-- Hunt picker modal -->
+    <div class="sport-picker hunt-picker" id="hunt-picker" hidden role="dialog" aria-modal="true" aria-labelledby="hunt-picker-title">
+      <div class="sport-picker-backdrop" id="hunt-picker-backdrop"></div>
+      <div class="sport-picker-panel">
+        <h2 class="sport-picker-title" id="hunt-picker-title">Choose a Car Color</h2>
+        <p class="sport-picker-sub">Pick the color of the car you want to hunt</p>
+        <div class="picker-tutorial-card">
+          <div class="picker-tutorial-icon">💡</div>
+          <div class="picker-tutorial-text">
+            <span class="picker-tutorial-title" data-i18n="howItWorks">How it works</span>
+            <p class="picker-tutorial-copy" data-i18n="huntTutorial">The classic road trip game. Pick a color, spot cars, and tap to score points. Compete to see who spots the most!</p>
+          </div>
+        </div>
+        <div class="sport-option-list">
+          <button class="sport-option" type="button" data-hunt-color="yellow">
+            <span class="sport-option-emoji">🟡</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name">Yellow Car</span>
+              <span class="sport-option-desc">The classic road trip game</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+          <button class="sport-option" type="button" data-hunt-color="red">
+            <span class="sport-option-emoji">🔴</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name">Red Car</span>
+              <span class="sport-option-desc">Look for bright red vehicles</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+          <button class="sport-option" type="button" data-hunt-color="blue">
+            <span class="sport-option-emoji">🔵</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name">Blue Car</span>
+              <span class="sport-option-desc">Spot a blue car to score</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+          <button class="sport-option" type="button" data-hunt-color="green">
+            <span class="sport-option-emoji">🟢</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name">Green Car</span>
+              <span class="sport-option-desc">Keep an eye out for green</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+          <button class="sport-option" type="button" data-hunt-color="pink">
+            <span class="sport-option-emoji">🟣</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name">Pink Car</span>
+              <span class="sport-option-desc">Rare and rewarding</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+        </div>
+        <button class="sport-picker-cancel" id="hunt-picker-cancel" type="button">Cancel</button>
+      </div>
+    </div>
+
+    <!-- About modal -->
+    <div class="sport-picker about-modal" id="about-modal" hidden role="dialog" aria-modal="true" aria-labelledby="about-title">
+      <div class="sport-picker-backdrop" id="about-backdrop"></div>
+      <div class="sport-picker-panel" style="text-align: center;">
+        <h2 class="sport-picker-title" id="about-title" style="margin-bottom: 12px;" data-i18n="aboutCountly">About Countly</h2>
+        <p class="sport-picker-sub" style="margin-bottom: 24px; line-height: 1.5;" data-i18n="aboutDesc">
+          Created with precision by <strong>Iven Singer</strong>.<br><br>
+          Countly is a beautiful, modern counter app designed to keep track of what matters. Features a stunning Liquid Glass aesthetic, specialized sport scoreboards, and mini-games.
+        </p>
+        <div style="margin-bottom: 24px;">
+          <a href="https://github.com/IvenSinger/Countly---Simple-Counter-App" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline; font-weight: 500; display: inline-flex; align-items: center; gap: 8px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z"></path>
+            </svg>
+            View on GitHub
+          </a>
+        </div>
+        <button class="continue-tutorial" id="close-about" type="button" style="width: 100%; display: block; text-align: center;" data-i18n="close">Close</button>
+      </div>
+    </div>
+
+    <!-- Skin picker modal -->
+    <div class="sport-picker skin-picker" id="skin-picker" hidden role="dialog" aria-modal="true" aria-labelledby="skin-picker-title">
+      <div class="sport-picker-backdrop" id="skin-picker-backdrop"></div>
+      <div class="sport-picker-panel">
+        <h2 class="sport-picker-title" id="skin-picker-title">Choose Skin</h2>
+        <p class="sport-picker-sub">Select a visual style for Countly</p>
+        <div class="picker-tutorial-card">
+          <div class="picker-tutorial-icon">💡</div>
+          <div class="picker-tutorial-text">
+            <span class="picker-tutorial-title" data-i18n="howItWorks">How it works</span>
+            <p class="picker-tutorial-copy" data-i18n="skinTutorial">Personalize your app's aesthetic. Skins change the colors, materials, and animations of your counters.</p>
+          </div>
+        </div>
+        <div class="sport-option-list">
+          <button class="sport-option" type="button" data-skin="default">
+            <span class="sport-option-emoji">✨</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name">Default (Liquid Glass)</span>
+              <span class="sport-option-desc">The stunning modern aesthetic</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+          <button class="sport-option" type="button" data-skin="classic">
+            <span class="sport-option-emoji">📏</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name">Classic</span>
+              <span class="sport-option-desc">Clean, flat, and simple</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+          <button class="sport-option" type="button" data-skin="glitch">
+            <span class="sport-option-emoji">👾</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name">Glitched</span>
+              <span class="sport-option-desc">Chaotic cyberpunk vibes</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+          <button class="sport-option" type="button" data-skin="neon">
+            <span class="sport-option-emoji">🌃</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name">Neon</span>
+              <span class="sport-option-desc">Vibrant synthwave colors</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+          <button class="sport-option" type="button" data-skin="ocean">
+            <span class="sport-option-emoji">🌊</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name">Ocean</span>
+              <span class="sport-option-desc">Deep sea blues and aquamarine</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+          <button class="sport-option" type="button" data-skin="nature">
+            <span class="sport-option-emoji">🌿</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name">Nature</span>
+              <span class="sport-option-desc">Calming greens and organic tones</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+          <button class="sport-option" type="button" data-skin="sunset">
+            <span class="sport-option-emoji">🌅</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name">Sunset</span>
+              <span class="sport-option-desc">Vibrant twilight and synthwave vibes</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+          <button class="sport-option" type="button" data-skin="space">
+            <span class="sport-option-emoji">🚀</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name">Space</span>
+              <span class="sport-option-desc">Deep cosmos with floating stars</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+          <button class="sport-option" type="button" data-skin="minimal">
+            <span class="sport-option-emoji">⚪</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name">Minimal</span>
+              <span class="sport-option-desc">Ultra-clean, monochrome focus</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+          <button class="sport-option" type="button" data-skin="retro">
+            <span class="sport-option-emoji">👾</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name">Retro</span>
+              <span class="sport-option-desc">Nostalgic 8-bit arcade aesthetic</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+        </div>
+        <button class="sport-picker-cancel" id="skin-picker-cancel" type="button">Cancel</button>
+      </div>
+    </div>
+
+    <!-- Onboarding Modal -->
+    <div class="onboarding-overlay" id="tutorial-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
+      <div class="onboarding-modal" id="onboarding-modal">
+        
+        <div class="onboarding-carousel" id="onboarding-carousel">
+          <div class="onboarding-slide" id="onboarding-slide">
+            <div class="onboarding-graphic" id="onboarding-graphic"></div>
+            <h2 class="onboarding-title" id="tutorial-title"></h2>
+            <p class="onboarding-copy" id="tutorial-copy"></p>
+          </div>
+        </div>
+
+        <div class="onboarding-bottom">
+          <div class="onboarding-dots" id="onboarding-dots"></div>
+          <div class="onboarding-actions">
+            <button class="skip-tutorial" id="skip-tutorial" type="button" data-i18n="skipIntro">Skip</button>
+            <button class="continue-tutorial liquid-button" id="continue-tutorial" type="button"><span data-i18n="continue">Continue</span> <span aria-hidden="true">→</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

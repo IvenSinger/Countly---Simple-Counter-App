@@ -147,10 +147,13 @@
           <p class="eyebrow" data-i18n="navHistory">History</p>
           <h1 data-i18n="historyHeroTitle">Your counting story.</h1>
         </section>
-        <div class="history-placeholder">
+        <div id="history-list-container">
+          <!-- Populated by JS -->
+        </div>
+        <div class="history-placeholder" id="history-empty-state" style="display: none;">
           <div class="history-placeholder-icon">📊</div>
-          <p class="history-placeholder-title" data-i18n="comingSoon">Coming soon</p>
-          <p class="history-placeholder-copy" data-i18n="historyDesc">History will show your counting activity over time — streaks, totals by day, and personal bests.</p>
+          <p class="history-placeholder-title" data-i18n="noHistoryTitle">No History Yet</p>
+          <p class="history-placeholder-copy" data-i18n="noHistoryDesc">Archive counters from your dashboard to see them here.</p>
         </div>
       </section>
 

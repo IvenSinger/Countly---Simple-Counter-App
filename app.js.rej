@@ -1,0 +1,9 @@
+@@ -522,7 +523,7 @@
+         </div>
+       </div>
+     `;
+-    grid.appendChild(card);
++    sportGrid.appendChild(card);
+ 
+     // Add action listeners
+     card.querySelectorAll(".sport-action").forEach(btn => {

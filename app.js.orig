@@ -1,0 +1,1180 @@
+const STORAGE_KEY = "countly-counters";
+const HUNT_COUNTERS_KEY = "countly-yellow-hunt-counters";
+const THEME_KEY = "countly-theme";
+const SKIN_KEY = "countly-skin";
+const HUNT_KEY = "countly-yellow-hunt";
+const HUNT_COLOR_KEY = "countly-hunt-color";
+const TUTORIAL_KEY = "countly-tutorial-seen";
+const LANGUAGE_KEY = "countly-language";
+const SPORT_KEY = "countly-sport-mode";
+const SPORT_TYPE_KEY = "countly-sport-type";
+const SPORT_SCORES_KEY = "countly-sport-scores";
+const TODAY_COUNTS_KEY = "countly-today-counts";
+
+const COUNTER_ICONS = [
+  "🔢", "💧", "👟", "📚", "☕", "🎯", "✅", "🏋️", "🧘", "💊",
+  "🍎", "📝", "🎵", "💰", "🌟", "🚴", "📸", "🧹", "🤝", "🎮",
+  "🐾", "🌱", "⏰", "🍳", "🛒"
+];
+const DEFAULT_ICONS_MAP = {
+  "Water glasses": "💧", "Daily steps": "👟", "Books read": "📚",
+  "Wassergläser": "💧", "Tägliche Schritte": "👟", "Gelesene Bücher": "📚",
+  "Vasos de agua": "💧", "Pasos diarios": "👟", "Libros leídos": "📚",
+  "水杯": "💧", "每日步数": "👟", "已读书籍": "📚",
+  "पानी के गिलास": "💧", "दैनिक कदम": "👟", "पढ़ी गई किताबें": "📚",
+};
+
+function getIconForCounter(counter) {
+  if (counter.icon) return counter.icon;
+  if (DEFAULT_ICONS_MAP[counter.name]) return DEFAULT_ICONS_MAP[counter.name];
+  return COUNTER_ICONS[0];
+}
+
+// ── Today's count tracking ────────────────────────────────────────────────────
+function getTodayKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+function loadTodayCounts() {
+  try {
+    const data = JSON.parse(localStorage.getItem(TODAY_COUNTS_KEY));
+    if (data && data.date === getTodayKey()) return data.counts;
+  } catch {}
+  return {};
+}
+function saveTodayCounts(counts) {
+  localStorage.setItem(TODAY_COUNTS_KEY, JSON.stringify({ date: getTodayKey(), counts }));
+}
+let todayCounts = loadTodayCounts();
+
+function generateId() {
+  return typeof crypto !== "undefined" && crypto.randomUUID
+    ? crypto.randomUUID()
+    : "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
+        const r = (Math.random() * 16) | 0;
+        return (c === "x" ? r : (r & 0x3 | 0x8)).toString(16);
+      });
+}
+
+const HUNT_CONFIG = {
+  yellow: { emoji: "🚕", label: "Yellow Car" },
+  red: { emoji: "🚗", label: "Red Car" },
+  blue: { emoji: "🚙", label: "Blue Car" },
+  green: { emoji: "🛻", label: "Green Car" },
+  pink: { emoji: "🚘", label: "Pink Car" }
+};
+
+const translations = {
+  en: {
+    language: "Language", yourCounters: "Your counters", heroTitle: "Keep track of what matters.", addCounter: "Add new counter", howToPlay: "How to play", howItWorks: "How it works", sportTutorial: "Transform your counters into specialized scoreboards. Each sport features custom scoring rules and a unique theme.", huntTutorial: "The classic road trip game. Pick a color, spot cars, and tap to score points. Compete to see who spots the most!", skinTutorial: "Personalize your app's aesthetic. Skins change the colors, materials, and animations of your counters.",
+    guideCopy: "Spot a yellow car for <strong>1 point</strong>. Log each find and see who can spot the most.",
+    totalCount: "Total count", activeCounters: "Active counters", renameHint: "Click a counter’s name to rename it", keepItSimple: "Keep it simple.", viewTutorial: "View tutorial again", quickTour: "QUICK TOUR", skipIntro: "Skip Tutorial", continue: "Continue", finish: "Finish",
+    tip: "TIP", play: "PLAY", car: "Car", tapToAdjust: "Tap to adjust", untitled: "Untitled counter", counter: "Counter", resetConfirm: "Reset all counters to zero?", emptyTitle: "Your counter space is ready.", emptyCopy: "Add a counter to get started.",
+    chooseLanguage: "Choose language", darkMode: "Switch to dark mode", lightMode: "Switch to light mode", activateHunt: "Activate Yellow Hunt mode", exitHunt: "Exit Yellow Hunt mode", resetAll: "Reset all counters", counterName: "Counter name", searchCounters: "Search counters", noMatchingCounters: "No counters match your search.", aboutCountly: "About Countly", aboutDesc: "Created with precision by <strong>Iven Singer</strong>.<br><br>Countly is a beautiful, modern counter app designed to keep track of what matters. Features a stunning Liquid Glass aesthetic, specialized sport scoreboards, and mini-games.", close: "Close", resetSport: "Reset %s scores to zero?", remove: "Remove", increase: "Increase", decrease: "Decrease", carAria: "Log a %s for",
+    tutorials: [
+      ["Make it yours", "Add as many counters as you need, then give each one a name so everything stays easy to find."],
+      ["Count in a tap", "Use the plus and minus controls on any card to keep your numbers moving. Your progress is saved automatically."],
+      ["Try Sport Mode", "Tap the 🏆 trophy button to pick a sport — Basketball, Soccer, or Tennis. Each sport has its own scoring buttons and colour theme. Your scores are saved per sport."],
+      ["Try Yellow Hunt", "Switch on Yellow Hunt for the road game: log yellow cars for 1 point."],
+      ["Choose Skin", "Personalize the aesthetics of your app. Skins change the colors, materials, and animations of your counters."],
+      ["Choose your language", "Open the globe menu to choose English, German, Spanish, Mandarin Chinese, Hindi, or Italian."],
+      ["Set the mood", "Toggle between light and dark mode whenever you like. Countly remembers your preference."],
+      ["Start fresh", "Use reset whenever you want to bring every counter back to zero and begin a new round."]
+    ]
+  },
+    de: {
+    language: "Sprache", yourCounters: "Deine Zähler", heroTitle: "Behalte im Blick, was zählt.", addCounter: "Neuen Zähler hinzufügen", howToPlay: "So wird gespielt", howItWorks: "So funktioniert's", sportTutorial: "Verwandle deine Zähler in spezielle Anzeigetafeln. Jede Sportart bietet eigene Punkteregeln und ein einzigartiges Design.", huntTutorial: "Das klassische Roadtrip-Spiel. Wähle eine Farbe, entdecke Autos und tippe, um Punkte zu sammeln. Finde heraus, wer die meisten sieht!", skinTutorial: "Personalisiere das Aussehen deiner App. Skins verändern die Farben, Materialien und Animationen deiner Zähler.", guideCopy: "Entdecke ein gelbes Auto für <strong>1 Punkt</strong>. Erfasse jeden Fund und finde die meisten.", totalCount: "Gesamtzahl", activeCounters: "Aktive Zähler", renameHint: "Klicke auf den Namen eines Zählers, um ihn umzubenennen", keepItSimple: "Einfach halten.", viewTutorial: "Tutorial erneut ansehen", quickTour: "KURZTOUR", skipIntro: "Intro überspringen", continue: "Weiter", finish: "Fertig", tip: "TIPP", play: "SPIEL", car: "Auto", tapToAdjust: "Antippen zum Ändern", untitled: "Unbenannter Zähler", counter: "Zähler", resetConfirm: "Alle Zähler auf null zurücksetzen?", emptyTitle: "Dein Zählerbereich ist bereit.", emptyCopy: "Füge einen Zähler hinzu.", chooseLanguage: "Sprache auswählen", darkMode: "Dunkelmodus aktivieren", lightMode: "Hellmodus aktivieren", activateHunt: "Yellow Hunt aktivieren", exitHunt: "Yellow Hunt beenden", resetAll: "Alle Zähler zurücksetzen", counterName: "Name des Zählers", searchCounters: "Zähler suchen", noMatchingCounters: "Keine Zähler entsprechen deiner Suche.", aboutCountly: "Über Countly", aboutDesc: "Mit Präzision erstellt von <strong>Iven Singer</strong>.<br><br>Countly ist eine schöne, moderne Zähler-App. Bietet eine atemberaubende Liquid-Glass-Ästhetik, spezielle Sport-Anzeigetafeln und Minispiele.", close: "Schließen", resetSport: "%s-Spielstände auf null zurücksetzen?", remove: "Zähler entfernen", increase: "Erhöhen", decrease: "Verringern", carAria: "Erfasse ein %s für", tutorials: [["Mach es zu deinem", "Füge beliebig viele Zähler hinzu und gib ihnen Namen, damit alles leicht zu finden bleibt."], ["Mit einem Tipp zählen", "Nutze Plus und Minus auf jeder Karte. Dein Fortschritt wird automatisch gespeichert."], ["Sport-Modus ausprobieren", "Tippe auf das 🏆 Pokal-Symbol und wähle eine Sportart – Basketball, Fußball oder Tennis. Jede hat eigene Punkte-Buttons und Farben."], ["Yellow Hunt ausprobieren", "Aktiviere Yellow Hunt: Gelbe Autos zählen 1 Punkt."], ["Skin auswählen", "Personalisiere das Aussehen deiner App. Skins verändern die Farben, Materialien und Animationen deiner Zähler."], ["Sprache auswählen", "Öffne das Globusmenü und wähle deine Sprache."], ["Stimmung festlegen", "Wechsle jederzeit zwischen hellem und dunklem Modus."], ["Neu beginnen", "Setze alle Zähler zurück, um eine neue Runde zu starten."]]
+  },
+  es: {
+    language: "Idioma", yourCounters: "Tus contadores", heroTitle: "Lleva el control de lo que importa.", addCounter: "Añadir nuevo contador", howToPlay: "Cómo jugar", howItWorks: "Cómo funciona", sportTutorial: "Transforma tus contadores en marcadores especializados. Cada deporte cuenta con reglas de puntuación y un diseño únicos.", huntTutorial: "El clásico juego de viaje. Elige un color, busca coches y toca para sumar puntos. ¡Compite para ver quién encuentra más!", skinTutorial: "Personaliza la estética de tu aplicación. Los estilos cambian los colores, materiales y animaciones de tus contadores.", guideCopy: "Encuentra un coche amarillo por <strong>1 punto</strong>. Registra cada hallazgo y descubre quién encuentra más.", totalCount: "Cuenta total", activeCounters: "Contadores activos", renameHint: "Haz clic en el nombre para cambiarlo", keepItSimple: "Mantenlo simple.", viewTutorial: "Ver tutorial de nuevo", quickTour: "GUÍA RÁPIDA", skipIntro: "Omitir introducción", continue: "Continuar", finish: "Terminar", tip: "CONSEJO", play: "JUEGO", car: "Coche", tapToAdjust: "Toca para ajustar", untitled: "Contador sin título", counter: "Contador", resetConfirm: "¿Restablecer todos los contadores a cero?", emptyTitle: "Tu espacio de contadores está listo.", emptyCopy: "Añade un contador para empezar.", chooseLanguage: "Elegir idioma", darkMode: "Cambiar a modo oscuro", lightMode: "Cambiar a modo claro", activateHunt: "Activar Yellow Hunt", exitHunt: "Salir de Yellow Hunt", resetAll: "Restablecer contadores", counterName: "Nombre del contador", searchCounters: "Buscar contadores", noMatchingCounters: "Ningún contador coincide con tu búsqueda.", aboutCountly: "Acerca de Countly", aboutDesc: "Creado con precisión por <strong>Iven Singer</strong>.<br><br>Countly es una hermosa y moderna aplicación de contadores. Cuenta con una impresionante estética de Liquid Glass, marcadores deportivos y minijuegos.", close: "Cerrar", resetSport: "¿Restablecer las puntuaciones de %s a cero?", remove: "Eliminar contador", increase: "Aumentar", decrease: "Disminuir", carAria: "Registra un %s para", tutorials: [["Hazlo tuyo", "Añade los contadores que necesites y ponles nombre para encontrar todo fácilmente."], ["Cuenta con un toque", "Usa los controles más y menos. Tu progreso se guarda automáticamente."], ["Prueba el modo Sport", "Toca el trofeo 🏆 para elegir un deporte: Baloncesto, Fútbol o Tenis. Cada uno tiene sus propios botones de puntuación y colores."], ["Prueba Yellow Hunt", "Activa Yellow Hunt: los coches amarillos valen 1 punto."], ["Elegir estilo", "Personaliza la estética de tu aplicación. Los estilos cambian los colores, materiales y animaciones de tus contadores."], ["Elige tu idioma", "Abre el menú del globo para elegir idioma."], ["Cambia el ambiente", "Alterna entre el modo claro y oscuro cuando quieras."], ["Empieza de cero", "Restablece los contadores para comenzar una ronda nueva."]]
+  },
+  zh: {
+    language: "语言", yourCounters: "你的计数器", heroTitle: "记录重要的事情。", addCounter: "添加新计数器", howToPlay: "玩法", howItWorks: "功能介绍", sportTutorial: "将计数器变为专业计分板。每项运动都有专属的计分规则和独特主题。", huntTutorial: "经典的公路旅行游戏。选择一种颜色，发现汽车并点击得分。比比看谁找得最多！", skinTutorial: "个性化你的应用外观。皮肤可以改变计数器的颜色、材质和动画。", guideCopy: "发现黄色汽车得<strong>1分</strong>。记录每次发现，看看谁发现得最多。", totalCount: "总计数", activeCounters: "活动计数器", renameHint: "点击计数器名称即可重命名", keepItSimple: "保持简单。", viewTutorial: "再次查看教程", quickTour: "快速导览", skipIntro: "跳过介绍", continue: "继续", finish: "完成", tip: "提示", play: "游戏", car: "汽车", tapToAdjust: "点击调整", untitled: "未命名计数器", counter: "计数器", resetConfirm: "将所有计数器重置为零？", emptyTitle: "计数器空间已准备好。", emptyCopy: "添加一个计数器开始吧。", chooseLanguage: "选择语言", darkMode: "切换到深色模式", lightMode: "切换到浅色模式", activateHunt: "开启 Yellow Hunt", exitHunt: "退出 Yellow Hunt", resetAll: "重置所有计数器", counterName: "计数器名称", searchCounters: "搜索计数器", noMatchingCounters: "没有符合您搜索的计数器。", aboutCountly: "关于 Countly", aboutDesc: "由 <strong>Iven Singer</strong> 精心制作。<br><br>Countly 是一款精美的现代计数器应用。具有令人惊叹的液态玻璃美学、专门的运动计分板和迷你游戏。", close: "关闭", resetSport: "将 %s 的分数重置为零？", remove: "删除计数器", increase: "增加", decrease: "减少", carAria: "记录 %s，计数器为", tutorials: [["打造专属计数器", "添加需要的计数器并命名，让一切都易于查找。"], ["轻触即可计数", "使用加减按钮更新数字，进度会自动保存。"], ["试试运动模式", "点击 🏆 奖杯按钮选择运动项目——篮球、足球或网球。每项运动有专属得分按钮和配色。"], ["试试 Yellow Hunt", "开启 Yellow Hunt：黄色汽车得1分。"], ["选择皮肤", "个性化你的应用外观。皮肤可以改变计数器的颜色、材质和动画。"], ["选择语言", "打开地球图标菜单选择语言。"], ["调整氛围", "随时切换浅色和深色模式。"], ["重新开始", "重置所有计数器，开始新一轮。"]]
+  },
+  hi: {
+    language: "भाषा", yourCounters: "आपके काउंटर", heroTitle: "जो ज़रूरी है उसका हिसाब रखें।", addCounter: "नया काउंटर जोड़ें", howToPlay: "कैसे खेलें", howItWorks: "यह कैसे काम करता है", sportTutorial: "अपने काउंटरों को विशेष स्कोरबोर्ड में बदलें। प्रत्येक खेल में कस्टम स्कोरिंग नियम और एक अद्वितीय थीम है।", huntTutorial: "क्लासिक रोड ट्रिप गेम। एक रंग चुनें, कारें ढूंढें और पॉइंट स्कोर करने के लिए टैप करें। देखें कौन सबसे ज्यादा ढूंढता है!", skinTutorial: "अपने ऐप के एस्थेटिक को कस्टमाइज़ करें। स्किन्स आपके काउंटरों के रंग, मटीरियल और एनिमेशन बदल देते हैं।", guideCopy: "पीली कार के लिए <strong>1 अंक</strong> पाएं। हर खोज दर्ज करें और देखें किसने सबसे ज़्यादा पाया।", totalCount: "कुल गिनती", activeCounters: "सक्रिय काउंटर", renameHint: "नाम बदलने के लिए काउंटर के नाम पर क्लिक करें", keepItSimple: "सरल रखें।", viewTutorial: "ट्यूटोरियल फिर देखें", quickTour: "त्वरित परिचय", skipIntro: "परिचय छोड़ें", continue: "जारी रखें", finish: "समाप्त", tip: "सुझाव", play: "खेल", car: "कार", tapToAdjust: "बदलने के लिए टैप करें", untitled: "बिना नाम का काउंटर", counter: "काउंटर", resetConfirm: "सभी काउंटर शून्य पर रीसेट करें?", emptyTitle: "आपका काउंटर स्थान तैयार है।", emptyCopy: "शुरू करने के लिए काउंटर जोड़ें।", chooseLanguage: "भाषा चुनें", darkMode: "डार्क मोड पर जाएं", lightMode: "लाइट मोड पर जाएं", activateHunt: "Yellow Hunt शुरू करें", exitHunt: "Yellow Hunt से बाहर निकलें", resetAll: "सभी काउंटर रीसेट करें", counterName: "काउंटर का नाम", searchCounters: "काउंटर खोजें", noMatchingCounters: "कोई काउंटर आपकी खोज से मेल नहीं खाता।", aboutCountly: "Countly के बारे में", aboutDesc: "<strong>Iven Singer</strong> द्वारा सटीकता से बनाया गया。<br><br>Countly एक सुंदर, आधुनिक काउंटर ऐप है। इसमें शानदार लिक्विड ग्लास एस्थेटिक, स्पोर्ट्स स्कोरबोर्ड और मिनी-गेम शामिल हैं।", close: "बंद करें", resetSport: "क्या %s के स्कोर शून्य पर रीसेट करें?", remove: "काउंटर हटाएं", increase: "बढ़ाएं", decrease: "घटाएं", carAria: "एक %s दर्ज करें, काउंटर", tutorials: [["इसे अपना बनाएं", "जितने काउंटर चाहिए जोड़ें और उन्हें नाम दें ताकि सब आसानी से मिल सके।"], ["एक टैप में गिनें", "प्लस और माइनस बटन का उपयोग करें। प्रगति अपने आप सेव होती है।"], ["स्पोर्ट मोड आज़माएं", "🏆 ट्रॉफी बटन टैप करें और खेल चुनें — बास्केटबॉल, सॉकर या टेनिस। हर खेल के अपने स्कोरिंग बटन और रंग हैं।"], ["Yellow Hunt आज़माएं", "Yellow Hunt चालू करें: पीली कार 1 अंक देती है।"], ["स्किन चुनें", "अपने ऐप के एस्थेटिक को कस्टमाइज़ करें। स्किन्स आपके काउंटरों के रंग, मटीरियल और एनिमेशन बदल देते हैं."], ["भाषा चुनें", "भाषा चुनने के लिए ग्लोब मेनू खोलें।"], ["मूड सेट करें", "जब चाहें लाइट और डार्क मोड बदलें।"], ["फिर से शुरू करें", "नई शुरुआत के लिए सभी काउंटर रीसेट करें।"]]
+  },
+  it: {
+    language: "Lingua", yourCounters: "I tuoi contatori", heroTitle: "Tieni traccia di ciò che conta.", addCounter: "Aggiungi nuovo contatore", howToPlay: "Come si gioca", howItWorks: "Come funziona", sportTutorial: "Trasforma i tuoi contatori in tabelloni segnapunti. Ogni sport ha regole di punteggio e un tema unico.", huntTutorial: "Il classico gioco da viaggio. Scegli un colore, trova le auto e tocca per fare punti. Scopri chi ne trova di più!", skinTutorial: "Personalizza l'estetica dell'app. Le skin cambiano i colori, i materiali e le animazioni dei tuoi contatori.", guideCopy: "Trova un'auto gialla per <strong>1 punto</strong>. Registra ogni scoperta e vedi chi ne trova di più.", totalCount: "Conteggio totale", activeCounters: "Contatori attivi", renameHint: "Fai clic sul nome di un contatore per rinominarlo", keepItSimple: "Mantieni le cose semplici.", viewTutorial: "Rivedi il tutorial", quickTour: "TOUR RAPIDO", skipIntro: "Salta il tutorial", continue: "Continua", finish: "Fine", tip: "SUGGERIMENTO", play: "GIOCO", car: "Auto", tapToAdjust: "Tocca per regolare", untitled: "Contatore senza titolo", counter: "Contatore", resetConfirm: "Vuoi azzerare tutti i contatori?", emptyTitle: "Il tuo spazio per i contatori è pronto.", emptyCopy: "Aggiungi un contatore per iniziare.", chooseLanguage: "Scegli la lingua", darkMode: "Passa alla modalità scura", lightMode: "Passa alla modalità chiara", activateHunt: "Attiva la modalità Yellow Hunt", exitHunt: "Esci dalla modalità Yellow Hunt", resetAll: "Azzera tutti i contatori", counterName: "Nome del contatore", searchCounters: "Cerca contatori", noMatchingCounters: "Nessun contatore corrisponde alla tua ricerca.", aboutCountly: "Informazioni su Countly", aboutDesc: "Creato con precisione da <strong>Iven Singer</strong>.<br><br>Countly è una bellissima app moderna per tenere il conto di ciò che conta. Presenta un'incredibile estetica Liquid Glass, tabelloni sportivi specializzati e mini-giochi.", close: "Chiudi", resetSport: "Azzerare i punteggi di %s?", remove: "Rimuovi", increase: "Aumenta", decrease: "Riduci", carAria: "Registra un %s per", tutorials: [["Fallo tuo", "Aggiungi quanti contatori vuoi, poi dai a ciascuno un nome in modo da trovare tutto facilmente."], ["Conta con un tocco", "Usa i pulsanti più e meno su qualsiasi scheda per aggiornare i numeri. I tuoi progressi vengono salvati automaticamente."], ["Prova la Modalità Sport", "Tocca il pulsante con il trofeo 🏆 per scegliere uno sport — Pallacanestro, Calcio o Tennis. Ogni sport ha i propri pulsanti di punteggio e tema di colori."], ["Prova Yellow Hunt", "Attiva Yellow Hunt: registra le auto gialle per 1 punto."], ["Scegli una skin", "Personalizza l'estetica dell'app. Le skin cambiano i colori, i materiali e le animazioni dei tuoi contatori."], ["Scegli la lingua", "Apri il menu del mappamondo per scegliere la lingua."], ["Imposta l'atmosfera", "Passa dalla modalità chiara a quella scura quando vuoi."], ["Inizia da capo", "Usa azzera ogni volta che vuoi riportare i contatori a zero per iniziare una nuova partita."]]
+  },
+  fr: {
+    language: "Langue", yourCounters: "Vos compteurs", heroTitle: "Gardez une trace de ce qui compte.", addCounter: "Ajouter un compteur", howToPlay: "Comment jouer", howItWorks: "Comment ça marche", sportTutorial: "Transformez vos compteurs en tableaux d'affichage spécialisés. Chaque sport propose des règles de score personnalisées et un thème unique.", huntTutorial: "Le jeu classique des voyages en voiture. Choisissez une couleur, repérez des voitures et tapez pour marquer des points. Rivalisez pour voir qui en repère le plus !", skinTutorial: "Personnalisez l'esthétique de votre application. Les thèmes modifient les couleurs, les matériaux et les animations de vos compteurs.", guideCopy: "Repérez une voiture jaune pour <strong>1 point</strong>. Enregistrez chaque trouvaille et voyez qui en trouve le plus.", totalCount: "Compte total", activeCounters: "Compteurs actifs", renameHint: "Cliquez sur le nom d'un compteur pour le renommer", keepItSimple: "Faites simple.", viewTutorial: "Revoir le tutoriel", quickTour: "VISITE RAPIDE", skipIntro: "Passer l'intro", continue: "Continuer", finish: "Terminer", tip: "ASTUCE", play: "JEU", car: "Voiture", tapToAdjust: "Appuyez pour ajuster", untitled: "Compteur sans titre", counter: "Compteur", resetConfirm: "Remettre tous les compteurs à zéro ?", emptyTitle: "Votre espace compteur est prêt.", emptyCopy: "Ajoutez un compteur pour commencer.", chooseLanguage: "Choisir la langue", darkMode: "Passer en mode sombre", lightMode: "Passer en mode clair", activateHunt: "Activer le mode Yellow Hunt", exitHunt: "Quitter le mode Yellow Hunt", resetAll: "Réinitialiser tous les compteurs", counterName: "Nom du compteur", searchCounters: "Rechercher des compteurs", noMatchingCounters: "Aucun compteur ne correspond à votre recherche.", aboutCountly: "À propos de Countly", aboutDesc: "Créé avec précision par <strong>Iven Singer</strong>.<br><br>Countly est une belle application de comptage moderne. Elle présente une superbe esthétique Liquid Glass, des tableaux d'affichage sportifs spécialisés et des mini-jeux.", close: "Fermer", resetSport: "Remettre les scores de %s à zéro ?", remove: "Supprimer", increase: "Augmenter", decrease: "Diminuer", carAria: "Enregistrer un %s pour", tutorials: [["Appropriez-le-vous", "Ajoutez autant de compteurs que nécessaire, puis donnez-leur un nom pour tout retrouver facilement."], ["Comptez d'un geste", "Utilisez les boutons plus et moins pour ajuster vos nombres. Votre progression est enregistrée automatiquement."], ["Essayez le mode Sport", "Appuyez sur le bouton trophée 🏆 pour choisir un sport — Basket-ball, Football ou Tennis. Chacun a ses propres boutons de score et couleurs."], ["Essayez Yellow Hunt", "Activez Yellow Hunt pour le jeu de route : les voitures jaunes valent 1 point."], ["Choisir un thème", "Personnalisez l'esthétique de votre application. Les thèmes modifient les couleurs, les matériaux et les animations de vos compteurs."], ["Choisissez votre langue", "Ouvrez le menu globe pour choisir votre langue."], ["Plantez le décor", "Basculez entre le mode clair et sombre à tout moment."], ["Repartez à zéro", "Utilisez la réinitialisation pour remettre tous les compteurs à zéro et commencer une nouvelle partie."]]
+  },
+  pt: {
+    language: "Idioma", yourCounters: "Seus contadores", heroTitle: "Acompanhe o que importa.", addCounter: "Adicionar contador", howToPlay: "Como jogar", howItWorks: "Como funciona", sportTutorial: "Transforme seus contadores em placares especializados. Cada esporte apresenta regras de pontuação personalizadas e um tema único.", huntTutorial: "O clássico jogo de viagem. Escolha uma cor, encontre carros e toque para marcar pontos. Compita para ver quem encontra mais!", skinTutorial: "Personalize a estética do seu aplicativo. Os visuais mudam as cores, os materiais e as animações de seus contadores.", guideCopy: "Encontre um carro amarelo por <strong>1 ponto</strong>. Registre cada descoberta e veja quem encontra mais.", totalCount: "Contagem total", activeCounters: "Contadores ativos", renameHint: "Clique no nome de um contador para renomeá-lo", keepItSimple: "Mantenha a simplicidade.", viewTutorial: "Ver tutorial novamente", quickTour: "TOUR RÁPIDO", skipIntro: "Pular introdução", continue: "Continuar", finish: "Concluir", tip: "DICA", play: "JOGO", car: "Carro", tapToAdjust: "Toque para ajustar", untitled: "Contador sem título", counter: "Contador", resetConfirm: "Zerar todos os contadores?", emptyTitle: "Seu espaço de contador está pronto.", emptyCopy: "Adicione um contador para começar.", chooseLanguage: "Escolher idioma", darkMode: "Mudar para modo escuro", lightMode: "Mudar para modo claro", activateHunt: "Ativar modo Yellow Hunt", exitHunt: "Sair do modo Yellow Hunt", resetAll: "Zerar todos os contadores", counterName: "Nome do contador", searchCounters: "Buscar contadores", noMatchingCounters: "Nenhum contador corresponde à sua busca.", aboutCountly: "Sobre o Countly", aboutDesc: "Criado com precisão por <strong>Iven Singer</strong>.<br><br>Countly é um aplicativo de contagem moderno e bonito. Possui uma impressionante estética Liquid Glass, placares esportivos especializados e minijogos.", close: "Fechar", resetSport: "Zerar pontuações de %s?", remove: "Remover", increase: "Aumentar", decrease: "Diminuir", carAria: "Registrar um %s para", tutorials: [["Deixe com a sua cara", "Adicione quantos contadores precisar e dê um nome a eles para facilitar a busca."], ["Conte com um toque", "Use os botões de mais e menos em qualquer cartão para manter seus números em movimento. Seu progresso é salvo automaticamente."], ["Experimente o Modo Esporte", "Toque no botão de troféu 🏆 para escolher um esporte — Basquete, Futebol ou Tênis. Cada esporte tem seus próprios botões de pontuação e tema de cor."], ["Experimente Yellow Hunt", "Ative Yellow Hunt para o jogo de estrada: carros amarelos valem 1 ponto."], ["Escolher visual", "Personalize a estética do seu aplicativo. Os visuais mudam as cores, os materiais e as animações de seus contadores."], ["Escolha o seu idioma", "Abra o menu do globo para escolher o seu idioma."], ["Defina o clima", "Alterne entre o modo claro e escuro quando quiser."], ["Comece do zero", "Use a redefinição sempre que quiser zerar todos os contadores e começar uma nova rodada."]]
+  },
+  ko: {
+    language: "언어", yourCounters: "카운터", heroTitle: "중요한 것을 기록하세요.", addCounter: "새 카운터 추가", howToPlay: "플레이 방법", howItWorks: "작동 방식", sportTutorial: "카운터를 전문 점수판으로 변환하세요. 각 스포츠마다 사용자 지정 채점 규칙과 독특한 테마가 있습니다.", huntTutorial: "클래식 로드 트립 게임. 색상을 선택하고 자동차를 찾아 터치하여 점수를 얻으세요. 누가 가장 많이 찾는지 경쟁해 보세요!", skinTutorial: "앱의 미학을 맞춤 설정하세요. 스킨은 카운터의 색상, 질감 및 애니메이션을 변경합니다.", guideCopy: "노란색 자동차를 찾으면 <strong>1점</strong>입니다. 찾을 때마다 기록하고 누가 가장 많이 찾는지 확인하세요.", totalCount: "총 개수", activeCounters: "활성 카운터", renameHint: "이름을 변경하려면 카운터 이름을 클릭하세요", keepItSimple: "간단하게 유지하세요.", viewTutorial: "튜토리얼 다시 보기", quickTour: "빠른 둘러보기", skipIntro: "인트로 건너뛰기", continue: "계속", finish: "완료", tip: "팁", play: "플레이", car: "자동차", tapToAdjust: "터치하여 조정", untitled: "제목 없는 카운터", counter: "카운터", resetConfirm: "모든 카운터를 0으로 초기화하시겠습니까?", emptyTitle: "카운터 공간이 준비되었습니다.", emptyCopy: "시작하려면 카운터를 추가하세요.", chooseLanguage: "언어 선택", darkMode: "다크 모드로 전환", lightMode: "라이트 모드로 전환", activateHunt: "Yellow Hunt 모드 활성화", exitHunt: "Yellow Hunt 모드 종료", resetAll: "모든 카운터 초기화", counterName: "카운터 이름", searchCounters: "카운터 검색", noMatchingCounters: "검색과 일치하는 카운터가 없습니다.", aboutCountly: "Countly 정보", aboutDesc: "<strong>Iven Singer</strong>가 정밀하게 제작했습니다.<br><br>Countly는 아름답고 현대적인 카운터 앱입니다. 놀라운 Liquid Glass 미학, 특수 스포츠 점수판 및 미니 게임을 제공합니다.", close: "닫기", resetSport: "%s 점수를 0으로 초기화하시겠습니까?", remove: "제거", increase: "증가", decrease: "감소", carAria: "기록할 %s (대상:", tutorials: [["나만의 설정", "필요한 만큼 카운터를 추가하고 각각 이름을 지정하여 쉽게 찾을 수 있게 하세요."], ["터치로 카운트", "카드의 플러스 및 마이너스 컨트롤을 사용하여 숫자를 변경하세요. 진행 상황이 자동으로 저장됩니다."], ["스포츠 모드 체험", "🏆 트로피 버튼을 눌러 농구, 축구 또는 테니스 중 스포츠를 선택하세요. 각 스포츠마다 고유한 점수 버튼과 색상 테마가 있습니다."], ["Yellow Hunt 체험", "도로 게임을 위해 Yellow Hunt를 켜세요: 노란색 자동차는 1점입니다."], ["스킨 선택", "앱의 미학을 맞춤 설정하세요. 스킨은 카운터의 색상, 질감 및 애니메이션을 변경합니다."], ["언어 선택", "지구본 메뉴를 열어 언어를 선택하세요."], ["분위기 설정", "원할 때마다 라이트 모드와 다크 모드 간에 전환하세요."], ["새로 시작", "모든 카운터를 0으로 되돌리고 새로운 라운드를 시작하고 싶을 때 초기화하세요."]]
+  },
+  ja: {
+    language: "言語", yourCounters: "あなたのカウンター", heroTitle: "大切なことを記録しましょう。", addCounter: "新しいカウンターを追加", howToPlay: "遊び方", howItWorks: "使い方", sportTutorial: "カウンターを専用のスコアボードに変換します。各スポーツにはカスタムのスコアリングルールとユニークなテーマがあります。", huntTutorial: "クラシックなロードトリップゲーム。色を選び、車を見つけてタップしてポイントを獲得します。誰が一番多く見つけるか競いましょう！", skinTutorial: "アプリのデザインをカスタマイズします。スキンはカウンターの色、素材、アニメーションを変更します。", guideCopy: "黄色い車を見つけると<strong>1ポイント</strong>。見つけた車を記録して、誰が一番多く見つけるか競いましょう。", totalCount: "合計カウント", activeCounters: "アクティブなカウンター", renameHint: "カウンターの名前をクリックして名前を変更", keepItSimple: "シンプルに保つ。", viewTutorial: "チュートリアルをもう一度見る", quickTour: "クイックツアー", skipIntro: "スキップ", continue: "続ける", finish: "完了", tip: "ヒント", play: "プレイ", car: "車", tapToAdjust: "タップして調整", untitled: "無題のカウンター", counter: "カウンター", resetConfirm: "すべてのカウンターをゼロにリセットしますか？", emptyTitle: "カウンターの準備ができました。", emptyCopy: "開始するにはカウンターを追加してください。", chooseLanguage: "言語を選択", darkMode: "ダークモードに切り替え", lightMode: "ライトモードに切り替え", activateHunt: "Yellow Hunt モードを有効化", exitHunt: "Yellow Hunt モードを終了", resetAll: "すべてのカウンターをリセット", counterName: "カウンター名", searchCounters: "カウンターを検索", noMatchingCounters: "検索に一致するカウンターはありません。", aboutCountly: "Countlyについて", aboutDesc: "<strong>Iven Singer</strong>によって精密に作成されました。<br><br>Countlyは美しくモダンなカウンターアプリです。見事なリキッドガラスの美学、専用のスポーツスコアボード、ミニゲームを備えています。", close: "閉じる", resetSport: "%sのスコアをゼロにリセットしますか？", remove: "削除", increase: "増やす", decrease: "減らす", carAria: "%sを記録：", tutorials: [["自分らしく", "必要なだけカウンターを追加し、それぞれに名前を付けて、すべてを簡単に見つけられるようにします。"], ["タップでカウント", "カードのプラスとマイナスのコントロールを使用して数値を変更します。進行状況は自動的に保存されます。"], ["スポーツモードを試す", "🏆 トロフィーボタンをタップして、バスケットボール、サッカー、またはテニスからスポーツを選択します。各スポーツには独自のスコアボタンとカラーテーマがあります。"], ["Yellow Huntを試す", "ロードゲームのためにYellow Huntをオンにします：黄色い車で1ポイント。"], ["スキンを選択", "アプリのデザインをカスタマイズします。スキンはカウンターの色、素材、アニメーションを変更します。"], ["言語を選択", "地球儀メニューを開いて言語を選択してください。"], ["ムードを設定", "いつでもライトモードとダークモードを切り替えます。"], ["新しく始める", "すべてのカウンターをゼロに戻して新しいラウンドを始めたいときは、リセットを使用してください。"]]
+  },
+  tr: {
+    language: "Dil", yourCounters: "Sayaçlarınız", heroTitle: "Sizin için önemli olanı takip edin.", addCounter: "Yeni sayaç ekle", howToPlay: "Nasıl oynanır", howItWorks: "Nasıl çalışır", sportTutorial: "Sayaçlarınızı özel skor tablolarına dönüştürün. Her sporun özel puanlama kuralları ve benzersiz bir teması vardır.", huntTutorial: "Klasik yolculuk oyunu. Bir renk seçin, arabaları bulun ve puan kazanmak için dokunun. Kimin daha çok bulduğunu görmek için yarışın!", skinTutorial: "Uygulamanızın estetiğini kişiselleştirin. Görünümler sayaçlarınızın renklerini, malzemelerini ve animasyonlarını değiştirir.", guideCopy: "Sarı bir araba bulursanız <strong>1 puan</strong>. Her bulduğunuzu kaydedin ve kimin daha çok bulduğunu görün.", totalCount: "Toplam sayı", activeCounters: "Aktif sayaçlar", renameHint: "Yeniden adlandırmak için sayacın adına tıklayın", keepItSimple: "Basit tutun.", viewTutorial: "Eğitimi tekrar izle", quickTour: "KISA TUR", skipIntro: "Tanıtımı atla", continue: "Devam et", finish: "Bitir", tip: "İPUCU", play: "OYUN", car: "Araba", tapToAdjust: "Ayarlamak için dokunun", untitled: "İsimsiz sayaç", counter: "Sayaç", resetConfirm: "Tüm sayaçlar sıfırlansın mı?", emptyTitle: "Sayaç alanınız hazır.", emptyCopy: "Başlamak için bir sayaç ekleyin.", chooseLanguage: "Dil seçin", darkMode: "Karanlık moda geç", lightMode: "Aydınlık moda geç", activateHunt: "Yellow Hunt modunu etkinleştir", exitHunt: "Yellow Hunt modundan çık", resetAll: "Tüm sayaçları sıfırla", counterName: "Sayaç adı", searchCounters: "Sayaçları ara", noMatchingCounters: "Aramanızla eşleşen sayaç yok.", aboutCountly: "Countly Hakkında", aboutDesc: "<strong>Iven Singer</strong> tarafından hassasiyetle oluşturuldu.<br><br>Countly, önemli olanı takip etmek için tasarlanmış güzel, modern bir sayaç uygulamasıdır. Çarpıcı Likit Cam estetiği, özel spor skor tabloları ve mini oyunlar sunar.", close: "Kapat", resetSport: "%s skorları sıfırlansın mı?", remove: "Kaldır", increase: "Artır", decrease: "Azalt", carAria: "Şunun için bir %s kaydet:", tutorials: [["Size özel yapın", "İhtiyacınız olduğu kadar sayaç ekleyin, ardından her birine isim verin ki her şeyi bulmak kolay olsun."], ["Bir dokunuşla sayın", "Sayıları değiştirmek için herhangi bir karttaki artı ve eksi kontrollerini kullanın. İlerlemeniz otomatik olarak kaydedilir."], ["Spor Modunu Deneyin", "🏆 kupa düğmesine dokunarak bir spor seçin — Basketbol, Futbol veya Tenis. Her sporun kendi puanlama düğmeleri ve renk teması vardır."], ["Yellow Hunt'ı Deneyin", "Yol oyunu için Yellow Hunt'ı açın: sarı arabalar 1 puan değerindedir."], ["Görünüm Seç", "Uygulamanızın estetiğini kişiselleştirin. Görünümler sayaçlarınızın renklerini, malzemelerini ve animasyonlarını değiştirir."], ["Dilinizi seçin", "Dilinizi seçmek için küre menüsünü açın."], ["Ruh halini ayarlayın", "İstediğiniz zaman aydınlık ve karanlık mod arasında geçiş yapın."], ["Yeniden başla", "Tüm sayaçları sıfıra döndürmek ve yeni bir tura başlamak istediğinizde sıfırlamayı kullanın."]]
+  }
+};
+let currentLanguage = "en";
+function t(key) { return translations[currentLanguage][key] || translations.en[key] || key; }
+
+// ── Sport configs ──────────────────────────────────────────────────────────────
+function formatTennisScore(mine, theirs) {
+  const labels = ["Love", "15", "30", "40"];
+  // Win without deuce: 4+ points and 2+ ahead while opponent hasn't reached 3
+  if (mine >= 4 && mine - theirs >= 2) return "Game";
+  // Deuce territory: both players at 3+ points
+  if (mine >= 3 && theirs >= 3) {
+    const diff = mine - theirs;
+    if (diff >= 2) return "Game";
+    if (diff === 1) return "Ad";
+    if (diff === 0) return "Deuce";
+    return "40"; // opponent has the advantage, trailing player stays at 40
+  }
+  return labels[Math.min(mine, 3)] ?? "Love";
+}
+
+const SPORT_CONFIGS = {
+  basketball: {
+    emoji: "🏀", name: "Basketball", defaultTeams: ["Home", "Away"], scoreUnit: "pts",
+    actions: [
+      { label: "Free Throw", short: "FT",  points: 1 },
+      { label: "Field Goal", short: "2PT", points: 2 },
+      { label: "3-Pointer",  short: "3PT", points: 3 },
+    ],
+    formatScore: (score)        => String(score),
+  },
+  soccer: {
+    emoji: "⚽", name: "Soccer", defaultTeams: ["Home", "Away"], scoreUnit: "goals",
+    actions: [
+      { label: "Goal", short: "GOAL", points: 1 },
+    ],
+    formatScore: (score)        => String(score),
+  },
+  tennis: {
+    emoji: "🎾", name: "Tennis", defaultTeams: ["Player 1", "Player 2"], scoreUnit: "",
+    actions: [
+      { label: "Point", short: "PT", points: 1 },
+    ],
+    formatScore: (score, opp = 0) => formatTennisScore(score, opp),
+  },
+  football: {
+    emoji: "🏈", name: "Am. Football", defaultTeams: ["Home", "Away"], scoreUnit: "pts",
+    actions: [
+      { label: "Touchdown", short: "TD", points: 6 },
+      { label: "Field Goal", short: "FG", points: 3 },
+      { label: "Safety", short: "SAF", points: 2 },
+      { label: "2-Pt Conv", short: "2PT", points: 2 },
+      { label: "Extra Point", short: "XP", points: 1 },
+    ],
+    formatScore: (score)        => String(score),
+  },
+  f1: {
+    emoji: "🏎️", name: "Formula 1", defaultTeams: ["Driver 1", "Driver 2"], scoreUnit: "pts",
+    actions: [
+      { label: "Win (1st)", short: "1ST", points: 25 },
+      { label: "2nd Place", short: "2ND", points: 18 },
+      { label: "3rd Place", short: "3RD", points: 15 },
+      { label: "Fastest Lap", short: "FL", points: 1 },
+      { label: "Point", short: "PT", points: 1 },
+    ],
+    formatScore: (score)        => String(score),
+  },
+  baseball: {
+    emoji: "⚾", name: "Baseball", defaultTeams: ["Home", "Away"], scoreUnit: "runs",
+    actions: [
+      { label: "Run", short: "RUN", points: 1 },
+    ],
+    formatScore: (score)        => String(score),
+  },
+  hockey: {
+    emoji: "🏒", name: "Ice Hockey", defaultTeams: ["Home", "Away"], scoreUnit: "goals",
+    actions: [
+      { label: "Goal", short: "GOAL", points: 1 },
+    ],
+    formatScore: (score)        => String(score),
+  },
+  volleyball: {
+    emoji: "🏐", name: "Volleyball", defaultTeams: ["Home", "Away"], scoreUnit: "pts",
+    actions: [
+      { label: "Point", short: "PT", points: 1 },
+    ],
+    formatScore: (score)        => String(score),
+  },
+};
+const starterCounters = [
+  { id: generateId(), name: "Water glasses", count: 4, icon: "💧", createdAt: Date.now() },
+  { id: generateId(), name: "Daily steps", count: 1250, icon: "👟", createdAt: Date.now() },
+  { id: generateId(), name: "Books read", count: 2, icon: "📚", createdAt: Date.now() },
+];
+const starterCounterNames = {
+  en: ["Water glasses", "Daily steps", "Books read"],
+  de: ["Wassergläser", "Tägliche Schritte", "Gelesene Bücher"],
+  es: ["Vasos de agua", "Pasos diarios", "Libros leídos"],
+  zh: ["水杯", "每日步数", "已读书籍"],
+  hi: ["पानी के गिलास", "दैनिक कदम", "पढ़ी गई किताबें"],
+};
+const starterNameIndexes = new Map(
+  Object.values(starterCounterNames).flatMap((names) => names.map((name, index) => [name, index]))
+);
+
+function localizeStarterCounters(language) {
+  const names = starterCounterNames[language] || starterCounterNames.en;
+  let changed = false;
+  counters.forEach((counter) => {
+    // Starter counters can have any current count, so identify them by their
+    // built-in name rather than by the initial count value.
+    const starterIndex = starterNameIndexes.get(counter.name);
+    if (starterIndex !== undefined && counter.name !== names[starterIndex]) {
+      counter.name = names[starterIndex];
+      changed = true;
+    }
+  });
+  if (changed) save();
+}
+
+function createYellowHuntCounters() {
+  const huntIcons = ["🏁", "🎯", "⭐"];
+  return [1, 2, 3].map((player, i) => ({
+    id: generateId(),
+    name: `Player ${player}`,
+    count: Math.floor(Math.random() * 10) + 1,
+    icon: huntIcons[i],
+    createdAt: Date.now(),
+  }));
+}
+
+function readCounters(key) {
+  try {
+    const stored = localStorage.getItem(key);
+    if (stored === null) return null;
+    const parsed = JSON.parse(stored);
+    return Array.isArray(parsed) ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function isYellowHuntCounters(value) {
+  return Array.isArray(value) && value.length > 0 && value.every((counter) => /^Player [1-3]$/.test(counter.name));
+}
+
+const legacyCounters = readCounters(STORAGE_KEY);
+const savedHuntCounters = readCounters(HUNT_COUNTERS_KEY);
+let huntMode = localStorage.getItem(HUNT_KEY) === "true";
+let huntColor = localStorage.getItem(HUNT_COLOR_KEY) || "yellow";
+let currentSkin = localStorage.getItem(SKIN_KEY) || "default";
+let counters = huntMode
+  ? savedHuntCounters ?? (isYellowHuntCounters(legacyCounters) ? legacyCounters : createYellowHuntCounters())
+  : (isYellowHuntCounters(legacyCounters) ? starterCounters : legacyCounters ?? starterCounters);
+
+const grid = document.querySelector("#counter-grid");
+const total = document.querySelector("#total-count");
+const active = document.querySelector("#counter-count");
+const counterSearch = document.querySelector("#counter-search-input");
+const themeToggle = document.querySelector("#settings-theme-row");
+const gamesHuntBtn = document.querySelector("#games-hunt-btn");
+const vehicleLayer = document.querySelector("#vehicle-layer");
+const eyebrow = document.querySelector("#eyebrow");
+const heroTitle = document.querySelector("#hero-title");
+const appHint = document.querySelector("#app-hint");
+const huntGuide = document.querySelector("#hunt-guide");
+const tutorialOverlay = document.querySelector("#tutorial-overlay");
+const tutorialSpotlight = document.querySelector("#tutorial-spotlight");
+const tutorialArrow = document.querySelector("#tutorial-arrow");
+const tutorialCard = document.querySelector("#tutorial-card");
+const tutorialStep = document.querySelector("#tutorial-step");
+const tutorialTitle = document.querySelector("#tutorial-title");
+const tutorialCopy = document.querySelector("#tutorial-copy");
+const continueTutorial = document.querySelector("#continue-tutorial");
+const languageChoices = [...document.querySelectorAll(".lang-row")];
+const redoTutorial = document.querySelector("#redo-tutorial");
+
+// Navigation & Tab State
+const tabs = {
+  counters: document.querySelector("#tab-counters"),
+  sports: document.querySelector("#tab-sports"),
+  history: document.querySelector("#tab-history"),
+  games: document.querySelector("#tab-games"),
+  settings: document.querySelector("#tab-settings"),
+};
+const navButtons = document.querySelectorAll(".nav-tab");
+let currentTab = localStorage.getItem("countly-tab") || "counters";
+
+function navigateTo(tabId) {
+  currentTab = tabId;
+  localStorage.setItem("countly-tab", tabId);
+  Object.entries(tabs).forEach(([id, el]) => { el.hidden = id !== tabId; });
+  navButtons.forEach(btn => {
+    btn.classList.toggle("is-active", btn.dataset.tab === tabId);
+    if (btn.dataset.tab === tabId) btn.setAttribute("aria-current", "page");
+    else btn.removeAttribute("aria-current");
+  });
+  document.body.dataset.tab = tabId;
+  if (tabId === "sports") { if (sportMode) renderSport(); }
+  else if (tabId === "counters") render();
+}
+navButtons.forEach(btn => btn.addEventListener("click", () => navigateTo(btn.dataset.tab)));
+
+let tutorialIndex = 0;
+let searchQuery = "";
+let sportMode = false;
+let sportType = "basketball";
+let sportScores = null;
+const tutorialTargets = ["#add-counter", ".counter-card .increment", "#nav-sports", "#nav-games", "#settings-skin-row", "#settings-language-row", "#settings-theme-row", "#settings-reset-row"];
+function tutorialSteps() { return tutorialTargets.map((target, index) => ({ target, title: t("tutorials")[index][0], copy: t("tutorials")[index][1] })); }
+function applyTheme(theme) {
+  const dark = theme === "dark";
+  document.body.classList.toggle("dark-mode", dark);
+  document.documentElement.classList.toggle("dark-mode", dark);
+  
+  const metaThemeColor = document.getElementById("meta-theme-color");
+  if (metaThemeColor) {
+    if (currentSkin === "glitch") {
+      metaThemeColor.setAttribute("content", "#000000");
+    } else {
+      metaThemeColor.setAttribute("content", dark ? "#000000" : "#f5f5f7");
+    }
+  }
+
+  themeToggle.title = dark ? t("lightMode") : t("darkMode");
+  themeToggle.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
+}
+
+function applySkin() {
+  document.body.classList.remove("skin-classic", "skin-glitch", "skin-neon", "skin-ocean", "skin-nature", "skin-sunset", "skin-space", "skin-minimal", "skin-retro");
+  document.documentElement.classList.remove("skin-classic", "skin-glitch", "skin-neon", "skin-ocean", "skin-nature", "skin-sunset", "skin-space", "skin-minimal", "skin-retro");
+  
+  if (currentSkin !== "default") {
+    document.body.classList.add(`skin-${currentSkin}`);
+    document.documentElement.classList.add(`skin-${currentSkin}`);
+  }
+  
+  if (currentSkin === "ocean") {
+    startOceanAnimation();
+  } else {
+    stopOceanAnimation();
+  }
+
+  if (currentSkin === "space") {
+    startSpaceAnimation();
+  } else {
+    stopSpaceAnimation();
+  }
+  
+  const dark = document.body.classList.contains("dark-mode");
+  const metaThemeColor = document.getElementById("meta-theme-color");
+  if (metaThemeColor) {
+    if (currentSkin === "glitch") {
+      metaThemeColor.setAttribute("content", "#000000");
+    } else {
+      metaThemeColor.setAttribute("content", dark ? "#000000" : "#f5f5f7");
+    }
+  }
+}
+
+function applyLanguage(language) {
+  const selected = languageChoices.some((choice) => choice.dataset.language === language) ? language : "en";
+  currentLanguage = selected;
+  document.documentElement.lang = selected;
+  localizeStarterCounters(selected);
+  
+  languageChoices.forEach((choice) => {
+    choice.querySelector(".lang-check").classList.toggle("is-active", choice.dataset.language === selected);
+  });
+  
+  const selectedChoice = languageChoices.find(c => c.dataset.language === selected);
+  if (selectedChoice) {
+    document.querySelector("#settings-language-value").textContent = selectedChoice.querySelector(".settings-row-label").textContent;
+  }
+
+  document.querySelectorAll("[data-i18n]").forEach((element) => {
+    const value = t(element.dataset.i18n);
+    if (element.dataset.i18n === "guideCopy" || element.dataset.i18n === "aboutDesc") element.innerHTML = value;
+    else element.textContent = value;
+  });
+  document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => { element.placeholder = t(element.dataset.i18nPlaceholder); });
+  
+  themeToggle.title = document.body.classList.contains("dark-mode") ? t("lightMode") : t("darkMode");
+  themeToggle.setAttribute("aria-label", themeToggle.title);
+  document.querySelector("#settings-reset-row").title = t("resetAll");
+  document.querySelector("#settings-reset-row").setAttribute("aria-label", t("resetAll"));
+  applyHuntMode();
+  if (tutorialOverlay && !tutorialOverlay.hidden) showTutorialStep();
+  
+  if (currentTab === "sports" && sportMode) {
+    applySportMode();
+    renderSport();
+  } else if (currentTab === "counters") {
+    render();
+  }
+  localStorage.setItem(LANGUAGE_KEY, selected);
+}
+
+function applyHuntMode() {
+  ["hunt-yellow", "hunt-red", "hunt-blue", "hunt-green", "hunt-pink"].forEach(c => {
+    document.body.classList.remove(c);
+    document.documentElement.classList.remove(c);
+  });
+  document.body.classList.toggle("hunt-mode", huntMode);
+  document.documentElement.classList.toggle("hunt-mode", huntMode);
+  if (huntMode) {
+    document.body.classList.add(`hunt-${huntColor}`);
+    document.documentElement.classList.add(`hunt-${huntColor}`);
+  }
+
+  if (gamesHuntBtn) {
+    gamesHuntBtn.classList.toggle("is-active", huntMode);
+    gamesHuntBtn.querySelector(".sport-quick-name").textContent = huntMode ? "End Car Hunt" : "Car Hunt";
+  }
+  
+  const colorName = huntColor.charAt(0).toUpperCase() + huntColor.slice(1);
+  eyebrow.textContent = huntMode ? `${colorName} Car Hunt` : t("yourCounters");
+  heroTitle.textContent = huntMode ? "Spot it. Count it. Win it." : t("heroTitle");
+  appHint.innerHTML = huntMode
+    ? `<span class="hint-key">${t("play")}</span> Log a ${colorName.toLowerCase()} car when you spot one`
+    : `<span class="hint-key">${t("tip")}</span> <span data-i18n="renameHint">${t("renameHint")}</span>`;
+}
+
+function save() {
+  localStorage.setItem(huntMode ? HUNT_COUNTERS_KEY : STORAGE_KEY, JSON.stringify(counters));
+}
+function formatCount(value) { return new Intl.NumberFormat(currentLanguage).format(value); }
+
+// ── Sport mode functions ──────────────────────────────────────────────────────
+const summaryLabelTotal  = document.querySelector("#total-count + .summary-label");
+const summaryLabelActive = document.querySelector("#counter-count + .summary-label");
+
+function createSportScores(type) {
+  return SPORT_CONFIGS[type].defaultTeams.map(name => ({ id: generateId(), name, score: 0 }));
+}
+function saveSportScores() {
+  localStorage.setItem(`${SPORT_SCORES_KEY}-${sportType}`, JSON.stringify(sportScores));
+}
+function loadSportScores(type) {
+  try {
+    const saved = JSON.parse(localStorage.getItem(`${SPORT_SCORES_KEY}-${type}`));
+    if (saved && Array.isArray(saved) && saved.length === 2) return saved;
+  } catch {}
+  return null;
+}
+function switchSport(type) {
+  if (type === sportType) return;
+  saveSportScores();                        // persist current sport before leaving
+  sportType   = type;
+  sportScores = loadSportScores(type) || createSportScores(type);
+  localStorage.setItem(SPORT_TYPE_KEY, type);
+  saveSportScores();
+  applySportMode();
+  renderSport();
+}
+function updateSportScore(id, amount) {
+  const team = sportScores.find(t => t.id === id);
+  if (team) { team.score = Math.max(0, team.score + amount); saveSportScores(); renderSport(); }
+}
+
+function renderSport() {
+  if (document.body.classList.contains("app-ready")) document.body.classList.add("counter-rendered");
+  grid.innerHTML = "";
+  if (!sportScores || sportScores.length < 2) return;
+  const config   = SPORT_CONFIGS[sportType];
+  const [t0, t1] = sportScores;
+
+  // Determine game-over state before rendering cards
+  const score0Display = config.formatScore(t0.score, t1.score);
+  const score1Display = config.formatScore(t1.score, t0.score);
+  const gameOver = score0Display === "Game" || score1Display === "Game";
+
+  sportScores.forEach((team, idx) => {
+    const opponent     = sportScores[1 - idx];
+    const displayScore = config.formatScore(team.score, opponent.score);
+    const isWon        = displayScore === "Game";
+
+    const card = document.createElement("article");
+    card.className = "counter-card sport-card";
+
+    const actionsHtml = config.actions.map(action => `
+      <button class="sport-action" type="button"
+        data-id="${team.id}" data-points="${action.points}"
+        ${gameOver ? "disabled" : ""}
+        aria-label="${action.label} +${action.points} for ${escapeHtml(team.name)}">
+        <span class="sport-action-short">${action.short}</span>
+        <span class="sport-action-pts">+${action.points}</span>
+      </button>`).join("");
+
+    // Raw numeric score shown below formatted display (basketball/soccer only)
+    const rawHtml = config.scoreUnit
+      ? `<div class="sport-score-raw">${team.score} ${team.score === 1 && config.scoreUnit === "goals" ? "goal" : config.scoreUnit}</div>`
+      : "";
+
+    // Tennis: also show raw point count in small muted text
+    const tennisRaw = sportType === "tennis" && !isWon
+      ? `<div class="sport-score-raw">${team.score} pt${team.score !== 1 ? "s" : ""}</div>`
+      : "";
+
+    card.innerHTML = `
+      <div class="card-top">
+        <input class="counter-name sport-team-name" value="${escapeHtml(team.name)}" aria-label="Team name" maxlength="24" />
+        <button class="sport-undo" type="button"
+          title="Undo last point for ${escapeHtml(team.name)}"
+          aria-label="Undo last point for ${escapeHtml(team.name)}">↩</button>
+      </div>
+      <div class="sport-score-wrap${isWon ? " sport-score-won" : ""}">
+        <div class="sport-score">${displayScore}</div>
+        ${sportType === "tennis" ? tennisRaw : rawHtml}
+      </div>
+      ${isWon ? `<div class="sport-won-badge">🏆 Game!</div>` : ""}
+      <div class="sport-actions">${actionsHtml}</div>
+    `;
+
+    card.querySelectorAll(".sport-action").forEach(btn => {
+      btn.addEventListener("click", () => { if (!btn.disabled) updateSportScore(team.id, parseInt(btn.dataset.points)); });
+    });
+    card.querySelector(".sport-undo").addEventListener("click", () => updateSportScore(team.id, -1));
+    card.querySelector(".sport-team-name").addEventListener("change", e => {
+      team.name = e.target.value.trim() || config.defaultTeams[idx];
+      saveSportScores(); renderSport();
+    });
+    grid.appendChild(card);
+  });
+
+  // Update scoreboard in summary bar
+  if (sportType === "tennis") {
+    total.textContent  = config.formatScore(t0.score, t1.score);
+    active.textContent = config.formatScore(t1.score, t0.score);
+  } else {
+    total.textContent  = t0.score;
+    active.textContent = t1.score;
+  }
+  summaryLabelTotal.textContent  = t0.name;
+  summaryLabelActive.textContent = t1.name;
+}
+
+function applySportMode() {
+  ["sport-basketball", "sport-soccer", "sport-tennis", "sport-football", "sport-f1", "sport-baseball", "sport-hockey", "sport-volleyball"].forEach(c => {
+    document.body.classList.remove(c);
+    document.documentElement.classList.remove(c);
+  });
+  document.body.classList.toggle("sport-mode", sportMode);
+  document.documentElement.classList.toggle("sport-mode", sportMode);
+
+  const sportGuide  = document.querySelector("#sport-guide");
+  if (sportGuide) sportGuide.hidden = !sportMode;
+
+  if (sportMode) {
+    document.body.classList.add(`sport-${sportType}`);
+    document.documentElement.classList.add(`sport-${sportType}`);
+    const config = SPORT_CONFIGS[sportType];
+    document.querySelector("#sport-guide-icon").textContent  = config.emoji;
+    document.querySelector("#sport-guide-title").textContent = config.name;
+    const actionDesc = config.actions.map(a => `${a.label} +${a.points}`).join(" · ");
+    document.querySelector("#sport-guide-copy").textContent  = `${actionDesc}. Tap a team name to rename it.`;
+    eyebrow.textContent   = `${config.emoji}  ${config.name}`;
+    heroTitle.textContent = "Track every point, every play.";
+    appHint.innerHTML     = `<span class="hint-key">SPORT</span> Use the action buttons to log scores for each team`;
+    // Highlight the active sport in the switcher pills
+    document.querySelectorAll(".sport-switch-btn").forEach(btn => {
+      btn.classList.toggle("is-active", btn.dataset.switchSport === sportType);
+    });
+  }
+}
+
+function openSportPicker()  { document.querySelector("#sport-picker").hidden = false; }
+function closeSportPicker() { document.querySelector("#sport-picker").hidden = true;  }
+
+function enterSportMode(type) {
+  // Mutually exclusive with Hunt Mode
+  if (huntMode) {
+    exitHuntMode();
+  }
+  sportMode   = true;
+  sportType   = type;
+  sportScores = loadSportScores(type) || createSportScores(type);
+  localStorage.setItem(SPORT_KEY, "true");
+  localStorage.setItem(SPORT_TYPE_KEY, type);
+  saveSportScores();
+  closeSportPicker();
+  applySportMode();
+  renderSport();
+  navigateTo("counters");
+}
+
+function exitSportMode() {
+  sportMode = false;
+  localStorage.setItem(SPORT_KEY, "false");
+  applySportMode();
+  applyHuntMode();
+  applyLanguage(currentLanguage); // restores i18n labels including summary labels
+}
+
+function animateIncrement(button, countEl) {
+  // Spring scale on button
+  button.classList.remove('plus-pop');
+  void button.offsetWidth; // force reflow
+  button.classList.add('plus-pop');
+
+  // Ripple effect
+  const ripple = document.createElement('span');
+  ripple.className = 'plus-ripple';
+  button.appendChild(ripple);
+  ripple.addEventListener('animationend', () => ripple.remove());
+
+  // Count bump animation
+  if (countEl) {
+    countEl.classList.remove('count-bump');
+    void countEl.offsetWidth;
+    countEl.classList.add('count-bump');
+  }
+
+  // Floating +1 indicator
+  const floater = document.createElement('span');
+  floater.className = 'plus-float';
+  floater.textContent = '+1';
+  button.closest('.counter-card').appendChild(floater);
+  floater.addEventListener('animationend', () => floater.remove());
+}
+
+function render() {
+  if (sportMode) { renderSport(); return; }
+  if (document.body.classList.contains("app-ready")) document.body.classList.add("counter-rendered");
+  grid.innerHTML = "";
+  const visibleCounters = searchQuery.trim()
+    ? counters.filter((counter) => counter.name.toLocaleLowerCase(currentLanguage).includes(searchQuery.trim().toLocaleLowerCase(currentLanguage)))
+    : counters;
+  if (!counters.length) {
+      grid.innerHTML = `<div class="empty-state"><strong>${t("emptyTitle")}</strong>${t("emptyCopy")}</div>`;
+  }
+  if (counters.length && !visibleCounters.length) {
+    grid.innerHTML = `<div class="empty-state"><strong>${t("noMatchingCounters")}</strong></div>`;
+  }
+  todayCounts = loadTodayCounts();
+  visibleCounters.forEach((counter) => {
+    const card = document.createElement("article");
+    card.className = "counter-card";
+    const icon = getIconForCounter(counter);
+    const todayCount = todayCounts[counter.id] || 0;
+    const createdDate = counter.createdAt ? new Date(counter.createdAt) : null;
+    const daysActive = createdDate ? Math.max(1, Math.ceil((Date.now() - createdDate.getTime()) / 86400000)) : null;
+    const avgPerDay = daysActive && counter.count > 0 ? (counter.count / daysActive).toFixed(1) : null;
+
+    card.innerHTML = `
+      <div class="card-top">
+        <div class="card-icon-name">
+          <input class="card-icon-input" type="text" value="${icon}" maxlength="4" title="Change icon" aria-label="Change icon for ${escapeHtml(counter.name)}" />
+          <input class="counter-name" value="${escapeHtml(counter.name)}" aria-label="${t("counterName")}" maxlength="32" />
+        </div>
+        <button class="delete-button" type="button" title="${t("remove")}" aria-label="${t("remove")} ${escapeHtml(counter.name)}">×</button>
+      </div>
+      <div class="count-hero">
+        <div class="count" id="count-${counter.id}">${formatCount(counter.count)}</div>
+      </div>
+      <div class="card-actions-row">
+        <button class="step-button decrement" type="button" aria-label="${t("decrease")} ${escapeHtml(counter.name)}">−</button>
+        <button class="plus-button increment" type="button" aria-label="${t("increase")} ${escapeHtml(counter.name)}">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 6v16M6 14h16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+        </button>
+        <button class="step-button decrement-right" type="button" aria-label="${t("decrease")} ${escapeHtml(counter.name)}" style="visibility:hidden">−</button>
+      </div>
+      <div class="card-meta">
+        <div class="card-meta-item today-badge${todayCount > 0 ? ' has-count' : ''}">
+          <span class="meta-label">Today</span>
+          <span class="meta-value">${todayCount > 0 ? '+' + formatCount(todayCount) : '—'}</span>
+        </div>
+        ${avgPerDay && !huntMode ? `<div class="card-meta-item">
+          <span class="meta-label">Avg/day</span>
+          <span class="meta-value">${avgPerDay}</span>
+        </div>` : ''}
+      </div>
+      ${huntMode ? `<div class="hunt-actions">
+        <button class="hunt-action car-action" type="button" aria-label="${t("carAria").replace('%s', HUNT_CONFIG[huntColor].label)} ${escapeHtml(counter.name)}"><span class="hunt-emoji">${HUNT_CONFIG[huntColor].emoji}</span><span>${t("car")} <b>+1</b></span></button>
+      </div>` : ''}`;
+
+    const incrementBtn = card.querySelector(".increment");
+    const countEl = card.querySelector(".count");
+
+    incrementBtn.addEventListener("click", () => {
+      animateIncrement(incrementBtn, countEl);
+      updateCount(counter.id, 1);
+      // Track today's count
+      todayCounts[counter.id] = (todayCounts[counter.id] || 0) + 1;
+      saveTodayCounts(todayCounts);
+      if (huntMode) showVehicle();
+    });
+    card.querySelector(".decrement").addEventListener("click", () => updateCount(counter.id, -1));
+    card.querySelector(".car-action")?.addEventListener("click", () => {
+      animateIncrement(incrementBtn, countEl);
+      updateCount(counter.id, 1);
+      todayCounts[counter.id] = (todayCounts[counter.id] || 0) + 1;
+      saveTodayCounts(todayCounts);
+      showVehicle();
+    });
+    card.querySelector(".delete-button").addEventListener("click", () => removeCounter(counter.id));
+    card.querySelector(".counter-name").addEventListener("change", (event) => {
+      counter.name = event.target.value.trim() || t("untitled");
+      save(); render();
+    });
+    // Icon picker on change
+    card.querySelector(".card-icon-input").addEventListener("change", (event) => {
+      counter.icon = event.target.value.trim() || "🎯";
+      save(); render();
+    });
+    grid.appendChild(card);
+  });
+  total.textContent = formatCount(counters.reduce((sum, item) => sum + item.count, 0));
+  active.textContent = counters.length;
+}
+
+counterSearch.addEventListener("input", (event) => { searchQuery = event.target.value; render(); });
+
+function updateCount(id, amount) { const counter = counters.find((item) => item.id === id); if (counter) { counter.count = Math.max(0, counter.count + amount); save(); render(); } }
+function removeCounter(id) { counters = counters.filter((counter) => counter.id !== id); save(); render(); }
+function escapeHtml(value) { return value.replace(/[&<>'"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[char])); }
+function showVehicle() {
+  const vehicle = document.createElement("div");
+  vehicle.className = `passing-vehicle car path-${Math.ceil(Math.random() * 3)}`;
+  const startY = Math.round(14 + Math.random() * 64);
+  const gentleShift = () => Math.round(-15 + Math.random() * 30);
+  const midY = Math.max(10, Math.min(86, startY + gentleShift()));
+  const endY = Math.max(10, Math.min(86, midY + gentleShift()));
+  vehicle.style.setProperty("--start-y", `${startY}vh`);
+  vehicle.style.setProperty("--mid-y", `${midY}vh`);
+  vehicle.style.setProperty("--end-y", `${endY}vh`);
+  vehicle.style.setProperty("--travel-time", `${(3.5 + Math.random() * 1.2).toFixed(2)}s`);
+  vehicle.textContent = HUNT_CONFIG[huntColor]?.emoji || "🚕";
+  vehicleLayer.appendChild(vehicle);
+  vehicle.addEventListener("animationend", () => vehicle.remove());
+}
+
+function positionTutorial() {
+  const step = tutorialSteps()[tutorialIndex];
+  const target = document.querySelector(step.target);
+  if (!target || target.hidden || target.offsetParent === null) {
+    if (tutorialOverlay && !tutorialOverlay.hidden) closeTutorial();
+    return;
+  }
+  const targetRect = target.getBoundingClientRect();
+  const cardRect = tutorialCard.getBoundingClientRect();
+  const gap = 24;
+  const cardLeft = Math.max(16, Math.min(window.innerWidth - cardRect.width - 16, targetRect.left + targetRect.width / 2 - cardRect.width / 2));
+  const below = targetRect.top < window.innerHeight / 2;
+  const cardTop = Math.max(16, Math.min(window.innerHeight - cardRect.height - 16, below ? targetRect.bottom + gap : targetRect.top - cardRect.height - gap));
+  tutorialCard.style.left = `${cardLeft}px`;
+  tutorialCard.style.top = `${cardTop}px`;
+  tutorialSpotlight.style.left = `${targetRect.left - 8}px`;
+  tutorialSpotlight.style.top = `${targetRect.top - 8}px`;
+  tutorialSpotlight.style.width = `${targetRect.width + 16}px`;
+  tutorialSpotlight.style.height = `${targetRect.height + 16}px`;
+  const startX = cardLeft + cardRect.width / 2;
+  const startY = below ? cardTop : cardTop + cardRect.height;
+  const endX = targetRect.left + targetRect.width / 2;
+  const endY = below ? targetRect.bottom + 3 : targetRect.top - 3;
+  const distance = Math.hypot(endX - startX, endY - startY);
+  const angle = Math.atan2(endY - startY, endX - startX) * (180 / Math.PI);
+  tutorialArrow.style.left = `${startX}px`;
+  tutorialArrow.style.top = `${startY}px`;
+  tutorialArrow.style.width = `${Math.max(20, distance)}px`;
+  tutorialArrow.style.transform = `rotate(${angle}deg)`;
+}
+
+function showTutorialStep() {
+  const steps = tutorialSteps();
+  const step = steps[tutorialIndex];
+  tutorialStep.textContent = `${tutorialIndex + 1} / ${steps.length}`;
+  tutorialTitle.textContent = step.title;
+  tutorialCopy.textContent = step.copy;
+  continueTutorial.innerHTML = tutorialIndex === steps.length - 1 ? `${t("finish")} <span aria-hidden="true">✓</span>` : `${t("continue")} <span aria-hidden="true">→</span>`;
+  tutorialOverlay.hidden = false;
+  requestAnimationFrame(positionTutorial);
+}
+
+function launchConfetti() {
+  const canvas = document.createElement("canvas");
+  canvas.style.cssText = "position:fixed;inset:0;z-index:120;pointer-events:none;";
+  canvas.width = window.innerWidth * devicePixelRatio;
+  canvas.height = window.innerHeight * devicePixelRatio;
+  canvas.style.width = "100vw";
+  canvas.style.height = "100vh";
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext("2d");
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+
+  const W = window.innerWidth;
+  const H = window.innerHeight;
+  const colors = [
+    "#4169e1", "#ffd24d", "#ff9d72", "#8ed1c4", "#b79aff",
+    "#ff6b8a", "#47d7ac", "#f9a03f", "#a78bfa", "#34d399"
+  ];
+  const PARTICLE_COUNT = 120;
+  const GRAVITY = 520;       // px/s²
+  const DRAG = 0.97;
+  const WIND = 18;           // gentle horizontal drift (px/s)
+  const particles = [];
+
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    const angle = -Math.PI / 2 + (Math.random() - 0.5) * 1.6; // fan upward ±~46°
+    const speed = 420 + Math.random() * 560;
+    const side = Math.random() < 0.5 ? -1 : 1;
+    const originX = W / 2 + side * (Math.random() * W * 0.32);
+    const originY = H * 0.92 + Math.random() * H * 0.08;      // bottom region
+    particles.push({
+      x: originX,
+      y: originY,
+      vx: Math.cos(angle) * speed * (Math.random() < 0.5 ? 1 : -1),
+      vy: Math.sin(angle) * speed,
+      color: colors[i % colors.length],
+      w: 5 + Math.random() * 6,
+      h: 7 + Math.random() * 9,
+      shape: Math.random() < 0.45 ? "rect" : Math.random() < 0.6 ? "circle" : "ribbon",
+      rotation: Math.random() * Math.PI * 2,
+      spin: (2 + Math.random() * 8) * (Math.random() < 0.5 ? 1 : -1),
+      wobblePhase: Math.random() * Math.PI * 2,
+      wobbleSpeed: 2 + Math.random() * 4,
+      opacity: 1,
+      life: 2.4 + Math.random() * 1.8, // seconds before fading
+      age: -Math.random() * 0.25,       // stagger start
+    });
+  }
+
+  let lastTime = performance.now();
+  let running = true;
+
+  function tick(now) {
+    if (!running) return;
+    const dt = Math.min((now - lastTime) / 1000, 0.05);
+    lastTime = now;
+
+    ctx.clearRect(0, 0, W, H);
+    let alive = 0;
+
+    for (const p of particles) {
+      p.age += dt;
+      if (p.age < 0) { alive++; continue; } // still staggering
+
+      // physics
+      p.vy += GRAVITY * dt;
+      p.vx += WIND * Math.sin(p.wobblePhase + p.age * p.wobbleSpeed) * dt;
+      p.vx *= DRAG;
+      p.vy *= DRAG;
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+      p.rotation += p.spin * dt;
+
+      // fade out near end of life
+      const fadeStart = p.life * 0.65;
+      if (p.age > fadeStart) {
+        p.opacity = Math.max(0, 1 - (p.age - fadeStart) / (p.life * 0.35));
+      }
+
+      if (p.opacity <= 0 || p.y > H + 60) continue;
+      alive++;
+
+      ctx.save();
+      ctx.globalAlpha = p.opacity;
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rotation);
+      // 3D-ish wobble: scale X by a sine wave
+      const scaleX = 0.4 + 0.6 * Math.abs(Math.cos(p.age * p.wobbleSpeed + p.wobblePhase));
+      ctx.scale(scaleX, 1);
+      ctx.fillStyle = p.color;
+
+      if (p.shape === "circle") {
+        ctx.beginPath();
+        ctx.arc(0, 0, p.w / 2, 0, Math.PI * 2);
+        ctx.fill();
+      } else if (p.shape === "ribbon") {
+        ctx.fillRect(-p.w * 0.5, -p.h * 0.8, p.w * 0.6, p.h * 1.6);
+      } else {
+        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      }
+      ctx.restore();
+    }
+
+    if (alive > 0) {
+      requestAnimationFrame(tick);
+    } else {
+      canvas.remove();
+      running = false;
+    }
+  }
+
+  requestAnimationFrame(tick);
+}
+
+function closeTutorial(completed = false) {
+  tutorialOverlay.hidden = true;
+  localStorage.setItem(TUTORIAL_KEY, "true");
+  if (completed) launchConfetti();
+}
+
+document.querySelector("#add-counter").addEventListener("click", () => {
+  searchQuery = "";
+  counterSearch.value = "";
+  const iconIdx = counters.length % COUNTER_ICONS.length;
+  counters.push({ id: generateId(), name: `${t("counter")} ${counters.length + 1}`, count: 0, icon: COUNTER_ICONS[iconIdx], createdAt: Date.now() });
+  save(); render();
+  setTimeout(() => grid.lastElementChild?.querySelector(".counter-name")?.select(), 0);
+});
+document.querySelector("#settings-reset-row").addEventListener("click", () => {
+  if (sportMode) {
+    const config = SPORT_CONFIGS[sportType];
+    if (confirm(t("resetSport").replace('%s', config.name))) {
+      sportScores.forEach(team => { team.score = 0; });
+      saveSportScores(); renderSport();
+    }
+  } else if (counters.length && confirm(t("resetConfirm"))) {
+    counters.forEach(counter => { counter.count = 0; }); save(); render();
+  }
+});
+function openHuntPicker() { document.querySelector("#hunt-picker").hidden = false; }
+function closeHuntPicker() { document.querySelector("#hunt-picker").hidden = true; }
+
+function enterHuntMode(color) {
+  if (sportMode) {
+    exitSportMode();
+  }
+  huntMode = true;
+  huntColor = color;
+  localStorage.setItem(HUNT_KEY, "true");
+  localStorage.setItem(HUNT_COLOR_KEY, color);
+  counters = readCounters(HUNT_COUNTERS_KEY) ?? (isYellowHuntCounters(legacyCounters) ? legacyCounters : createYellowHuntCounters());
+  save();
+  closeHuntPicker();
+  applyHuntMode();
+  render();
+  navigateTo("counters");
+}
+
+function exitHuntMode() {
+  huntMode = false;
+  localStorage.setItem(HUNT_KEY, "false");
+  counters = readCounters(STORAGE_KEY);
+  if (!counters || isYellowHuntCounters(counters)) counters = starterCounters;
+  save();
+  applyHuntMode();
+  render();
+}
+
+if (gamesHuntBtn) {
+  gamesHuntBtn.addEventListener("click", () => {
+    if (huntMode) {
+      exitHuntMode();
+    } else {
+      openHuntPicker();
+    }
+  });
+}
+
+// ── Hunt Picker Event Listeners ───────────────────────────────────────────────
+document.querySelector("#hunt-picker-cancel").addEventListener("click", closeHuntPicker);
+document.querySelector("#hunt-picker-backdrop").addEventListener("click", closeHuntPicker);
+document.querySelectorAll(".sport-option[data-hunt-color]").forEach(btn => {
+  btn.addEventListener("click", () => enterHuntMode(btn.dataset.huntColor));
+});
+themeToggle.addEventListener("click", () => {
+  const nextTheme = document.body.classList.contains("dark-mode") ? "light" : "dark";
+  localStorage.setItem(THEME_KEY, nextTheme);
+  applyTheme(nextTheme);
+});
+applyTheme(localStorage.getItem(THEME_KEY) || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
+applyHuntMode();
+
+// Initialise sport mode from localStorage
+(function initSport() {
+  const savedSportMode = localStorage.getItem(SPORT_KEY) === "true";
+  if (savedSportMode) {
+    // Sport and Hunt are mutually exclusive — clear Hunt if both somehow stored
+    if (huntMode) {
+      huntMode = false;
+      localStorage.setItem(HUNT_KEY, "false");
+    }
+    sportMode   = true;
+    sportType   = localStorage.getItem(SPORT_TYPE_KEY) || "basketball";
+    sportScores = loadSportScores(sportType) || createSportScores(sportType);
+    applySportMode();
+    renderSport();
+  } else {
+    applySportMode(); // just sets toggle aria-label
+    render();
+  }
+})();
+
+// ── Ocean Skin Animation ──────────────────────────────────────────────────────
+let oceanInterval = null;
+const seaEmojis = ["🐟", "🐠", "🐡", "🐢", "🐬", "🐙", "🦀", "🦑"];
+
+function spawnSeaCreature() {
+  if (document.hidden || currentSkin !== "ocean") return;
+  const creature = document.createElement("div");
+  creature.className = "sea-creature-animated";
+  creature.textContent = seaEmojis[Math.floor(Math.random() * seaEmojis.length)];
+  
+  const isRightToLeft = Math.random() > 0.5;
+  const startY = 10 + Math.random() * 80;
+  const endY = startY + (Math.random() * 40 - 20);
+  const travelTime = 15 + Math.random() * 15;
+  const size = 2 + Math.random() * 3;
+  
+  creature.style.setProperty("--start-y", `${startY}vh`);
+  creature.style.setProperty("--end-y", `${endY}vh`);
+  creature.style.setProperty("--travel-time", `${travelTime}s`);
+  creature.style.fontSize = `${size}rem`;
+  creature.style.opacity = 0.4 + Math.random() * 0.4;
+  
+  creature.classList.add(isRightToLeft ? "swim-rtl" : "swim-ltr");
+  
+  const ambientScene = document.querySelector(".ambient-scene");
+  if (ambientScene) ambientScene.appendChild(creature);
+  
+  creature.addEventListener("animationend", () => creature.remove());
+}
+
+function startOceanAnimation() {
+  if (!oceanInterval) {
+    for(let i = 0; i < 4; i++) setTimeout(spawnSeaCreature, Math.random() * 2000);
+    oceanInterval = setInterval(spawnSeaCreature, 4000);
+  }
+}
+
+function stopOceanAnimation() {
+  if (oceanInterval) {
+    clearInterval(oceanInterval);
+    oceanInterval = null;
+  }
+  document.querySelectorAll(".sea-creature-animated").forEach(el => el.remove());
+}
+
+let spaceInterval;
+const spaceStars = ["✨", "🌟", "💫", "⭐"];
+
+function spawnSpaceStar() {
+  if (document.hidden || currentSkin !== "space") return;
+  const star = document.createElement("div");
+  star.className = "space-star float-anim";
+  star.textContent = spaceStars[Math.floor(Math.random() * spaceStars.length)];
+  
+  const startX = Math.random() * 100;
+  const driftX = (Math.random() - 0.5) * 20;
+  const travelTime = 10 + Math.random() * 20;
+  const size = 1 + Math.random() * 1.5;
+  const maxOpacity = 0.3 + Math.random() * 0.5;
+  
+  star.style.setProperty("--start-x", `${startX}vw`);
+  star.style.setProperty("--drift-x", `${driftX}vw`);
+  star.style.setProperty("--travel-time", `${travelTime}s`);
+  star.style.setProperty("--max-opacity", maxOpacity);
+  star.style.fontSize = `${size}rem`;
+  
+  const ambientScene = document.querySelector(".ambient-scene");
+  if (ambientScene) ambientScene.appendChild(star);
+  
+  star.addEventListener("animationend", () => star.remove());
+}
+
+function startSpaceAnimation() {
+  if (!spaceInterval) {
+    for(let i = 0; i < 6; i++) setTimeout(spawnSpaceStar, Math.random() * 3000);
+    spaceInterval = setInterval(spawnSpaceStar, 2000);
+  }
+}
+
+function stopSpaceAnimation() {
+  if (spaceInterval) {
+    clearInterval(spaceInterval);
+    spaceInterval = null;
+  }
+  document.querySelectorAll(".space-star").forEach(el => el.remove());
+}
+
+requestAnimationFrame(() => {
+  document.body.classList.add("app-ready");
+  if (!localStorage.getItem(TUTORIAL_KEY)) setTimeout(showTutorialStep, 760);
+});
+
+document.querySelector("#continue-tutorial").addEventListener("click", () => {
+  if (tutorialIndex === tutorialSteps().length - 1) closeTutorial(true);
+  else { tutorialIndex += 1; showTutorialStep(); }
+});
+document.querySelector("#skip-tutorial").addEventListener("click", closeTutorial);
+redoTutorial.addEventListener("click", () => {
+  tutorialIndex = 0;
+  showTutorialStep();
+});
+document.querySelector(".brand").addEventListener("click", (e) => {
+  e.preventDefault();
+  if (sportMode) exitSportMode();
+  if (huntMode) exitHuntMode();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  tutorialIndex = 0;
+  showTutorialStep();
+});
+
+// ── About Modal ─────────────────────────────────────────────────────────────
+const aboutModal = document.querySelector("#about-modal");
+document.querySelector("#settings-about-row").addEventListener("click", () => {
+  aboutModal.hidden = false;
+});
+document.querySelector("#close-about").addEventListener("click", () => {
+  aboutModal.hidden = true;
+});
+document.querySelector("#about-backdrop").addEventListener("click", () => {
+  aboutModal.hidden = true;
+});
+window.addEventListener("resize", () => { if (!tutorialOverlay.hidden) positionTutorial(); });
+window.addEventListener("scroll", () => { if (!tutorialOverlay.hidden) positionTutorial(); }, { passive: true });
+
+// Settings / Language screen wiring
+document.querySelector("#settings-language-row").addEventListener("click", () => {
+  document.querySelector("#settings-language-screen").hidden = false;
+});
+document.querySelector("#lang-screen-back").addEventListener("click", () => {
+  document.querySelector("#settings-language-screen").hidden = true;
+});
+languageChoices.forEach((choice) => choice.addEventListener("click", () => {
+  applyLanguage(choice.dataset.language);
+  document.querySelector("#settings-language-screen").hidden = true;
+}));
+
+applyLanguage(localStorage.getItem(LANGUAGE_KEY) || "en");
+applySkin();
+
+// ── Skin Picker event listeners ───────────────────────────────────────────────
+const skinPicker = document.querySelector("#skin-picker");
+function openSkinPicker() { skinPicker.hidden = false; }
+function closeSkinPicker() { skinPicker.hidden = true; }
+
+document.querySelector("#settings-skin-row").addEventListener("click", openSkinPicker);
+if (document.querySelector("#skin-toggle")) {
+  document.querySelector("#skin-toggle").addEventListener("click", openSkinPicker);
+}
+document.querySelector("#skin-picker-cancel").addEventListener("click", closeSkinPicker);
+document.querySelector("#skin-picker-backdrop").addEventListener("click", closeSkinPicker);
+document.querySelectorAll("#skin-picker .sport-option").forEach(btn => {
+  btn.addEventListener("click", () => {
+    currentSkin = btn.dataset.skin;
+    localStorage.setItem(SKIN_KEY, currentSkin);
+    applySkin();
+    closeSkinPicker();
+  });
+});
+
+// Restore current tab on load
+navigateTo(currentTab);
+
+// ── Sport mode event listeners ────────────────────────────────────────────────
+document.querySelectorAll(".sport-quick-btn").forEach(btn => {
+  btn.addEventListener("click", () => enterSportMode(btn.dataset.sport));
+});
+document.querySelector("#sport-exit-btn").addEventListener("click", exitSportMode);
+document.querySelector("#reset-sport-btn").addEventListener("click", () => {
+  const config = SPORT_CONFIGS[sportType];
+  if (confirm(t("resetSport").replace('%s', config.name))) {
+    sportScores.forEach(team => { team.score = 0; });
+    saveSportScores(); renderSport();
+  }
+});
+document.querySelector("#sport-picker-cancel").addEventListener("click", closeSportPicker);
+document.querySelector("#sport-picker-backdrop").addEventListener("click", closeSportPicker);
+document.querySelectorAll(".sport-option[data-sport]").forEach(btn => {
+  btn.addEventListener("click", () => enterSportMode(btn.dataset.sport));
+});
+document.querySelectorAll(".sport-switch-btn[data-switch-sport]").forEach(btn => {
+  btn.addEventListener("click", () => switchSport(btn.dataset.switchSport));
+});
