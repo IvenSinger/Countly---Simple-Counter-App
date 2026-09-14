@@ -242,8 +242,6 @@ footer span { padding: 0 2px; color: var(--muted); opacity: .5; }
 .dark-mode .nav-tab:hover { background: rgba(255,255,255,.05); }
 .nav-tab.is-active { color: var(--blue); }
 .nav-tab.is-active .nav-icon { transform: translateY(-2px); }
-.nav-tab::after { content: ""; position: absolute; top: -6px; left: 50%; transform: translateX(-50%) scaleX(0); width: 24px; height: 4px; border-radius: var(--radius-pill); background: var(--blue); opacity: 0; transition: all .25s cubic-bezier(.2,.7,.35,1); }
-.nav-tab.is-active::after { transform: translateX(-50%) scaleX(1); opacity: 1; }
 
 /* ── Tab Sections ──────────────────────────────────────────────────────────── */
 .tab-section { animation: card-in .4s cubic-bezier(.2,.7,.35,1) both; padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
