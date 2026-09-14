@@ -41,7 +41,7 @@
             <p class="eyebrow" id="eyebrow" data-i18n="yourCounters">Your counters</p>
             <h1 id="hero-title" data-i18n="heroTitle">Keep track of what matters.</h1>
           </div>
-          <div class="hero-actions" style="display: flex; gap: 12px; justify-content: center; width: 100%;">
+          <div class="hero-actions" style="display: flex; gap: 12px;">
             <button class="add-button qc-trigger" id="quick-count-btn" type="button"><span aria-hidden="true">⚡</span> <span data-i18n="quickCount">Quick Count</span></button>
             <button class="add-button" id="add-counter" type="button"><span aria-hidden="true">+</span> <span data-i18n="addCounter">Add counter</span></button>
           </div>
@@ -596,13 +596,17 @@
             <circle class="qc-progress-fill" id="qc-progress-fill" cx="100" cy="100" r="90"></circle>
           </svg>
         </div>
-        <div class="qc-count-display">
-          <span class="qc-value" id="qc-value">0</span>
-          <span class="qc-goal-remaining" id="qc-goal-remaining" hidden></span>
-        </div>
         
-        <button class="qc-tap-area" id="qc-tap-area" type="button" aria-label="Increment"></button>
-        <button class="qc-decrease-btn" id="qc-decrease-btn" type="button" aria-label="Decrement">-</button>
+        <div class="qc-controls">
+          <button class="qc-action-btn qc-decrease-btn" id="qc-decrease-btn" type="button" aria-label="Decrement">−</button>
+          
+          <div class="qc-count-display">
+            <span class="qc-value" id="qc-value">0</span>
+            <span class="qc-goal-remaining" id="qc-goal-remaining" hidden></span>
+          </div>
+          
+          <button class="qc-action-btn qc-increase-btn" id="qc-increase-btn" type="button" aria-label="Increment">+</button>
+        </div>
       </div>
 
       <div class="qc-footer">

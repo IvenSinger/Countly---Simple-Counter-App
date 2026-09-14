@@ -2459,7 +2459,7 @@ function render() {
       </div>
       <div class="count-hero">
         <div class="count" id="count-${counter.id}">${formatCount(counter.count)}</div>
-        ${counter.goal ? `<div class="counter-goal" style="font-size: 13px; color: var(--muted); margin-top: 4px; font-weight: 600;">Goal: ${formatCount(counter.goal)} &middot; ${Math.max(0, counter.goal - counter.count)} to go</div>` : ''}
+        ${counter.goal ? `<div class="counter-goal" style="font-size: 13px; color: var(--muted); margin-top: 4px; font-weight: 600; cursor: pointer;" data-action="set-goal" data-id="${counter.id}">Goal: ${formatCount(counter.goal)} &middot; ${Math.max(0, counter.goal - counter.count)} to go</div>` : `<button class="redo-tutorial" style="margin-top: 6px; padding: 4px 12px; cursor: pointer;" data-action="set-goal" data-id="${counter.id}" type="button">Set Goal</button>`}
       </div>
       <div class="card-actions-row">
         <button class="step-button decrement" type="button" aria-label="${t("decrease")} ${escapeHtml(counter.name)}">−</button>
@@ -2491,6 +2491,23 @@ function render() {
     });
     card.querySelector(".decrement").addEventListener("click", () => updateCount(counter.id, -1));
     card.querySelector(".delete-button").addEventListener("click", () => removeCounter(counter.id));
+    const goalBtn = card.querySelector('[data-action="set-goal"]');
+    if (goalBtn) {
+      goalBtn.addEventListener("click", () => {
+        const currentStr = counter.goal !== undefined ? String(counter.goal) : "";
+        const input = prompt("Set a target goal for this counter:", currentStr);
+        if (input !== null) {
+          const parsed = parseInt(input.trim(), 10);
+          if (!isNaN(parsed) && parsed > 0) {
+            counter.goal = parsed;
+          } else if (input.trim() === "") {
+            delete counter.goal;
+          }
+          saveCounters();
+          render();
+        }
+      });
+    }
     card.querySelector(".counter-name").addEventListener("change", (event) => {
       counter.name = event.target.value.trim() || t("untitled");
       save(); render();
@@ -3049,7 +3066,7 @@ const qcGoalBtn = document.getElementById("qc-goal-btn");
 const qcGoalText = document.getElementById("qc-goal-text");
 const qcValue = document.getElementById("qc-value");
 const qcGoalRemaining = document.getElementById("qc-goal-remaining");
-const qcTapArea = document.getElementById("qc-tap-area");
+const qcIncreaseBtn = document.getElementById("qc-increase-btn");
 const qcDecreaseBtn = document.getElementById("qc-decrease-btn");
 const qcFinishBtn = document.getElementById("qc-finish-btn");
 const qcSaveSheet = document.getElementById("qc-save-sheet");
@@ -3108,7 +3125,7 @@ function closeQuickCount() {
 document.getElementById("quick-count-btn")?.addEventListener("click", openQuickCount);
 qcCloseBtn.addEventListener("click", closeQuickCount);
 
-qcTapArea.addEventListener("click", (e) => {
+qcIncreaseBtn.addEventListener("click", (e) => {
   e.preventDefault();
   qcCount++;
   updateQcUI();

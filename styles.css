@@ -1099,7 +1099,8 @@ body.skin-retro button:active {
 
 
 /* ── Quick Count Modal ──────────────────────────────────────────────────────── */
-.quick-count-modal { position: fixed; inset: 0; z-index: 2000; display: flex; flex-direction: column; background: var(--bg); animation: fade-in 0.3s cubic-bezier(0.2, 0.7, 0.35, 1) both; }
+.quick-count-modal { position: fixed; inset: 0; z-index: 2000; display: flex; flex-direction: column; background: rgba(245, 245, 247, 0.75); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); animation: fade-in 0.3s cubic-bezier(0.2, 0.7, 0.35, 1) both; }
+.dark-mode .quick-count-modal { background: rgba(0, 0, 0, 0.75); }
 .quick-count-modal[hidden] { display: none; }
 .qc-header { display: flex; align-items: center; justify-content: space-between; padding: calc(16px + env(safe-area-inset-top)) 16px 16px; position: relative; z-index: 2010; }
 .qc-icon-btn { width: 44px; height: 44px; border-radius: 22px; border: 0; background: var(--glass-bg); color: var(--ink); font-size: 18px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: .5px solid var(--glass-border); transition: transform 0.2s; }
@@ -1109,7 +1110,7 @@ body.skin-retro button:active {
 .qc-goal-btn.has-goal { background: var(--blue); color: #fff; border-color: rgba(255,255,255,0.2); }
 
 .qc-body { flex: 1; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
-.qc-count-display { position: relative; z-index: 2010; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
+
 .qc-value { font-size: 120px; font-weight: 800; letter-spacing: -4px; line-height: 1; color: var(--ink); text-shadow: 0 8px 32px rgba(0,0,0,0.05); }
 .qc-goal-remaining { margin-top: 12px; font-size: 18px; font-weight: 600; color: var(--muted); background: var(--glass-bg); padding: 8px 16px; border-radius: 20px; border: .5px solid var(--glass-border); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); }
 
@@ -1118,9 +1119,11 @@ body.skin-retro button:active {
 .qc-progress-bg { fill: none; stroke: var(--glass-border); stroke-width: 8; }
 .qc-progress-fill { fill: none; stroke: var(--blue); stroke-width: 8; stroke-linecap: round; stroke-dasharray: 565.48; stroke-dashoffset: 565.48; transition: stroke-dashoffset 0.4s cubic-bezier(0.2, 0.7, 0.35, 1); }
 
-.qc-tap-area { position: absolute; inset: 0; z-index: 2000; background: transparent; border: 0; outline: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-.qc-decrease-btn { position: absolute; bottom: 32px; right: 32px; width: 64px; height: 64px; border-radius: 32px; background: var(--glass-bg-elevated); color: var(--ink); font-size: 32px; font-weight: 400; border: .5px solid var(--glass-border); box-shadow: 0 8px 24px rgba(0,0,0,0.08); z-index: 2010; cursor: pointer; backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); transition: transform 0.2s; }
-.qc-decrease-btn:active { transform: scale(0.9); }
+.qc-controls { display: flex; align-items: center; justify-content: center; gap: 32px; z-index: 2010; width: 100%; padding: 0 24px; margin-top: 24px; }
+.qc-action-btn { width: 80px; height: 80px; flex-shrink: 0; border-radius: 40px; background: var(--glass-bg-elevated); color: var(--ink); font-size: 48px; font-weight: 300; line-height: 1; border: .5px solid var(--glass-border); box-shadow: 0 8px 32px rgba(0,0,0,0.08); cursor: pointer; backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); transition: transform 0.2s, background 0.2s; display: flex; align-items: center; justify-content: center; padding-bottom: 6px; }
+.qc-action-btn:active { transform: scale(0.92); background: rgba(0,122,255,0.1); border-color: var(--blue); color: var(--blue); }
+.qc-count-display { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 180px; text-align: center; pointer-events: none; }
+@media (max-width: 500px) { .qc-controls { gap: 16px; } .qc-action-btn { width: 70px; height: 70px; font-size: 40px; } .qc-value { font-size: 90px; } .qc-progress-ring { width: 280px; height: 280px; } }
 
 .qc-footer { padding: 16px 24px calc(24px + env(safe-area-inset-bottom)); position: relative; z-index: 2010; display: flex; justify-content: center; }
 .qc-btn-primary { padding: 18px 32px; border-radius: var(--radius-pill); border: 0; background: var(--ink); color: var(--bg); font-size: 18px; font-weight: 700; cursor: pointer; width: 100%; max-width: 320px; transition: transform 0.2s; box-shadow: 0 12px 32px rgba(0,0,0,0.1); }
