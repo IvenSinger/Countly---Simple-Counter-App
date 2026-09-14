@@ -2495,6 +2495,10 @@ function renderHistory() {
   const emptyState = document.getElementById("history-empty-state");
   if (!container || !emptyState) return;
   
+  // Calculate summary stats
+  let totalSessions = history.length;
+  let totalCounts = history.reduce((sum, item) => sum + (item.count || 0), 0);
+  
   if (history.length === 0) {
     container.innerHTML = "";
     emptyState.style.display = "flex";
@@ -2502,7 +2506,15 @@ function renderHistory() {
   }
   
   emptyState.style.display = "none";
-  container.innerHTML = "";
+  
+  // Build the summary UI at the top
+  container.innerHTML = `
+    <section class="summary" style="margin-bottom: 0;">
+      <div class="summary-item"><span class="summary-value">${totalSessions}</span><span class="summary-label">Sessions</span></div>
+      <div class="summary-divider"></div>
+      <div class="summary-item"><span class="summary-value">${formatCount(totalCounts)}</span><span class="summary-label">Total Counted</span></div>
+    </section>
+  `;
   
   // Group by date
   const groups = {};
