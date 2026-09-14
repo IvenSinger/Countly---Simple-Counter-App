@@ -428,8 +428,8 @@ function applyHuntMode() {
     document.body.classList.add(`hunt-${huntColor}`);
     document.documentElement.classList.add(`hunt-${huntColor}`);
   }
+}
 
-  
 if (gamesHuntBtn) {
   gamesHuntBtn.addEventListener("click", () => {
     enterHuntMode();
@@ -662,7 +662,7 @@ function render() {
           <span class="meta-label">Avg/day</span>
           <span class="meta-value">${avgPerDay}</span>
         </div>` : ''}
-      </div>\`;
+      </div>`;
 
     const incrementBtn = card.querySelector(".increment");
     const countEl = card.querySelector(".count");
