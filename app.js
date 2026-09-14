@@ -3153,7 +3153,7 @@ goalPickerSaveBtn.addEventListener("click", () => {
       } else if (input === "") {
         delete counter.goal;
       }
-      saveCounters();
+      save();
       render();
     }
   }
@@ -3257,7 +3257,7 @@ qcSaveBtn.addEventListener("click", () => {
   }
   
   counters.push(newCounter);
-  saveCounters();
+  save();
   render();
   updateStats();
   
@@ -3323,7 +3323,7 @@ document.getElementById("icon-picker-save")?.addEventListener("click", () => {
     const counter = counters.find(c => c.id === activeIconCounterId);
     if (counter) {
       counter.icon = (iconPickerInput && iconPickerInput.value.trim()) || "🎯";
-      saveCounters();
+      save();
       render();
     }
   }
