@@ -41,7 +41,10 @@
             <p class="eyebrow" id="eyebrow" data-i18n="yourCounters">Your counters</p>
             <h1 id="hero-title" data-i18n="heroTitle">Keep track of what matters.</h1>
           </div>
-          <button class="add-button" id="add-counter" type="button"><span aria-hidden="true">+</span> <span data-i18n="addCounter">Add new counter</span></button>
+          <div class="hero-actions" style="display: flex; gap: 12px; justify-content: center; width: 100%;">
+            <button class="add-button qc-trigger" id="quick-count-btn" type="button"><span aria-hidden="true">⚡</span> <span data-i18n="quickCount">Quick Count</span></button>
+            <button class="add-button" id="add-counter" type="button"><span aria-hidden="true">+</span> <span data-i18n="addCounter">Add counter</span></button>
+          </div>
         </section>
 
 
@@ -574,6 +577,49 @@
           </button>
         </div>
         <button class="sport-picker-cancel" id="skin-picker-cancel" type="button" data-i18n="cancelBtn">Cancel</button>
+      </div>
+    </div>
+
+    
+    <!-- Quick Count Modal -->
+    <div class="quick-count-modal" id="quick-count-modal" hidden="" role="dialog" aria-modal="true">
+      <div class="qc-header">
+        <button class="qc-icon-btn" id="qc-close-btn" type="button" aria-label="Close">✕</button>
+        <button class="qc-goal-btn" id="qc-goal-btn" type="button"><span id="qc-goal-text">Set Goal</span></button>
+        <div style="width: 44px;"></div>
+      </div>
+      
+      <div class="qc-body">
+        <div class="qc-progress-ring" id="qc-progress-ring" hidden>
+          <svg viewBox="0 0 200 200">
+            <circle class="qc-progress-bg" cx="100" cy="100" r="90"></circle>
+            <circle class="qc-progress-fill" id="qc-progress-fill" cx="100" cy="100" r="90"></circle>
+          </svg>
+        </div>
+        <div class="qc-count-display">
+          <span class="qc-value" id="qc-value">0</span>
+          <span class="qc-goal-remaining" id="qc-goal-remaining" hidden></span>
+        </div>
+        
+        <button class="qc-tap-area" id="qc-tap-area" type="button" aria-label="Increment"></button>
+        <button class="qc-decrease-btn" id="qc-decrease-btn" type="button" aria-label="Decrement">-</button>
+      </div>
+
+      <div class="qc-footer">
+        <button class="qc-btn-primary" id="qc-finish-btn" type="button" data-i18n="finishBtn">Finish</button>
+      </div>
+
+      <!-- Save/Discard Sheet -->
+      <div class="qc-save-sheet" id="qc-save-sheet" hidden>
+        <div class="qc-save-sheet-backdrop" id="qc-save-sheet-backdrop"></div>
+        <div class="qc-save-sheet-panel">
+          <h3 data-i18n="saveCounterTitle">Save Counter</h3>
+          <input type="text" id="qc-name-input" class="qc-input" placeholder="Name this counter..." autocomplete="off">
+          <div class="qc-save-actions">
+            <button class="qc-btn-secondary" id="qc-discard-btn" type="button" data-i18n="discardBtn">Discard</button>
+            <button class="qc-btn-primary" id="qc-save-btn" type="button" data-i18n="saveBtn">Save</button>
+          </div>
+        </div>
       </div>
     </div>
 

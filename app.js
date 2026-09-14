@@ -209,7 +209,13 @@ const translations = {
     skinRetroDesc: "Nostalgic 8-bit arcade aesthetic",
     viewOnGithub: "View on GitHub",
     prevBtn: "Back",
-    brainrotHint: "Hint: Scroll to the bottom of the language menu for a surprise... 💀"
+    brainrotHint: "Hint: Scroll to the bottom of the language menu for a surprise... 💀",
+    quickCount: "Quick Count",
+    finishBtn: "Finish",
+    saveCounterTitle: "Save Counter",
+    namePlaceholder: "Name this counter...",
+    discardBtn: "Discard",
+    saveBtn: "Save"
   },
   de: {
     language: "Sprache",
@@ -355,7 +361,13 @@ const translations = {
     skinRetroDesc: "Nostalgische 8-Bit-Arcade-Ästhetik",
     viewOnGithub: "Auf GitHub ansehen",
     prevBtn: "Zurück",
-    brainrotHint: "Tipp: Scrolle zum Ende des Sprachmenüs für eine Überraschung... 💀"
+    brainrotHint: "Tipp: Scrolle zum Ende des Sprachmenüs für eine Überraschung... 💀",
+    quickCount: "Schnellzähler",
+    finishBtn: "Fertig",
+    saveCounterTitle: "Zähler speichern",
+    namePlaceholder: "Zähler benennen...",
+    discardBtn: "Verwerfen",
+    saveBtn: "Speichern"
   },
   es: {
     language: "Idioma",
@@ -501,7 +513,13 @@ const translations = {
     skinRetroDesc: "Estética nostálgica de arcade de 8 bits",
     viewOnGithub: "Ver en GitHub",
     prevBtn: "Atrás",
-    brainrotHint: "Pista: Desplázate hasta el final del menú de idiomas para una sorpresa... 💀"
+    brainrotHint: "Pista: Desplázate hasta el final del menú de idiomas para una sorpresa... 💀",
+    quickCount: "Conteo Rápido",
+    finishBtn: "Terminar",
+    saveCounterTitle: "Guardar contador",
+    namePlaceholder: "Nombra este contador...",
+    discardBtn: "Descartar",
+    saveBtn: "Guardar"
   },
   zh: {
     language: "语言",
@@ -647,7 +665,13 @@ const translations = {
     skinRetroDesc: "怀旧的8位街机美学",
     viewOnGithub: "在GitHub上查看",
     prevBtn: "返回",
-    brainrotHint: "提示：滚动到语言菜单底部发现惊喜... 💀"
+    brainrotHint: "提示：滚动到语言菜单底部发现惊喜... 💀",
+    quickCount: "快速计数",
+    finishBtn: "完成",
+    saveCounterTitle: "保存计数器",
+    namePlaceholder: "命名此计数器...",
+    discardBtn: "放弃",
+    saveBtn: "保存"
   },
   hi: {
     language: "भाषा",
@@ -793,7 +817,13 @@ const translations = {
     skinRetroDesc: "उदासीन 8-बिट आर्केड सौंदर्य",
     viewOnGithub: "GitHub पर देखें",
     prevBtn: "पीछे",
-    brainrotHint: "संकेत: एक आश्चर्य के लिए भाषा मेनू के नीचे स्क्रॉल करें... 💀"
+    brainrotHint: "संकेत: एक आश्चर्य के लिए भाषा मेनू के नीचे स्क्रॉल करें... 💀",
+    quickCount: "त्वरित गिनती",
+    finishBtn: "समाप्त",
+    saveCounterTitle: "काउंटर सहेजें",
+    namePlaceholder: "इस काउंटर को नाम दें...",
+    discardBtn: "खारिज करें",
+    saveBtn: "सहेजें"
   },
   it: {
     language: "Lingua",
@@ -939,7 +969,13 @@ const translations = {
     skinRetroDesc: "Estetica nostalgica arcade a 8 bit",
     viewOnGithub: "Vedi su GitHub",
     prevBtn: "Indietro",
-    brainrotHint: "Suggerimento: Scorri fino in fondo al menu delle lingue per una sorpresa... 💀"
+    brainrotHint: "Suggerimento: Scorri fino in fondo al menu delle lingue per una sorpresa... 💀",
+    quickCount: "Conteggio Rapido",
+    finishBtn: "Finito",
+    saveCounterTitle: "Salva Contatore",
+    namePlaceholder: "Dai un nome...",
+    discardBtn: "Scarta",
+    saveBtn: "Salva"
   },
   fr: {
     language: "Langue",
@@ -1085,7 +1121,13 @@ const translations = {
     skinRetroDesc: "Esthétique nostalgique d'arcade 8 bits",
     viewOnGithub: "Voir sur GitHub",
     prevBtn: "Retour",
-    brainrotHint: "Astuce : Faites défiler jusqu'en bas du menu des langues pour une surprise... 💀"
+    brainrotHint: "Astuce : Faites défiler jusqu'en bas du menu des langues pour une surprise... 💀",
+    quickCount: "Comptage Rapide",
+    finishBtn: "Terminer",
+    saveCounterTitle: "Enregistrer le compteur",
+    namePlaceholder: "Nommez ce compteur...",
+    discardBtn: "Ignorer",
+    saveBtn: "Enregistrer"
   },
   pt: {
     language: "Idioma",
@@ -1231,7 +1273,13 @@ const translations = {
     skinRetroDesc: "Estética nostálgica de fliperama 8 bits",
     viewOnGithub: "Ver no GitHub",
     prevBtn: "Voltar",
-    brainrotHint: "Dica: Role até o final do menu de idiomas para uma surpresa... 💀"
+    brainrotHint: "Dica: Role até o final do menu de idiomas para uma surpresa... 💀",
+    quickCount: "Contagem Rápida",
+    finishBtn: "Terminar",
+    saveCounterTitle: "Salvar Contador",
+    namePlaceholder: "Nomeie este contador...",
+    discardBtn: "Descartar",
+    saveBtn: "Salvar"
   },
   ko: {
     language: "언어",
@@ -1377,7 +1425,13 @@ const translations = {
     skinRetroDesc: "향수를 불러일으키는 8비트 아케이드 미학",
     viewOnGithub: "GitHub에서 보기",
     prevBtn: "이전",
-    brainrotHint: "힌트: 언어 메뉴 하단으로 스크롤하여 깜짝 선물을 확인하세요... 💀"
+    brainrotHint: "힌트: 언어 메뉴 하단으로 스크롤하여 깜짝 선물을 확인하세요... 💀",
+    quickCount: "빠른 카운트",
+    finishBtn: "완료",
+    saveCounterTitle: "카운터 저장",
+    namePlaceholder: "카운터 이름...",
+    discardBtn: "취소",
+    saveBtn: "저장"
   },
   ja: {
     language: "言語",
@@ -1523,7 +1577,13 @@ const translations = {
     skinRetroDesc: "ノスタルジックな8ビットアーケードの美学",
     viewOnGithub: "GitHubで表示",
     prevBtn: "戻る",
-    brainrotHint: "ヒント：言語メニューの一番下までスクロールしてサプライズを見つけてください... 💀"
+    brainrotHint: "ヒント：言語メニューの一番下までスクロールしてサプライズを見つけてください... 💀",
+    quickCount: "クイックカウント",
+    finishBtn: "完了",
+    saveCounterTitle: "カウンターを保存",
+    namePlaceholder: "カウンター名を入力...",
+    discardBtn: "破棄",
+    saveBtn: "保存"
   },
   tr: {
     language: "Dil",
@@ -1669,7 +1729,13 @@ const translations = {
     skinRetroDesc: "Nostaljik 8-bit arcade estetiği",
     viewOnGithub: "GitHub'da Gör",
     prevBtn: "Geri",
-    brainrotHint: "İpucu: Sürpriz için dil menüsünün en altına kaydırın... 💀"
+    brainrotHint: "İpucu: Sürpriz için dil menüsünün en altına kaydırın... 💀",
+    quickCount: "Hızlı Sayım",
+    finishBtn: "Bitir",
+    saveCounterTitle: "Sayacı Kaydet",
+    namePlaceholder: "Bu sayaca ad ver...",
+    discardBtn: "Vazgeç",
+    saveBtn: "Kaydet"
   },
   "en-online": {
     language: "Language (no cap)",
@@ -1815,7 +1881,13 @@ const translations = {
     skinRetroDesc: "Old school 8-bit aesthetic",
     viewOnGithub: "Check the GitHub",
     prevBtn: "Wait, go back",
-    brainrotHint: "Pro tip: Scroll to the bottom of the language menu for some crazy drip... 💀"
+    brainrotHint: "Pro tip: Scroll to the bottom of the language menu for some crazy drip... 💀",
+    quickCount: "Speedrun",
+    finishBtn: "Donezo",
+    saveCounterTitle: "Keep the receipts",
+    namePlaceholder: "Name this vibe...",
+    discardBtn: "Trash it",
+    saveBtn: "Lock in"
   }
 };
 let currentLanguage = "en";
@@ -2387,6 +2459,7 @@ function render() {
       </div>
       <div class="count-hero">
         <div class="count" id="count-${counter.id}">${formatCount(counter.count)}</div>
+        ${counter.goal ? `<div class="counter-goal" style="font-size: 13px; color: var(--muted); margin-top: 4px; font-weight: 600;">Goal: ${formatCount(counter.goal)} &middot; ${Math.max(0, counter.goal - counter.count)} to go</div>` : ''}
       </div>
       <div class="card-actions-row">
         <button class="step-button decrement" type="button" aria-label="${t("decrease")} ${escapeHtml(counter.name)}">−</button>
@@ -2967,3 +3040,138 @@ const endGameBtn = document.querySelector("#end-game-btn");
 if (endGameBtn) {
   endGameBtn.addEventListener("click", exitHuntMode);
 }
+
+
+// ── Quick Count Feature ───────────────────────────────────────────────────────
+const qcModal = document.getElementById("quick-count-modal");
+const qcCloseBtn = document.getElementById("qc-close-btn");
+const qcGoalBtn = document.getElementById("qc-goal-btn");
+const qcGoalText = document.getElementById("qc-goal-text");
+const qcValue = document.getElementById("qc-value");
+const qcGoalRemaining = document.getElementById("qc-goal-remaining");
+const qcTapArea = document.getElementById("qc-tap-area");
+const qcDecreaseBtn = document.getElementById("qc-decrease-btn");
+const qcFinishBtn = document.getElementById("qc-finish-btn");
+const qcSaveSheet = document.getElementById("qc-save-sheet");
+const qcSaveSheetBackdrop = document.getElementById("qc-save-sheet-backdrop");
+const qcNameInput = document.getElementById("qc-name-input");
+const qcDiscardBtn = document.getElementById("qc-discard-btn");
+const qcSaveBtn = document.getElementById("qc-save-btn");
+const qcProgressRing = document.getElementById("qc-progress-ring");
+const qcProgressFill = document.getElementById("qc-progress-fill");
+
+let qcCount = 0;
+let qcGoal = null;
+
+function updateQcUI() {
+  qcValue.textContent = formatCount(qcCount);
+  
+  if (qcGoal !== null) {
+    qcGoalBtn.classList.add("has-goal");
+    qcGoalText.textContent = "Goal: " + formatCount(qcGoal);
+    qcGoalRemaining.hidden = false;
+    
+    let remaining = qcGoal - qcCount;
+    if (remaining > 0) {
+      qcGoalRemaining.textContent = formatCount(remaining) + " to go";
+    } else {
+      qcGoalRemaining.textContent = "Goal reached! 🎉";
+    }
+    
+    qcProgressRing.hidden = false;
+    const radius = 90;
+    const circumference = 2 * Math.PI * radius; // ~565.48
+    let progress = Math.min(qcCount / qcGoal, 1);
+    qcProgressFill.style.strokeDasharray = circumference;
+    qcProgressFill.style.strokeDashoffset = circumference - (progress * circumference);
+  } else {
+    qcGoalBtn.classList.remove("has-goal");
+    qcGoalText.textContent = "Set Goal";
+    qcGoalRemaining.hidden = true;
+    qcProgressRing.hidden = true;
+  }
+}
+
+function openQuickCount() {
+  qcCount = 0;
+  qcGoal = null;
+  qcSaveSheet.hidden = true;
+  qcNameInput.value = "";
+  updateQcUI();
+  qcModal.hidden = false;
+}
+
+function closeQuickCount() {
+  qcModal.hidden = true;
+}
+
+document.getElementById("quick-count-btn")?.addEventListener("click", openQuickCount);
+qcCloseBtn.addEventListener("click", closeQuickCount);
+
+qcTapArea.addEventListener("click", (e) => {
+  e.preventDefault();
+  qcCount++;
+  updateQcUI();
+  if ('vibrate' in navigator) navigator.vibrate(5);
+});
+
+qcDecreaseBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  e.stopPropagation(); // prevent tapping the tap area
+  if (qcCount > 0) {
+    qcCount--;
+    updateQcUI();
+    if ('vibrate' in navigator) navigator.vibrate([10, 30, 10]);
+  }
+});
+
+qcGoalBtn.addEventListener("click", () => {
+  const currentStr = qcGoal !== null ? String(qcGoal) : "";
+  const input = prompt("Set a target goal for this counter:", currentStr);
+  if (input !== null) {
+    const parsed = parseInt(input.trim(), 10);
+    if (!isNaN(parsed) && parsed > 0) {
+      qcGoal = parsed;
+    } else if (input.trim() === "") {
+      qcGoal = null; // Clear goal
+    }
+    updateQcUI();
+  }
+});
+
+qcFinishBtn.addEventListener("click", () => {
+  qcSaveSheet.hidden = false;
+  setTimeout(() => qcNameInput.focus(), 100);
+});
+
+qcSaveSheetBackdrop.addEventListener("click", () => {
+  qcSaveSheet.hidden = true;
+});
+
+qcDiscardBtn.addEventListener("click", () => {
+  closeQuickCount();
+});
+
+qcSaveBtn.addEventListener("click", () => {
+  let name = qcNameInput.value.trim();
+  if (!name) name = "Quick Count";
+  
+  const newCounter = {
+    id: generateId(),
+    name: name,
+    count: qcCount,
+    icon: COUNTER_ICONS[Math.floor(Math.random() * COUNTER_ICONS.length)],
+    createdAt: Date.now()
+  };
+  
+  if (qcGoal !== null) {
+    newCounter.goal = qcGoal;
+  }
+  
+  counters.push(newCounter);
+  saveCounters();
+  render();
+  updateStats();
+  
+  closeQuickCount();
+});
