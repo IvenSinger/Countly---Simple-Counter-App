@@ -33,9 +33,6 @@
           <button class="icon-button skin-toggle" id="skin-toggle" type="button" title="Choose Skin" aria-label="Choose Skin">
             <img src="assets/skin_mode_icon.jpg" alt="Skin Selector" class="liquid-icon">
           </button>
-          <button class="icon-button hunt-toggle" id="hunt-toggle" type="button" title="Activate Yellow Hunt mode" aria-label="Activate Yellow Hunt mode">
-            <img src="assets/car_hunt_icon.jpg" alt="Yellow Hunt Mode" class="liquid-icon">
-          </button>
         </div>
       </header>
 
@@ -52,13 +49,7 @@
           <button class="add-button" id="add-counter" type="button"><span aria-hidden="true">+</span> <span data-i18n="addCounter">Add new counter</span></button>
         </section>
 
-        <section class="hunt-guide" id="hunt-guide" aria-label="How to play Yellow Hunt" hidden>
-          <div class="guide-icon" aria-hidden="true">🏁</div>
-          <div>
-            <p class="guide-title" data-i18n="howToPlay">How to play</p>
-            <p class="guide-copy" data-i18n="guideCopy">Spot a yellow car for <strong>1 point</strong>. Log each find and see who can spot the most.</p>
-          </div>
-        </section>
+
 
         <section class="summary" aria-label="Counter summary">
           <div class="summary-item"><span class="summary-value" id="total-count">0</span><span class="summary-label" data-i18n="totalCount">Total count</span></div>
@@ -162,6 +153,24 @@
           <div class="history-placeholder-icon">📊</div>
           <p class="history-placeholder-title">Coming soon</p>
           <p class="history-placeholder-copy">History will show your counting activity over time — streaks, totals by day, and personal bests.</p>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════════════
+           TAB: GAMES
+           ════════════════════════════════════════════════════════════════════ -->
+      <section class="tab-section" id="tab-games" aria-label="Games" hidden>
+        <section class="tab-hero">
+          <p class="eyebrow">Mini Games</p>
+          <h1>Play and count.</h1>
+        </section>
+        <div class="sports-start">
+          <div class="sports-start-grid">
+            <button class="sport-quick-btn" type="button" id="games-hunt-btn">
+              <span class="sport-quick-emoji">🚕</span>
+              <span class="sport-quick-name">Car Hunt</span>
+            </button>
+          </div>
         </div>
       </section>
 
@@ -301,10 +310,17 @@
         </svg>
         <span class="nav-label">History</span>
       </button>
+      <button class="nav-tab" type="button" data-tab="games" id="nav-games" aria-label="Games">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2" y="6" width="20" height="12" rx="2" ry="2"/>
+          <path d="M6 12h4M8 10v4M15 13h.01M18 11h.01"/>
+        </svg>
+        <span class="nav-label">Games</span>
+      </button>
       <button class="nav-tab" type="button" data-tab="settings" id="nav-settings" aria-label="Settings">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="2.5"/>
-          <path d="M12 2v2.5M12 19.5V22M4.22 4.22l1.77 1.77M18.01 18.01l1.77 1.77M2 12h2.5M19.5 12H22M4.22 19.78l1.77-1.77M18.01 5.99l1.77-1.77"/>
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
         </svg>
         <span class="nav-label">Settings</span>
       </button>

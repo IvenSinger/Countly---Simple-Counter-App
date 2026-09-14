@@ -271,7 +271,7 @@ const total = document.querySelector("#total-count");
 const active = document.querySelector("#counter-count");
 const counterSearch = document.querySelector("#counter-search-input");
 const themeToggle = document.querySelector("#settings-theme-row");
-const huntToggle = document.querySelector("#hunt-toggle");
+const gamesHuntBtn = document.querySelector("#games-hunt-btn");
 const vehicleLayer = document.querySelector("#vehicle-layer");
 const eyebrow = document.querySelector("#eyebrow");
 const heroTitle = document.querySelector("#hero-title");
@@ -293,6 +293,7 @@ const tabs = {
   counters: document.querySelector("#tab-counters"),
   sports: document.querySelector("#tab-sports"),
   history: document.querySelector("#tab-history"),
+  games: document.querySelector("#tab-games"),
   settings: document.querySelector("#tab-settings"),
 };
 const navButtons = document.querySelectorAll(".nav-tab");
@@ -318,7 +319,7 @@ let searchQuery = "";
 let sportMode = false;
 let sportType = "basketball";
 let sportScores = null;
-const tutorialTargets = ["#add-counter", ".counter-card .increment", "#nav-sports", "#hunt-toggle", "#settings-skin-row", "#settings-language-row", "#settings-theme-row", "#settings-reset-row"];
+const tutorialTargets = ["#add-counter", ".counter-card .increment", "#nav-sports", "#nav-games", "#settings-skin-row", "#settings-language-row", "#settings-theme-row", "#settings-reset-row"];
 function tutorialSteps() { return tutorialTargets.map((target, index) => ({ target, title: t("tutorials")[index][0], copy: t("tutorials")[index][1] })); }
 function applyTheme(theme) {
   const dark = theme === "dark";
@@ -397,7 +398,6 @@ function applyLanguage(language) {
   document.querySelector("#settings-reset-row").title = t("resetAll");
   document.querySelector("#settings-reset-row").setAttribute("aria-label", t("resetAll"));
   applyHuntMode();
-  huntGuide.setAttribute("aria-label", `${t("howToPlay")} Yellow Hunt`);
   if (tutorialOverlay && !tutorialOverlay.hidden) showTutorialStep();
   
   if (currentTab === "sports" && sportMode) {
@@ -421,10 +421,10 @@ function applyHuntMode() {
     document.documentElement.classList.add(`hunt-${huntColor}`);
   }
 
-  huntGuide.hidden = !huntMode;
-  huntToggle.classList.toggle("is-active", huntMode);
-  huntToggle.title = huntMode ? t("exitHunt") : t("activateHunt");
-  huntToggle.setAttribute("aria-label", huntToggle.title);
+  if (gamesHuntBtn) {
+    gamesHuntBtn.classList.toggle("is-active", huntMode);
+    gamesHuntBtn.querySelector(".sport-quick-name").textContent = huntMode ? "End Car Hunt" : "Car Hunt";
+  }
   
   const colorName = huntColor.charAt(0).toUpperCase() + huntColor.slice(1);
   eyebrow.textContent = huntMode ? `${colorName} Car Hunt` : t("yourCounters");
@@ -557,11 +557,7 @@ function applySportMode() {
   document.documentElement.classList.toggle("sport-mode", sportMode);
 
   const sportGuide  = document.querySelector("#sport-guide");
-  const sportToggle = document.querySelector("#sport-toggle");
-  sportGuide.hidden = !sportMode;
-  sportToggle.classList.toggle("is-active", sportMode);
-  sportToggle.title = sportMode ? "Exit Sport mode" : "Activate Sport mode";
-  sportToggle.setAttribute("aria-label", sportToggle.title);
+  if (sportGuide) sportGuide.hidden = !sportMode;
 
   if (sportMode) {
     document.body.classList.add(`sport-${sportType}`);
@@ -661,7 +657,7 @@ function render() {
     card.innerHTML = `
       <div class="card-top">
         <div class="card-icon-name">
-          <button class="card-icon-btn" type="button" title="Change icon" aria-label="Change icon for ${escapeHtml(counter.name)}">${icon}</button>
+          <input class="card-icon-input" type="text" value="${icon}" maxlength="4" title="Change icon" aria-label="Change icon for ${escapeHtml(counter.name)}" />
           <input class="counter-name" value="${escapeHtml(counter.name)}" aria-label="${t("counterName")}" maxlength="32" />
         </div>
         <button class="delete-button" type="button" title="${t("remove")}" aria-label="${t("remove")} ${escapeHtml(counter.name)}">×</button>
@@ -714,10 +710,9 @@ function render() {
       counter.name = event.target.value.trim() || t("untitled");
       save(); render();
     });
-    // Icon picker on click
-    card.querySelector(".card-icon-btn").addEventListener("click", () => {
-      const currentIdx = COUNTER_ICONS.indexOf(counter.icon);
-      counter.icon = COUNTER_ICONS[(currentIdx + 1) % COUNTER_ICONS.length];
+    // Icon picker on change
+    card.querySelector(".card-icon-input").addEventListener("change", (event) => {
+      counter.icon = event.target.value.trim() || "🎯";
       save(); render();
     });
     grid.appendChild(card);
@@ -943,6 +938,7 @@ function enterHuntMode(color) {
   closeHuntPicker();
   applyHuntMode();
   render();
+  navigateTo("counters");
 }
 
 function exitHuntMode() {
@@ -955,13 +951,15 @@ function exitHuntMode() {
   render();
 }
 
-huntToggle.addEventListener("click", () => {
-  if (huntMode) {
-    exitHuntMode();
-  } else {
-    openHuntPicker();
-  }
-});
+if (gamesHuntBtn) {
+  gamesHuntBtn.addEventListener("click", () => {
+    if (huntMode) {
+      exitHuntMode();
+    } else {
+      openHuntPicker();
+    }
+  });
+}
 
 // ── Hunt Picker Event Listeners ───────────────────────────────────────────────
 document.querySelector("#hunt-picker-cancel").addEventListener("click", closeHuntPicker);

@@ -153,9 +153,9 @@ button { font: inherit; cursor: pointer; }
 /* Card top: icon + name + delete */
 .card-top { display: flex; align-items: center; justify-content: space-between; text-align: left; margin-bottom: 4px; }
 .card-icon-name { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
-.card-icon-btn { display: flex; align-items: center; justify-content: center; width: 42px; height: 42px; flex: 0 0 42px; border: .5px solid var(--glass-border-subtle); border-radius: var(--radius-sm); background: var(--glass-bg); box-shadow: var(--specular), var(--inner-depth); font-size: 22px; line-height: 1; cursor: pointer; transition: all .25s cubic-bezier(.2,.7,.35,1); }
-.card-icon-btn:hover { transform: scale(1.1) rotate(-5deg); background: var(--glass-bg-elevated); box-shadow: var(--specular-strong), var(--inner-depth), 0 4px 12px rgba(0,0,0,.06); }
-.dark-mode .card-icon-btn:hover { box-shadow: var(--specular-strong), var(--inner-depth), 0 4px 12px rgba(0,0,0,.2); }
+.card-icon-input { display: flex; align-items: center; justify-content: center; width: 42px; height: 42px; flex: 0 0 42px; border: .5px solid var(--glass-border-subtle); border-radius: var(--radius-sm); background: var(--glass-bg); box-shadow: var(--specular), var(--inner-depth); font-size: 22px; line-height: 1; text-align: center; cursor: pointer; transition: all .25s cubic-bezier(.2,.7,.35,1); padding: 0; outline: none; }
+.card-icon-input:focus, .card-icon-input:hover { transform: scale(1.1); border-color: var(--blue); background: var(--glass-bg-elevated); box-shadow: var(--specular-strong), var(--inner-depth), 0 4px 12px rgba(0,0,0,.06); }
+.dark-mode .card-icon-input:focus, .dark-mode .card-icon-input:hover { box-shadow: var(--specular-strong), var(--inner-depth), 0 4px 12px rgba(0,0,0,.2); }
 
 .counter-name { width: calc(100% - 30px); border: 0; border-bottom: 1px solid transparent; padding: 2px 0; color: var(--ink); background: transparent; font-size: 15px; font-weight: 600; font-family: inherit; outline: none; letter-spacing: -.2px; }
 .counter-name:focus { border-bottom-color: var(--blue); }
