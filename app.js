@@ -270,7 +270,7 @@ const grid = document.querySelector("#counter-grid");
 const total = document.querySelector("#total-count");
 const active = document.querySelector("#counter-count");
 const counterSearch = document.querySelector("#counter-search-input");
-const themeToggle = document.querySelector("#theme-toggle");
+const themeToggle = document.querySelector("#settings-theme-row");
 const huntToggle = document.querySelector("#hunt-toggle");
 const vehicleLayer = document.querySelector("#vehicle-layer");
 const eyebrow = document.querySelector("#eyebrow");
@@ -285,17 +285,40 @@ const tutorialStep = document.querySelector("#tutorial-step");
 const tutorialTitle = document.querySelector("#tutorial-title");
 const tutorialCopy = document.querySelector("#tutorial-copy");
 const continueTutorial = document.querySelector("#continue-tutorial");
-const languageToggle = document.querySelector("#language-toggle");
-const languageMenu = document.querySelector("#language-menu");
-const languageSearch = document.querySelector("#language-search");
-const languageChoices = [...document.querySelectorAll("[data-language]")];
+const languageChoices = [...document.querySelectorAll(".lang-row")];
 const redoTutorial = document.querySelector("#redo-tutorial");
+
+// Navigation & Tab State
+const tabs = {
+  counters: document.querySelector("#tab-counters"),
+  sports: document.querySelector("#tab-sports"),
+  history: document.querySelector("#tab-history"),
+  settings: document.querySelector("#tab-settings"),
+};
+const navButtons = document.querySelectorAll(".nav-tab");
+let currentTab = localStorage.getItem("countly-tab") || "counters";
+
+function navigateTo(tabId) {
+  currentTab = tabId;
+  localStorage.setItem("countly-tab", tabId);
+  Object.entries(tabs).forEach(([id, el]) => { el.hidden = id !== tabId; });
+  navButtons.forEach(btn => {
+    btn.classList.toggle("is-active", btn.dataset.tab === tabId);
+    if (btn.dataset.tab === tabId) btn.setAttribute("aria-current", "page");
+    else btn.removeAttribute("aria-current");
+  });
+  document.body.dataset.tab = tabId;
+  if (tabId === "sports") { if (sportMode) renderSport(); }
+  else if (tabId === "counters") render();
+}
+navButtons.forEach(btn => btn.addEventListener("click", () => navigateTo(btn.dataset.tab)));
+
 let tutorialIndex = 0;
 let searchQuery = "";
 let sportMode = false;
 let sportType = "basketball";
 let sportScores = null;
-const tutorialTargets = ["#add-counter", ".counter-card .increment", "#sport-toggle", "#hunt-toggle", "#skin-toggle", "#language-toggle", "#theme-toggle", "#reset-all"];
+const tutorialTargets = ["#add-counter", ".counter-card .increment", "#nav-sports", "#hunt-toggle", "#settings-skin-row", "#settings-language-row", "#settings-theme-row", "#settings-reset-row"];
 function tutorialSteps() { return tutorialTargets.map((target, index) => ({ target, title: t("tutorials")[index][0], copy: t("tutorials")[index][1] })); }
 function applyTheme(theme) {
   const dark = theme === "dark";
@@ -352,50 +375,38 @@ function applyLanguage(language) {
   currentLanguage = selected;
   document.documentElement.lang = selected;
   localizeStarterCounters(selected);
-  languageChoices.forEach((choice) => { choice.querySelector("span").textContent = choice.dataset.language === selected ? "✓" : ""; });
+  
+  languageChoices.forEach((choice) => {
+    choice.querySelector(".lang-check").classList.toggle("is-active", choice.dataset.language === selected);
+  });
+  
+  const selectedChoice = languageChoices.find(c => c.dataset.language === selected);
+  if (selectedChoice) {
+    document.querySelector("#settings-language-value").textContent = selectedChoice.querySelector(".settings-row-label").textContent;
+  }
+
   document.querySelectorAll("[data-i18n]").forEach((element) => {
     const value = t(element.dataset.i18n);
     if (element.dataset.i18n === "guideCopy" || element.dataset.i18n === "aboutDesc") element.innerHTML = value;
     else element.textContent = value;
   });
   document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => { element.placeholder = t(element.dataset.i18nPlaceholder); });
-  languageToggle.title = t("chooseLanguage");
-  languageToggle.setAttribute("aria-label", t("chooseLanguage"));
+  
   themeToggle.title = document.body.classList.contains("dark-mode") ? t("lightMode") : t("darkMode");
   themeToggle.setAttribute("aria-label", themeToggle.title);
-  document.querySelector("#reset-all").title = t("resetAll");
-  document.querySelector("#reset-all").setAttribute("aria-label", t("resetAll"));
+  document.querySelector("#settings-reset-row").title = t("resetAll");
+  document.querySelector("#settings-reset-row").setAttribute("aria-label", t("resetAll"));
   applyHuntMode();
   huntGuide.setAttribute("aria-label", `${t("howToPlay")} Yellow Hunt`);
   if (tutorialOverlay && !tutorialOverlay.hidden) showTutorialStep();
-  if (sportMode) {
+  
+  if (currentTab === "sports" && sportMode) {
     applySportMode();
     renderSport();
-  } else {
+  } else if (currentTab === "counters") {
     render();
   }
   localStorage.setItem(LANGUAGE_KEY, selected);
-}
-
-function toggleLanguageMenu(force) {
-  const shouldOpen = typeof force === "boolean" ? force : languageMenu.hidden;
-  languageMenu.hidden = !shouldOpen;
-  languageToggle.setAttribute("aria-expanded", String(shouldOpen));
-  if (shouldOpen) {
-    positionLanguageMenu();
-    if (languageSearch) {
-      languageSearch.value = "";
-      languageChoices.forEach(choice => choice.style.display = "");
-      languageSearch.focus();
-    }
-  }
-}
-
-function positionLanguageMenu() {
-  const buttonRect = languageToggle.getBoundingClientRect();
-  const width = 190;
-  languageMenu.style.left = `${Math.max(8, Math.min(window.innerWidth - width - 8, buttonRect.right - width + 8))}px`;
-  languageMenu.style.top = `${buttonRect.bottom + 10}px`;
 }
 
 function applyHuntMode() {
@@ -905,7 +916,7 @@ document.querySelector("#add-counter").addEventListener("click", () => {
   save(); render();
   setTimeout(() => grid.lastElementChild?.querySelector(".counter-name")?.select(), 0);
 });
-document.querySelector("#reset-all").addEventListener("click", () => {
+document.querySelector("#settings-reset-row").addEventListener("click", () => {
   if (sportMode) {
     const config = SPORT_CONFIGS[sportType];
     if (confirm(t("resetSport").replace('%s', config.name))) {
@@ -1098,7 +1109,7 @@ document.querySelector(".brand").addEventListener("click", (e) => {
 
 // ── About Modal ─────────────────────────────────────────────────────────────
 const aboutModal = document.querySelector("#about-modal");
-document.querySelector("#about-button").addEventListener("click", () => {
+document.querySelector("#settings-about-row").addEventListener("click", () => {
   aboutModal.hidden = false;
 });
 document.querySelector("#close-about").addEventListener("click", () => {
@@ -1107,25 +1118,21 @@ document.querySelector("#close-about").addEventListener("click", () => {
 document.querySelector("#about-backdrop").addEventListener("click", () => {
   aboutModal.hidden = true;
 });
-window.addEventListener("resize", () => { if (!tutorialOverlay.hidden) positionTutorial(); if (!languageMenu.hidden) positionLanguageMenu(); });
+window.addEventListener("resize", () => { if (!tutorialOverlay.hidden) positionTutorial(); });
 window.addEventListener("scroll", () => { if (!tutorialOverlay.hidden) positionTutorial(); }, { passive: true });
-languageToggle.addEventListener("click", () => toggleLanguageMenu());
-if (languageSearch) {
-  languageSearch.addEventListener("input", (e) => {
-    const query = e.target.value.toLowerCase().trim();
-    languageChoices.forEach(choice => {
-      const terms = choice.getAttribute("data-search-terms") || "";
-      const text = choice.textContent.toLowerCase();
-      if (terms.includes(query) || text.includes(query)) {
-        choice.style.display = "";
-      } else {
-        choice.style.display = "none";
-      }
-    });
-  });
-}
-languageChoices.forEach((choice) => choice.addEventListener("click", () => { applyLanguage(choice.dataset.language); toggleLanguageMenu(false); }));
-document.addEventListener("click", (event) => { if (!event.target.closest(".language-picker, #language-menu")) toggleLanguageMenu(false); });
+
+// Settings / Language screen wiring
+document.querySelector("#settings-language-row").addEventListener("click", () => {
+  document.querySelector("#settings-language-screen").hidden = false;
+});
+document.querySelector("#lang-screen-back").addEventListener("click", () => {
+  document.querySelector("#settings-language-screen").hidden = true;
+});
+languageChoices.forEach((choice) => choice.addEventListener("click", () => {
+  applyLanguage(choice.dataset.language);
+  document.querySelector("#settings-language-screen").hidden = true;
+}));
+
 applyLanguage(localStorage.getItem(LANGUAGE_KEY) || "en");
 applySkin();
 
@@ -1134,7 +1141,7 @@ const skinPicker = document.querySelector("#skin-picker");
 function openSkinPicker() { skinPicker.hidden = false; }
 function closeSkinPicker() { skinPicker.hidden = true; }
 
-document.querySelector("#skin-toggle").addEventListener("click", openSkinPicker);
+document.querySelector("#settings-skin-row").addEventListener("click", openSkinPicker);
 document.querySelector("#skin-picker-cancel").addEventListener("click", closeSkinPicker);
 document.querySelector("#skin-picker-backdrop").addEventListener("click", closeSkinPicker);
 document.querySelectorAll(".sport-option[data-skin]").forEach(btn => {
@@ -1146,9 +1153,20 @@ document.querySelectorAll(".sport-option[data-skin]").forEach(btn => {
   });
 });
 
+// Restore current tab on load
+navigateTo(currentTab);
+
 // ── Sport mode event listeners ────────────────────────────────────────────────
-document.querySelector("#sport-toggle").addEventListener("click", () => {
-  if (sportMode) { exitSportMode(); } else { openSportPicker(); }
+document.querySelectorAll(".sport-quick-btn").forEach(btn => {
+  btn.addEventListener("click", () => enterSportMode(btn.dataset.sport));
+});
+document.querySelector("#sport-exit-btn").addEventListener("click", exitSportMode);
+document.querySelector("#reset-sport-btn").addEventListener("click", () => {
+  const config = SPORT_CONFIGS[sportType];
+  if (confirm(t("resetSport").replace('%s', config.name))) {
+    sportScores.forEach(team => { team.score = 0; });
+    saveSportScores(); renderSport();
+  }
 });
 document.querySelector("#sport-picker-cancel").addEventListener("click", closeSportPicker);
 document.querySelector("#sport-picker-backdrop").addEventListener("click", closeSportPicker);

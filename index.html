@@ -20,117 +20,294 @@
       <div class="glass-noise"></div>
     </div>
     <div class="vehicle-layer" id="vehicle-layer" aria-hidden="true"></div>
+
     <main class="app-shell">
+
+      <!-- ── Slim Topbar ─────────────────────────────────────────────────── -->
       <header class="topbar">
         <a class="brand" href="./" aria-label="Countly home">
           <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
           <span>countly</span>
         </a>
         <div class="topbar-actions">
-          <button class="icon-button sport-toggle" id="sport-toggle" type="button" title="Activate Sport mode" aria-label="Activate Sport mode">
-            <span aria-hidden="true">🏆</span>
-          </button>
           <button class="icon-button hunt-toggle" id="hunt-toggle" type="button" title="Activate Yellow Hunt mode" aria-label="Activate Yellow Hunt mode">
             <span aria-hidden="true">🚕</span>
-          </button>
-          <button class="icon-button skin-toggle" id="skin-toggle" type="button" title="Choose skin" aria-label="Choose skin">
-            <span aria-hidden="true">👕</span>
-          </button>
-          <div class="language-picker">
-            <button class="icon-button language-toggle" id="language-toggle" type="button" title="Choose language" aria-label="Choose language" aria-expanded="false" aria-controls="language-menu">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c2.3 2.5 3.5 5.5 3.5 9S14.3 18.5 12 21M12 3C9.7 5.5 8.5 8.5 8.5 12s1.2 6.5 3.5 9" /></svg>
-            </button>
-          </div>
-          <button class="icon-button theme-toggle" id="theme-toggle" type="button" title="Switch to dark mode" aria-label="Switch to dark mode">
-            <svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.5" /><path d="M12 2.5v2M12 19.5v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2.5 12h2M19.5 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></svg>
-            <svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.2A8.5 8.5 0 0 1 8.8 4a8.5 8.5 0 1 0 11.2 11.2Z" /></svg>
-          </button>
-          <button class="icon-button" id="reset-all" type="button" title="Reset all counters" aria-label="Reset all counters">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8.1 8.1 0 0 0-15.5-2M4 5v4h4M4 13a8.1 8.1 0 0 0 15.5 2M20 19v-4h-4" /></svg>
           </button>
         </div>
       </header>
 
-      <section class="hero">
-        <div>
-          <p class="eyebrow" id="eyebrow" data-i18n="yourCounters">Your counters</p>
-          <h1 id="hero-title" data-i18n="heroTitle">Keep track of what matters.</h1>
+      <!-- ════════════════════════════════════════════════════════════════════
+           TAB: COUNTERS
+           ════════════════════════════════════════════════════════════════════ -->
+      <section class="tab-section" id="tab-counters" aria-label="Counters">
+
+        <section class="hero">
+          <div>
+            <p class="eyebrow" id="eyebrow" data-i18n="yourCounters">Your counters</p>
+            <h1 id="hero-title" data-i18n="heroTitle">Keep track of what matters.</h1>
+          </div>
+          <button class="add-button" id="add-counter" type="button"><span aria-hidden="true">+</span> <span data-i18n="addCounter">Add new counter</span></button>
+        </section>
+
+        <section class="hunt-guide" id="hunt-guide" aria-label="How to play Yellow Hunt" hidden>
+          <div class="guide-icon" aria-hidden="true">🏁</div>
+          <div>
+            <p class="guide-title" data-i18n="howToPlay">How to play</p>
+            <p class="guide-copy" data-i18n="guideCopy">Spot a yellow car for <strong>1 point</strong>. Log each find and see who can spot the most.</p>
+          </div>
+        </section>
+
+        <section class="summary" aria-label="Counter summary">
+          <div class="summary-item"><span class="summary-value" id="total-count">0</span><span class="summary-label" data-i18n="totalCount">Total count</span></div>
+          <div class="summary-divider"></div>
+          <div class="summary-item"><span class="summary-value" id="counter-count">0</span><span class="summary-label" data-i18n="activeCounters">Active counters</span></div>
+        </section>
+
+        <div class="counter-search">
+          <label class="sr-only" for="counter-search-input" data-i18n="searchCounters">Search counters</label>
+          <span class="counter-search-icon" aria-hidden="true">⌕</span>
+          <input id="counter-search-input" type="search" autocomplete="off" data-i18n-placeholder="searchCounters" placeholder="Search counters" />
         </div>
-        <button class="add-button" id="add-counter" type="button"><span aria-hidden="true">+</span> <span data-i18n="addCounter">Add new counter</span></button>
+
+        <section class="counter-grid" id="counter-grid" aria-live="polite"></section>
+
+        <p class="hint" id="app-hint"><span class="hint-key">TIP</span> <span data-i18n="renameHint">Click a counter's name to rename it</span></p>
+
       </section>
 
-      <section class="hunt-guide" id="hunt-guide" aria-label="How to play Yellow Hunt" hidden>
-        <div class="guide-icon" aria-hidden="true">🏁</div>
-        <div>
-          <p class="guide-title" data-i18n="howToPlay">How to play</p>
-          <p class="guide-copy" data-i18n="guideCopy">Spot a yellow car for <strong>1 point</strong>. Log each find and see who can spot the most.</p>
+      <!-- ════════════════════════════════════════════════════════════════════
+           TAB: SPORTS
+           ════════════════════════════════════════════════════════════════════ -->
+      <section class="tab-section" id="tab-sports" aria-label="Sports" hidden>
+
+        <section class="tab-hero">
+          <p class="eyebrow">Sports</p>
+          <h1>Track every score.</h1>
+        </section>
+
+        <section class="sport-guide" id="sport-guide" aria-label="Sport mode active" hidden>
+          <div class="sport-guide-icon" id="sport-guide-icon" aria-hidden="true">🏀</div>
+          <div class="sport-guide-info">
+            <p class="sport-guide-title" id="sport-guide-title">Basketball</p>
+            <p class="sport-guide-copy" id="sport-guide-copy">Score points using the action buttons. Tap a team name to rename it.</p>
+          </div>
+          <div class="sport-switcher" id="sport-switcher" role="group" aria-label="Switch sport">
+            <button class="sport-switch-btn" type="button" data-switch-sport="basketball" title="Switch to Basketball" aria-label="Switch to Basketball">🏀</button>
+            <button class="sport-switch-btn" type="button" data-switch-sport="soccer" title="Switch to Soccer" aria-label="Switch to Soccer">⚽</button>
+            <button class="sport-switch-btn" type="button" data-switch-sport="tennis" title="Switch to Tennis" aria-label="Switch to Tennis">🎾</button>
+          </div>
+        </section>
+
+        <!-- Sport start screen (shown when not in sport mode) -->
+        <div class="sports-start" id="sports-start">
+          <div class="sports-start-grid">
+            <button class="sport-quick-btn" type="button" data-sport="basketball">
+              <span class="sport-quick-emoji">🏀</span>
+              <span class="sport-quick-name">Basketball</span>
+            </button>
+            <button class="sport-quick-btn" type="button" data-sport="soccer">
+              <span class="sport-quick-emoji">⚽</span>
+              <span class="sport-quick-name">Soccer</span>
+            </button>
+            <button class="sport-quick-btn" type="button" data-sport="tennis">
+              <span class="sport-quick-emoji">🎾</span>
+              <span class="sport-quick-name">Tennis</span>
+            </button>
+            <button class="sport-quick-btn" type="button" data-sport="football">
+              <span class="sport-quick-emoji">🏈</span>
+              <span class="sport-quick-name">Football</span>
+            </button>
+            <button class="sport-quick-btn" type="button" data-sport="f1">
+              <span class="sport-quick-emoji">🏎️</span>
+              <span class="sport-quick-name">Formula 1</span>
+            </button>
+            <button class="sport-quick-btn" type="button" data-sport="baseball">
+              <span class="sport-quick-emoji">⚾</span>
+              <span class="sport-quick-name">Baseball</span>
+            </button>
+            <button class="sport-quick-btn" type="button" data-sport="hockey">
+              <span class="sport-quick-emoji">🏒</span>
+              <span class="sport-quick-name">Ice Hockey</span>
+            </button>
+            <button class="sport-quick-btn" type="button" data-sport="volleyball">
+              <span class="sport-quick-emoji">🏐</span>
+              <span class="sport-quick-name">Volleyball</span>
+            </button>
+          </div>
+        </div>
+
+        <section class="counter-grid" id="sport-grid" aria-live="polite"></section>
+
+        <div class="sports-tab-actions" id="sports-tab-actions" hidden>
+          <button class="sport-exit-btn" id="sport-exit-btn" type="button">End Game</button>
+          <button class="icon-button" id="reset-sport-btn" type="button" title="Reset scores" aria-label="Reset scores">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8.1 8.1 0 0 0-15.5-2M4 5v4h4M4 13a8.1 8.1 0 0 0 15.5 2M20 19v-4h-4" /></svg>
+          </button>
+        </div>
+
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════════════
+           TAB: HISTORY
+           ════════════════════════════════════════════════════════════════════ -->
+      <section class="tab-section" id="tab-history" aria-label="History" hidden>
+        <section class="tab-hero">
+          <p class="eyebrow">History</p>
+          <h1>Your counting story.</h1>
+        </section>
+        <div class="history-placeholder">
+          <div class="history-placeholder-icon">📊</div>
+          <p class="history-placeholder-title">Coming soon</p>
+          <p class="history-placeholder-copy">History will show your counting activity over time — streaks, totals by day, and personal bests.</p>
         </div>
       </section>
 
-      <section class="sport-guide" id="sport-guide" aria-label="Sport mode active" hidden>
-        <div class="sport-guide-icon" id="sport-guide-icon" aria-hidden="true">🏀</div>
-        <div class="sport-guide-info">
-          <p class="sport-guide-title" id="sport-guide-title">Basketball</p>
-          <p class="sport-guide-copy" id="sport-guide-copy">Score points using the action buttons. Tap a team name to rename it.</p>
+      <!-- ════════════════════════════════════════════════════════════════════
+           TAB: SETTINGS
+           ════════════════════════════════════════════════════════════════════ -->
+      <section class="tab-section" id="tab-settings" aria-label="Settings" hidden>
+
+        <!-- Settings main screen -->
+        <div class="settings-screen" id="settings-main">
+          <section class="tab-hero">
+            <p class="eyebrow">Settings</p>
+            <h1>Preferences.</h1>
+          </section>
+
+          <!-- Appearance group -->
+          <div class="settings-group">
+            <p class="settings-group-label">Appearance</p>
+            <div class="settings-list">
+              <button class="settings-row" id="settings-theme-row" type="button">
+                <span class="settings-row-icon">🌙</span>
+                <span class="settings-row-label" id="settings-theme-label">Dark Mode</span>
+                <span class="settings-row-chevron" aria-hidden="true">
+                  <span class="theme-toggle-pill" id="theme-toggle-pill"></span>
+                </span>
+              </button>
+              <button class="settings-row" id="settings-skin-row" type="button">
+                <span class="settings-row-icon">🎨</span>
+                <span class="settings-row-label">Skin</span>
+                <span class="settings-row-value" id="settings-skin-value">Default</span>
+                <span class="settings-row-chevron" aria-hidden="true">›</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Language group -->
+          <div class="settings-group">
+            <p class="settings-group-label">Language</p>
+            <div class="settings-list">
+              <button class="settings-row" id="settings-language-row" type="button">
+                <span class="settings-row-icon">🌐</span>
+                <span class="settings-row-label">Language</span>
+                <span class="settings-row-value" id="settings-language-value">English</span>
+                <span class="settings-row-chevron" aria-hidden="true">›</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- General group -->
+          <div class="settings-group">
+            <p class="settings-group-label">General</p>
+            <div class="settings-list">
+              <button class="settings-row" id="settings-about-row" type="button">
+                <span class="settings-row-icon">ℹ️</span>
+                <span class="settings-row-label" data-i18n="aboutCountly">About Countly</span>
+                <span class="settings-row-chevron" aria-hidden="true">›</span>
+              </button>
+              <button class="settings-row settings-row-danger" id="settings-reset-row" type="button">
+                <span class="settings-row-icon">↺</span>
+                <span class="settings-row-label" data-i18n="resetAll">Reset all counters</span>
+                <span class="settings-row-chevron" aria-hidden="true">›</span>
+              </button>
+            </div>
+          </div>
+
+          <footer class="settings-footer">
+            <div>Countly <span>•</span> <span data-i18n="keepItSimple">Keep it simple.</span></div>
+            <button class="redo-tutorial" id="redo-tutorial" type="button" data-i18n="viewTutorial">View tutorial again</button>
+          </footer>
         </div>
-        <div class="sport-switcher" id="sport-switcher" role="group" aria-label="Switch sport">
-          <button class="sport-switch-btn" type="button" data-switch-sport="basketball" title="Switch to Basketball" aria-label="Switch to Basketball">🏀</button>
-          <button class="sport-switch-btn" type="button" data-switch-sport="soccer" title="Switch to Soccer" aria-label="Switch to Soccer">⚽</button>
-          <button class="sport-switch-btn" type="button" data-switch-sport="tennis" title="Switch to Tennis" aria-label="Switch to Tennis">🎾</button>
+
+        <!-- Language sub-screen -->
+        <div class="settings-screen settings-subscreen" id="settings-language-screen" hidden>
+          <div class="subscreen-header">
+            <button class="subscreen-back" id="lang-screen-back" type="button" aria-label="Back to Settings">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+              Settings
+            </button>
+            <span class="subscreen-title">Language</span>
+          </div>
+
+          <div class="settings-list lang-list" id="lang-list">
+            <button class="settings-row lang-row" type="button" data-language="en">
+              <span class="settings-row-icon">🇬🇧</span>
+              <span class="settings-row-label">English</span>
+              <span class="settings-row-check lang-check" aria-hidden="true">✓</span>
+            </button>
+            <button class="settings-row lang-row" type="button" data-language="de">
+              <span class="settings-row-icon">🇩🇪</span>
+              <span class="settings-row-label">Deutsch</span>
+              <span class="settings-row-check lang-check" aria-hidden="true"></span>
+            </button>
+            <button class="settings-row lang-row" type="button" data-language="es">
+              <span class="settings-row-icon">🇪🇸</span>
+              <span class="settings-row-label">Español</span>
+              <span class="settings-row-check lang-check" aria-hidden="true"></span>
+            </button>
+            <button class="settings-row lang-row" type="button" data-language="zh">
+              <span class="settings-row-icon">🇨🇳</span>
+              <span class="settings-row-label">简体中文</span>
+              <span class="settings-row-check lang-check" aria-hidden="true"></span>
+            </button>
+            <button class="settings-row lang-row" type="button" data-language="hi">
+              <span class="settings-row-icon">🇮🇳</span>
+              <span class="settings-row-label">हिन्दी</span>
+              <span class="settings-row-check lang-check" aria-hidden="true"></span>
+            </button>
+          </div>
         </div>
+
       </section>
 
-      <section class="summary" aria-label="Counter summary">
-        <div class="summary-item"><span class="summary-value" id="total-count">0</span><span class="summary-label" data-i18n="totalCount">Total count</span></div>
-        <div class="summary-divider"></div>
-        <div class="summary-item"><span class="summary-value" id="counter-count">0</span><span class="summary-label" data-i18n="activeCounters">Active counters</span></div>
-      </section>
-
-      <div class="counter-search">
-        <label class="sr-only" for="counter-search-input" data-i18n="searchCounters">Search counters</label>
-        <span class="counter-search-icon" aria-hidden="true">⌕</span>
-        <input id="counter-search-input" type="search" autocomplete="off" data-i18n-placeholder="searchCounters" placeholder="Search counters" />
-      </div>
-
-      <section class="counter-grid" id="counter-grid" aria-live="polite"></section>
-
-      <p class="hint" id="app-hint"><span class="hint-key">TIP</span> <span data-i18n="renameHint">Click a counter's name to rename it</span></p>
-      <footer>
-        <div>Countly <span>•</span> <span data-i18n="keepItSimple">Keep it simple.</span></div>
-        <button class="redo-tutorial" id="redo-tutorial" type="button" data-i18n="viewTutorial">View tutorial again</button>
-        <button class="redo-tutorial" id="about-button" type="button" data-i18n="aboutCountly">About Countly</button>
-      </footer>
     </main>
 
-    <div class="language-menu" id="language-menu" hidden>
-      <p class="language-menu-title" data-i18n="language">Language</p>
-      <input type="search" id="language-search" class="language-search" placeholder="Search language..." aria-label="Search language" autocomplete="off">
-      <button type="button" data-language="en" data-search-terms="english en ingles englisch">English <span>✓</span></button>
-      <button type="button" data-language="de" data-search-terms="deutsch german de aleman tedeesco">Deutsch <span></span></button>
-      <button type="button" data-language="es" data-search-terms="español spanish es spanisch">Español <span></span></button>
-      <button type="button" data-language="zh" data-search-terms="中文 mandarin chinese zh chinesisch chino">中文 · Mandarin <span></span></button>
-      <button type="button" data-language="hi" data-search-terms="हिन्दी hindi hi indio">हिन्दी · Hindi <span></span></button>
-      <button type="button" data-language="it" data-search-terms="italiano italian it italienisch">Italiano · Italian <span></span></button>
-      <button type="button" data-language="fr" data-search-terms="français french fr franzosisch frances">Français · French <span></span></button>
-      <button type="button" data-language="pt" data-search-terms="português portuguese pt portugiesisch portugues">Português · Portuguese <span></span></button>
-      <button type="button" data-language="ko" data-search-terms="한국어 korean ko koreanisch coreano">한국어 · Korean <span></span></button>
-      <button type="button" data-language="ja" data-search-terms="日本語 japanese ja japanisch japones">日本語 · Japanese <span></span></button>
-      <button type="button" data-language="tr" data-search-terms="türkçe turkish tr turkisch turco">Türkçe · Turkish <span></span></button>
-    </div>
+    <!-- ── Bottom Navigation ───────────────────────────────────────────────── -->
+    <nav class="bottom-nav" id="bottom-nav" aria-label="Main navigation">
+      <button class="nav-tab is-active" type="button" data-tab="counters" id="nav-counters" aria-label="Counters" aria-current="page">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+          <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+          <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+          <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+        </svg>
+        <span class="nav-label">Counters</span>
+      </button>
+      <button class="nav-tab" type="button" data-tab="sports" id="nav-sports" aria-label="Sports">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M12 3a9 9 0 0 0-4.2 7.5M12 3a9 9 0 0 1 4.2 7.5M3.6 9h16.8M3.6 15h16.8M12 21a9 9 0 0 1-4.2-7.5M12 21a9 9 0 0 0 4.2-7.5"/>
+        </svg>
+        <span class="nav-label">Sports</span>
+      </button>
+      <button class="nav-tab" type="button" data-tab="history" id="nav-history" aria-label="History">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 3v18h18"/>
+          <path d="M7 16l4-4 4 4 4-7"/>
+        </svg>
+        <span class="nav-label">History</span>
+      </button>
+      <button class="nav-tab" type="button" data-tab="settings" id="nav-settings" aria-label="Settings">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="2.5"/>
+          <path d="M12 2v2.5M12 19.5V22M4.22 4.22l1.77 1.77M18.01 18.01l1.77 1.77M2 12h2.5M19.5 12H22M4.22 19.78l1.77-1.77M18.01 5.99l1.77-1.77"/>
+        </svg>
+        <span class="nav-label">Settings</span>
+      </button>
+    </nav>
 
-    <div class="tutorial-overlay" id="tutorial-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
-      <div class="tutorial-spotlight" id="tutorial-spotlight" aria-hidden="true"></div>
-      <div class="tutorial-arrow" id="tutorial-arrow" aria-hidden="true"></div>
-      <section class="tutorial-card" id="tutorial-card">
-        <div class="tutorial-kicker"><span data-i18n="quickTour">QUICK TOUR</span> <span id="tutorial-step">1 / 7</span></div>
-        <h2 id="tutorial-title"></h2>
-        <p id="tutorial-copy"></p>
-        <div class="tutorial-actions">
-          <button class="skip-tutorial" id="skip-tutorial" type="button" data-i18n="skipIntro">Skip Tutorial</button>
-          <button class="continue-tutorial" id="continue-tutorial" type="button"><span data-i18n="continue">Continue</span> <span aria-hidden="true">→</span></button>
-        </div>
-      </section>
-    </div>
+    <!-- ── Modals (unchanged, still global) ─────────────────────────────── -->
 
     <!-- Sport picker modal -->
     <div class="sport-picker" id="sport-picker" hidden role="dialog" aria-modal="true" aria-labelledby="sport-picker-title">
@@ -392,6 +569,21 @@
         </div>
         <button class="sport-picker-cancel" id="skin-picker-cancel" type="button">Cancel</button>
       </div>
+    </div>
+
+    <!-- Tutorial overlay -->
+    <div class="tutorial-overlay" id="tutorial-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
+      <div class="tutorial-spotlight" id="tutorial-spotlight" aria-hidden="true"></div>
+      <div class="tutorial-arrow" id="tutorial-arrow" aria-hidden="true"></div>
+      <section class="tutorial-card" id="tutorial-card">
+        <div class="tutorial-kicker"><span data-i18n="quickTour">QUICK TOUR</span> <span id="tutorial-step">1 / 7</span></div>
+        <h2 id="tutorial-title"></h2>
+        <p id="tutorial-copy"></p>
+        <div class="tutorial-actions">
+          <button class="skip-tutorial" id="skip-tutorial" type="button" data-i18n="skipIntro">Skip Tutorial</button>
+          <button class="continue-tutorial" id="continue-tutorial" type="button"><span data-i18n="continue">Continue</span> <span aria-hidden="true">→</span></button>
+        </div>
+      </section>
     </div>
 
     <script src="app.js"></script>
