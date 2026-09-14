@@ -1142,6 +1142,9 @@ function openSkinPicker() { skinPicker.hidden = false; }
 function closeSkinPicker() { skinPicker.hidden = true; }
 
 document.querySelector("#settings-skin-row").addEventListener("click", openSkinPicker);
+if (document.querySelector("#skin-toggle")) {
+  document.querySelector("#skin-toggle").addEventListener("click", openSkinPicker);
+}
 document.querySelector("#skin-picker-cancel").addEventListener("click", closeSkinPicker);
 document.querySelector("#skin-picker-backdrop").addEventListener("click", closeSkinPicker);
 document.querySelectorAll(".sport-option[data-skin]").forEach(btn => {
