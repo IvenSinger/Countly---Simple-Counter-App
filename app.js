@@ -436,6 +436,43 @@ if (gamesHuntBtn) {
   });
 }
 
+function save() {
+  localStorage.setItem(huntMode ? HUNT_COUNTERS_KEY : STORAGE_KEY, JSON.stringify(counters));
+}
+function formatCount(value) { return new Intl.NumberFormat(currentLanguage).format(value); }
+
+// ── Sport mode functions ──────────────────────────────────────────────────────
+const summaryLabelTotal  = document.querySelector("#total-count + .summary-label");
+const summaryLabelActive = document.querySelector("#counter-count + .summary-label");
+
+function createSportScores(type) {
+  return SPORT_CONFIGS[type].defaultTeams.map(name => ({ id: generateId(), name, score: 0 }));
+}
+function saveSportScores() {
+  localStorage.setItem(`${SPORT_SCORES_KEY}-${sportType}`, JSON.stringify(sportScores));
+}
+function loadSportScores(type) {
+  try {
+    const saved = JSON.parse(localStorage.getItem(`${SPORT_SCORES_KEY}-${type}`));
+    if (saved && Array.isArray(saved) && saved.length === 2) return saved;
+  } catch {}
+  return null;
+}
+function switchSport(type) {
+  if (type === sportType) return;
+  saveSportScores();                        // persist current sport before leaving
+  sportType   = type;
+  sportScores = loadSportScores(type) || createSportScores(type);
+  localStorage.setItem(SPORT_TYPE_KEY, type);
+  saveSportScores();
+  applySportMode();
+  renderSport();
+}
+
+function updateSportScore(id, amount) {
+  const team = sportScores.find(t => t.id === id);
+  if (team) { team.score = Math.max(0, team.score + amount); saveSportScores(); renderSport(); }
+}
 
 function renderSport() {
   if (document.body.classList.contains("app-ready")) document.body.classList.add("counter-rendered");
@@ -696,7 +733,7 @@ counterSearch.addEventListener("input", (event) => { searchQuery = event.target.
 function updateCount(id, amount) { const counter = counters.find((item) => item.id === id); if (counter) { counter.count = Math.max(0, counter.count + amount); save(); render(); } }
 function removeCounter(id) { counters = counters.filter((counter) => counter.id !== id); save(); render(); }
 function escapeHtml(value) { return value.replace(/[&<>'"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[char])); }
-function showVehicle() {
+function showVehicle(color = huntColor) {
   const vehicle = document.createElement("div");
   vehicle.className = `passing-vehicle car path-${Math.ceil(Math.random() * 3)}`;
   const startY = Math.round(14 + Math.random() * 64);
@@ -707,7 +744,7 @@ function showVehicle() {
   vehicle.style.setProperty("--mid-y", `${midY}vh`);
   vehicle.style.setProperty("--end-y", `${endY}vh`);
   vehicle.style.setProperty("--travel-time", `${(3.5 + Math.random() * 1.2).toFixed(2)}s`);
-  vehicle.textContent = HUNT_CONFIG[huntColor]?.emoji || "🚕";
+  vehicle.textContent = HUNT_CONFIG[color]?.emoji || "🚕";
   vehicleLayer.appendChild(vehicle);
   vehicle.addEventListener("animationend", () => vehicle.remove());
 }
@@ -993,12 +1030,7 @@ if (gamesHuntBtn) {
   });
 }
 
-// ── Hunt Picker Event Listeners ───────────────────────────────────────────────
-document.querySelector("#hunt-picker-cancel").addEventListener("click", closeHuntPicker);
-document.querySelector("#hunt-picker-backdrop").addEventListener("click", closeHuntPicker);
-document.querySelectorAll(".sport-option[data-hunt-color]").forEach(btn => {
-  btn.addEventListener("click", () => enterHuntMode(btn.dataset.huntColor));
-});
+// Hunt Picker removed in favor of Dedicated Games Tab
 themeToggle.addEventListener("click", () => {
   const nextTheme = document.body.classList.contains("dark-mode") ? "light" : "dark";
   localStorage.setItem(THEME_KEY, nextTheme);
