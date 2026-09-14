@@ -2547,8 +2547,21 @@ function renderHistory() {
             <div class="history-item-meta">${timeStr} ${item.goal ? '• Goal: ' + item.goal : ''}</div>
           </div>
         </div>
-        <div class="history-item-count">${item.count}</div>
+        <div class="history-item-right">
+          <div class="history-item-count">${item.count}</div>
+          <button class="history-delete-button" type="button" title="Delete session" aria-label="Delete ${escapeHtml(item.name)}">×</button>
+        </div>
       `;
+      
+      itemDiv.querySelector('.history-delete-button').addEventListener('click', (e) => {
+        e.stopPropagation();
+        const index = history.findIndex(h => h.id === item.id);
+        if (index !== -1) {
+          history.splice(index, 1);
+          saveHistory();
+          renderHistory();
+        }
+      });
       groupDiv.appendChild(itemDiv);
     });
     
