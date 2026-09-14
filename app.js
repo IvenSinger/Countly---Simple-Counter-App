@@ -309,6 +309,7 @@ function navigateTo(tabId) {
     else btn.removeAttribute("aria-current");
   });
   document.body.dataset.tab = tabId;
+  applySportMode(); // Ensure sport classes are only active on sports tab
   if (tabId === "sports") { if (sportMode) renderSport(); }
   else if (tabId === "counters") render();
 }
@@ -553,8 +554,11 @@ function applySportMode() {
     document.body.classList.remove(c);
     document.documentElement.classList.remove(c);
   });
-  document.body.classList.toggle("sport-mode", sportMode);
-  document.documentElement.classList.toggle("sport-mode", sportMode);
+  
+  const isSportTab = document.body.dataset.tab === "sports";
+  
+  document.body.classList.toggle("sport-mode", sportMode && isSportTab);
+  document.documentElement.classList.toggle("sport-mode", sportMode && isSportTab);
 
   const sportsStart = document.querySelector("#sports-start");
   if (sportsStart) sportsStart.hidden = sportMode;
@@ -565,8 +569,10 @@ function applySportMode() {
   if (sportGuide) sportGuide.hidden = !sportMode;
 
   if (sportMode) {
-    document.body.classList.add(`sport-${sportType}`);
-    document.documentElement.classList.add(`sport-${sportType}`);
+    if (isSportTab) {
+      document.body.classList.add(`sport-${sportType}`);
+      document.documentElement.classList.add(`sport-${sportType}`);
+    }
     const config = SPORT_CONFIGS[sportType];
     document.querySelector("#sport-guide-icon").textContent  = config.emoji;
     document.querySelector("#sport-guide-title").textContent = config.name;
@@ -605,6 +611,10 @@ function enterSportMode(type) {
 function exitSportMode() {
   sportMode = false;
   localStorage.setItem(SPORT_KEY, "false");
+  
+  const sportGrid = document.querySelector("#sport-grid");
+  if (sportGrid) sportGrid.innerHTML = "";
+  
   applySportMode();
   applyHuntMode();
   applyLanguage(currentLanguage); // restores i18n labels including summary labels
