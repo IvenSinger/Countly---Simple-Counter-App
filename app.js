@@ -319,8 +319,7 @@ let searchQuery = "";
 let sportMode = false;
 let sportType = "basketball";
 let sportScores = null;
-const tutorialTargets = ["#add-counter", ".counter-card .increment", "#nav-sports", "#nav-games", "#settings-skin-row", "#settings-language-row", "#settings-theme-row", "#settings-reset-row"];
-function tutorialSteps() { return tutorialTargets.map((target, index) => ({ target, title: t("tutorials")[index][0], copy: t("tutorials")[index][1] })); }
+
 function applyTheme(theme) {
   const dark = theme === "dark";
   document.body.classList.toggle("dark-mode", dark);
@@ -748,46 +747,51 @@ function showVehicle() {
   vehicle.addEventListener("animationend", () => vehicle.remove());
 }
 
-function positionTutorial() {
-  const step = tutorialSteps()[tutorialIndex];
-  const target = document.querySelector(step.target);
-  if (!target || target.hidden || target.offsetParent === null) {
-    if (tutorialOverlay && !tutorialOverlay.hidden) closeTutorial();
-    return;
-  }
-  const targetRect = target.getBoundingClientRect();
-  const cardRect = tutorialCard.getBoundingClientRect();
-  const gap = 24;
-  const cardLeft = Math.max(16, Math.min(window.innerWidth - cardRect.width - 16, targetRect.left + targetRect.width / 2 - cardRect.width / 2));
-  const below = targetRect.top < window.innerHeight / 2;
-  const cardTop = Math.max(16, Math.min(window.innerHeight - cardRect.height - 16, below ? targetRect.bottom + gap : targetRect.top - cardRect.height - gap));
-  tutorialCard.style.left = `${cardLeft}px`;
-  tutorialCard.style.top = `${cardTop}px`;
-  tutorialSpotlight.style.left = `${targetRect.left - 8}px`;
-  tutorialSpotlight.style.top = `${targetRect.top - 8}px`;
-  tutorialSpotlight.style.width = `${targetRect.width + 16}px`;
-  tutorialSpotlight.style.height = `${targetRect.height + 16}px`;
-  const startX = cardLeft + cardRect.width / 2;
-  const startY = below ? cardTop : cardTop + cardRect.height;
-  const endX = targetRect.left + targetRect.width / 2;
-  const endY = below ? targetRect.bottom + 3 : targetRect.top - 3;
-  const distance = Math.hypot(endX - startX, endY - startY);
-  const angle = Math.atan2(endY - startY, endX - startX) * (180 / Math.PI);
-  tutorialArrow.style.left = `${startX}px`;
-  tutorialArrow.style.top = `${startY}px`;
-  tutorialArrow.style.width = `${Math.max(20, distance)}px`;
-  tutorialArrow.style.transform = `rotate(${angle}deg)`;
-}
+const onboardingSlides = [
+  { emoji: "✨", title: "Welcome to Countly", copy: "Keep track of what matters. A beautiful, modern way to tally everything in your life." },
+  { emoji: "👆", title: "Tap to Tally", copy: "Use the plus and minus controls to keep your numbers moving. Your progress is saved automatically." },
+  { emoji: "➕", title: "Create Counters", copy: "Add as many counters as you need, then give each one a name so everything is easy to find." },
+  { emoji: "🎨", title: "Make it Yours", copy: "Personalize your app's aesthetic. Skins change the colors, materials, and animations of your counters." },
+  { emoji: "🏆", title: "Mini Games & Sports", copy: "Transform your counters into specialized scoreboards or play the classic Car Hunt road trip game." },
+  { emoji: "📊", title: "History (Coming Soon)", copy: "History will show your counting activity over time — streaks, totals by day, and personal bests." },
+  { emoji: "🚀", title: "Ready to count?", copy: "You're all set! Let's start tracking what matters." }
+];
 
 function showTutorialStep() {
-  const steps = tutorialSteps();
-  const step = steps[tutorialIndex];
-  tutorialStep.textContent = `${tutorialIndex + 1} / ${steps.length}`;
-  tutorialTitle.textContent = step.title;
-  tutorialCopy.textContent = step.copy;
-  continueTutorial.innerHTML = tutorialIndex === steps.length - 1 ? `${t("finish")} <span aria-hidden="true">✓</span>` : `${t("continue")} <span aria-hidden="true">→</span>`;
+  const slide = onboardingSlides[tutorialIndex];
+  
+  const carousel = document.getElementById("onboarding-carousel");
+  
+  // Create new slide element
+  const slideEl = document.createElement("div");
+  slideEl.className = "onboarding-slide";
+  slideEl.innerHTML = `
+    <div class="onboarding-graphic">${slide.emoji}</div>
+    <h2 class="onboarding-title">${slide.title}</h2>
+    <p class="onboarding-copy">${slide.copy}</p>
+  `;
+  
+  // Transition logic
+  const oldSlide = carousel.querySelector(".onboarding-slide.is-active");
+  if (oldSlide) {
+    oldSlide.classList.remove("is-active");
+    oldSlide.classList.add("is-leaving");
+    setTimeout(() => oldSlide.remove(), 500);
+  }
+  
+  carousel.appendChild(slideEl);
+  // Force reflow
+  void slideEl.offsetWidth;
+  slideEl.classList.add("is-active");
+
+  // Render dots
+  const dotsContainer = document.getElementById("onboarding-dots");
+  dotsContainer.innerHTML = onboardingSlides.map((_, i) => 
+    `<div class="onboarding-dot ${i === tutorialIndex ? "is-active" : ""}"></div>`
+  ).join("");
+
+  continueTutorial.innerHTML = tutorialIndex === onboardingSlides.length - 1 ? `${t("finish")} <span aria-hidden="true">✓</span>` : `${t("continue")} <span aria-hidden="true">→</span>`;
   tutorialOverlay.hidden = false;
-  requestAnimationFrame(positionTutorial);
 }
 
 function launchConfetti() {
@@ -1094,7 +1098,7 @@ requestAnimationFrame(() => {
 });
 
 document.querySelector("#continue-tutorial").addEventListener("click", () => {
-  if (tutorialIndex === tutorialSteps().length - 1) closeTutorial(true);
+  if (tutorialIndex === onboardingSlides.length - 1) closeTutorial(true);
   else { tutorialIndex += 1; showTutorialStep(); }
 });
 document.querySelector("#skip-tutorial").addEventListener("click", closeTutorial);
@@ -1122,8 +1126,7 @@ document.querySelector("#close-about").addEventListener("click", () => {
 document.querySelector("#about-backdrop").addEventListener("click", () => {
   aboutModal.hidden = true;
 });
-window.addEventListener("resize", () => { if (!tutorialOverlay.hidden) positionTutorial(); });
-window.addEventListener("scroll", () => { if (!tutorialOverlay.hidden) positionTutorial(); }, { passive: true });
+
 
 // Settings / Language screen wiring
 document.querySelector("#settings-language-row").addEventListener("click", () => {

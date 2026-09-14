@@ -590,19 +590,26 @@
       </div>
     </div>
 
-    <!-- Tutorial overlay -->
-    <div class="tutorial-overlay" id="tutorial-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
-      <div class="tutorial-spotlight" id="tutorial-spotlight" aria-hidden="true"></div>
-      <div class="tutorial-arrow" id="tutorial-arrow" aria-hidden="true"></div>
-      <section class="tutorial-card" id="tutorial-card">
-        <div class="tutorial-kicker"><span data-i18n="quickTour">QUICK TOUR</span> <span id="tutorial-step">1 / 7</span></div>
-        <h2 id="tutorial-title"></h2>
-        <p id="tutorial-copy"></p>
-        <div class="tutorial-actions">
-          <button class="skip-tutorial" id="skip-tutorial" type="button" data-i18n="skipIntro">Skip Tutorial</button>
-          <button class="continue-tutorial" id="continue-tutorial" type="button"><span data-i18n="continue">Continue</span> <span aria-hidden="true">→</span></button>
+    <!-- Onboarding Modal -->
+    <div class="onboarding-overlay" id="tutorial-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
+      <div class="onboarding-modal" id="onboarding-modal">
+        
+        <div class="onboarding-carousel" id="onboarding-carousel">
+          <div class="onboarding-slide" id="onboarding-slide">
+            <div class="onboarding-graphic" id="onboarding-graphic"></div>
+            <h2 class="onboarding-title" id="tutorial-title"></h2>
+            <p class="onboarding-copy" id="tutorial-copy"></p>
+          </div>
         </div>
-      </section>
+
+        <div class="onboarding-bottom">
+          <div class="onboarding-dots" id="onboarding-dots"></div>
+          <div class="onboarding-actions">
+            <button class="skip-tutorial" id="skip-tutorial" type="button" data-i18n="skipIntro">Skip</button>
+            <button class="continue-tutorial liquid-button" id="continue-tutorial" type="button"><span data-i18n="continue">Continue</span> <span aria-hidden="true">→</span></button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script src="app.js"></script>
