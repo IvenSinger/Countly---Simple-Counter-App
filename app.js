@@ -231,14 +231,22 @@ function localizeStarterCounters(language) {
   if (changed) save();
 }
 
-function createYellowHuntCounters() {
-  const huntIcons = ["🏁", "🎯", "⭐"];
-  return [1, 2, 3].map((player, i) => ({
+
+function createHuntCounters() {
+  const cars = [
+    { name: "Yellow", icon: "🚕", color: "yellow" },
+    { name: "Red", icon: "🚗", color: "red" },
+    { name: "Blue", icon: "🚙", color: "blue" },
+    { name: "Green", icon: "🚐", color: "green" },
+    { name: "Pink", icon: "🚘", color: "pink" }
+  ];
+  return cars.map(car => ({
     id: generateId(),
-    name: `Player ${player}`,
-    count: Math.floor(Math.random() * 10) + 1,
-    icon: huntIcons[i],
-    createdAt: Date.now(),
+    name: car.name,
+    count: 0,
+    icon: car.icon,
+    color: car.color,
+    createdAt: Date.now()
   }));
 }
 
@@ -421,55 +429,13 @@ function applyHuntMode() {
     document.documentElement.classList.add(`hunt-${huntColor}`);
   }
 
-  if (gamesHuntBtn) {
-    gamesHuntBtn.classList.toggle("is-active", huntMode);
-    gamesHuntBtn.querySelector(".sport-quick-name").textContent = huntMode ? "End Car Hunt" : "Car Hunt";
-  }
   
-  const colorName = huntColor.charAt(0).toUpperCase() + huntColor.slice(1);
-  eyebrow.textContent = huntMode ? `${colorName} Car Hunt` : t("yourCounters");
-  heroTitle.textContent = huntMode ? "Spot it. Count it. Win it." : t("heroTitle");
-  appHint.innerHTML = huntMode
-    ? `<span class="hint-key">${t("play")}</span> Log a ${colorName.toLowerCase()} car when you spot one`
-    : `<span class="hint-key">${t("tip")}</span> <span data-i18n="renameHint">${t("renameHint")}</span>`;
+if (gamesHuntBtn) {
+  gamesHuntBtn.addEventListener("click", () => {
+    enterHuntMode();
+  });
 }
 
-function save() {
-  localStorage.setItem(huntMode ? HUNT_COUNTERS_KEY : STORAGE_KEY, JSON.stringify(counters));
-}
-function formatCount(value) { return new Intl.NumberFormat(currentLanguage).format(value); }
-
-// ── Sport mode functions ──────────────────────────────────────────────────────
-const summaryLabelTotal  = document.querySelector("#total-count + .summary-label");
-const summaryLabelActive = document.querySelector("#counter-count + .summary-label");
-
-function createSportScores(type) {
-  return SPORT_CONFIGS[type].defaultTeams.map(name => ({ id: generateId(), name, score: 0 }));
-}
-function saveSportScores() {
-  localStorage.setItem(`${SPORT_SCORES_KEY}-${sportType}`, JSON.stringify(sportScores));
-}
-function loadSportScores(type) {
-  try {
-    const saved = JSON.parse(localStorage.getItem(`${SPORT_SCORES_KEY}-${type}`));
-    if (saved && Array.isArray(saved) && saved.length === 2) return saved;
-  } catch {}
-  return null;
-}
-function switchSport(type) {
-  if (type === sportType) return;
-  saveSportScores();                        // persist current sport before leaving
-  sportType   = type;
-  sportScores = loadSportScores(type) || createSportScores(type);
-  localStorage.setItem(SPORT_TYPE_KEY, type);
-  saveSportScores();
-  applySportMode();
-  renderSport();
-}
-function updateSportScore(id, amount) {
-  const team = sportScores.find(t => t.id === id);
-  if (team) { team.score = Math.max(0, team.score + amount); saveSportScores(); renderSport(); }
-}
 
 function renderSport() {
   if (document.body.classList.contains("app-ready")) document.body.classList.add("counter-rendered");
@@ -692,14 +658,11 @@ function render() {
           <span class="meta-label">Today</span>
           <span class="meta-value">${todayCount > 0 ? '+' + formatCount(todayCount) : '—'}</span>
         </div>
-        ${avgPerDay && !huntMode ? `<div class="card-meta-item">
+        ${avgPerDay ? `<div class="card-meta-item">
           <span class="meta-label">Avg/day</span>
           <span class="meta-value">${avgPerDay}</span>
         </div>` : ''}
-      </div>
-      ${huntMode ? `<div class="hunt-actions">
-        <button class="hunt-action car-action" type="button" aria-label="${t("carAria").replace('%s', HUNT_CONFIG[huntColor].label)} ${escapeHtml(counter.name)}"><span class="hunt-emoji">${HUNT_CONFIG[huntColor].emoji}</span><span>${t("car")} <b>+1</b></span></button>
-      </div>` : ''}`;
+      </div>\`;
 
     const incrementBtn = card.querySelector(".increment");
     const countEl = card.querySelector(".count");
@@ -710,16 +673,8 @@ function render() {
       // Track today's count
       todayCounts[counter.id] = (todayCounts[counter.id] || 0) + 1;
       saveTodayCounts(todayCounts);
-      if (huntMode) showVehicle();
     });
     card.querySelector(".decrement").addEventListener("click", () => updateCount(counter.id, -1));
-    card.querySelector(".car-action")?.addEventListener("click", () => {
-      animateIncrement(incrementBtn, countEl);
-      updateCount(counter.id, 1);
-      todayCounts[counter.id] = (todayCounts[counter.id] || 0) + 1;
-      saveTodayCounts(todayCounts);
-      showVehicle();
-    });
     card.querySelector(".delete-button").addEventListener("click", () => removeCounter(counter.id));
     card.querySelector(".counter-name").addEventListener("change", (event) => {
       counter.name = event.target.value.trim() || t("untitled");
@@ -942,33 +897,90 @@ document.querySelector("#settings-reset-row").addEventListener("click", () => {
     counters.forEach(counter => { counter.count = 0; }); save(); render();
   }
 });
-function openHuntPicker() { document.querySelector("#hunt-picker").hidden = false; }
-function closeHuntPicker() { document.querySelector("#hunt-picker").hidden = true; }
 
-function enterHuntMode(color) {
-  if (sportMode) {
-    exitSportMode();
-  }
+
+function renderHunt() {
+  const gamesGrid = document.querySelector("#games-grid");
+  if (!gamesGrid) return;
+  gamesGrid.innerHTML = "";
+  
+  if (!huntScores.length) return;
+  
+  huntScores.forEach((counter) => {
+    const card = document.createElement("article");
+    card.className = `counter-card hunt-card hunt-card-${counter.color}`;
+    
+    card.innerHTML = `
+      <div class="card-top">
+        <div class="card-icon-name">
+          <span class="card-icon-static">${counter.icon}</span>
+          <span class="counter-name">${escapeHtml(counter.name)} Car</span>
+        </div>
+        <button class="sport-undo" type="button" title="Undo" aria-label="Undo">↩</button>
+      </div>
+      <div class="count-hero">
+        <div class="count" id="hunt-count-${counter.id}">${counter.count}</div>
+      </div>
+      <div class="card-actions-row">
+        <button class="plus-button increment hunt-increment" type="button" aria-label="Add ${counter.name} car">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 6v16M6 14h16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    `;
+    
+    const incrementBtn = card.querySelector(".increment");
+    const countEl = card.querySelector(".count");
+    
+    incrementBtn.addEventListener("click", () => {
+      animateIncrement(incrementBtn, countEl);
+      counter.count++;
+      saveHuntScores();
+      renderHunt();
+      showVehicle(counter.color);
+    });
+    
+    card.querySelector(".sport-undo").addEventListener("click", () => {
+      if (counter.count > 0) {
+        counter.count--;
+        saveHuntScores();
+        renderHunt();
+      }
+    });
+    
+    gamesGrid.appendChild(card);
+  });
+}
+
+function saveHuntScores() {
+  localStorage.setItem(HUNT_COUNTERS_KEY, JSON.stringify(huntScores));
+}
+
+function enterHuntMode() {
+  if (sportMode) exitSportMode();
   huntMode = true;
-  huntColor = color;
   localStorage.setItem(HUNT_KEY, "true");
-  localStorage.setItem(HUNT_COLOR_KEY, color);
-  counters = readCounters(HUNT_COUNTERS_KEY) ?? (isYellowHuntCounters(legacyCounters) ? legacyCounters : createYellowHuntCounters());
-  save();
-  closeHuntPicker();
+  
+  huntScores = readCounters(HUNT_COUNTERS_KEY) ?? createHuntCounters();
+  saveHuntScores();
+  
+  document.getElementById("games-start").hidden = true;
+  document.getElementById("games-active-view").hidden = false;
+  
   applyHuntMode();
-  render();
-  navigateTo("counters");
+  renderHunt();
 }
 
 function exitHuntMode() {
   huntMode = false;
   localStorage.setItem(HUNT_KEY, "false");
-  counters = readCounters(STORAGE_KEY);
-  if (!counters || isYellowHuntCounters(counters)) counters = starterCounters;
-  save();
+  
+  const gamesGrid = document.querySelector("#games-grid");
+  if (gamesGrid) gamesGrid.innerHTML = "";
+  
+  document.getElementById("games-start").hidden = false;
+  document.getElementById("games-active-view").hidden = true;
+  
   applyHuntMode();
-  render();
 }
 
 if (gamesHuntBtn) {
@@ -1196,3 +1208,9 @@ document.querySelectorAll(".sport-option[data-sport]").forEach(btn => {
 document.querySelectorAll(".sport-switch-btn[data-switch-sport]").forEach(btn => {
   btn.addEventListener("click", () => switchSport(btn.dataset.switchSport));
 });
+
+
+const endGameBtn = document.querySelector("#end-game-btn");
+if (endGameBtn) {
+  endGameBtn.addEventListener("click", exitHuntMode);
+}

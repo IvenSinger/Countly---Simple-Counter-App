@@ -157,17 +157,28 @@
            TAB: GAMES
            ════════════════════════════════════════════════════════════════════ -->
       <section class="tab-section" id="tab-games" aria-label="Games" hidden>
-        <section class="tab-hero">
-          <p class="eyebrow">Mini Games</p>
-          <h1>Play and count.</h1>
-        </section>
-        <div class="sports-start">
-          <div class="sports-start-grid">
-            <button class="sport-quick-btn" type="button" id="games-hunt-btn">
-              <span class="sport-quick-emoji">🚕</span>
-              <span class="sport-quick-name">Car Hunt</span>
-            </button>
+        
+        <div id="games-start">
+          <section class="tab-hero">
+            <p class="eyebrow">Mini Games</p>
+            <h1>Play and count.</h1>
+          </section>
+          <div class="sports-start">
+            <div class="sports-start-grid">
+              <button class="sport-quick-btn" type="button" id="games-hunt-btn">
+                <span class="sport-quick-emoji">🚕</span>
+                <span class="sport-quick-name">Car Hunt</span>
+              </button>
+            </div>
           </div>
+        </div>
+
+        <div id="games-active-view" hidden>
+          <div class="sports-actions-header">
+            <h2 id="games-active-title">Car Hunt</h2>
+            <button class="sport-end-btn" type="button" id="end-game-btn">End Game</button>
+          </div>
+          <div class="sport-grid" id="games-grid"></div>
         </div>
       </section>
 
@@ -409,204 +420,7 @@
     </div>
 
     <!-- Hunt picker modal -->
-    <div class="sport-picker hunt-picker" id="hunt-picker" hidden role="dialog" aria-modal="true" aria-labelledby="hunt-picker-title">
-      <div class="sport-picker-backdrop" id="hunt-picker-backdrop"></div>
-      <div class="sport-picker-panel">
-        <h2 class="sport-picker-title" id="hunt-picker-title">Choose a Car Color</h2>
-        <p class="sport-picker-sub">Pick the color of the car you want to hunt</p>
-        <div class="picker-tutorial-card">
-          <div class="picker-tutorial-icon">💡</div>
-          <div class="picker-tutorial-text">
-            <span class="picker-tutorial-title" data-i18n="howItWorks">How it works</span>
-            <p class="picker-tutorial-copy" data-i18n="huntTutorial">The classic road trip game. Pick a color, spot cars, and tap to score points. Compete to see who spots the most!</p>
-          </div>
-        </div>
-        <div class="sport-option-list">
-          <button class="sport-option" type="button" data-hunt-color="yellow">
-            <span class="sport-option-emoji">🟡</span>
-            <div class="sport-option-info">
-              <span class="sport-option-name">Yellow Car</span>
-              <span class="sport-option-desc">The classic road trip game</span>
-            </div>
-            <span class="sport-option-chevron" aria-hidden="true">›</span>
-          </button>
-          <button class="sport-option" type="button" data-hunt-color="red">
-            <span class="sport-option-emoji">🔴</span>
-            <div class="sport-option-info">
-              <span class="sport-option-name">Red Car</span>
-              <span class="sport-option-desc">Look for bright red vehicles</span>
-            </div>
-            <span class="sport-option-chevron" aria-hidden="true">›</span>
-          </button>
-          <button class="sport-option" type="button" data-hunt-color="blue">
-            <span class="sport-option-emoji">🔵</span>
-            <div class="sport-option-info">
-              <span class="sport-option-name">Blue Car</span>
-              <span class="sport-option-desc">Spot a blue car to score</span>
-            </div>
-            <span class="sport-option-chevron" aria-hidden="true">›</span>
-          </button>
-          <button class="sport-option" type="button" data-hunt-color="green">
-            <span class="sport-option-emoji">🟢</span>
-            <div class="sport-option-info">
-              <span class="sport-option-name">Green Car</span>
-              <span class="sport-option-desc">Keep an eye out for green</span>
-            </div>
-            <span class="sport-option-chevron" aria-hidden="true">›</span>
-          </button>
-          <button class="sport-option" type="button" data-hunt-color="pink">
-            <span class="sport-option-emoji">🟣</span>
-            <div class="sport-option-info">
-              <span class="sport-option-name">Pink Car</span>
-              <span class="sport-option-desc">Rare and rewarding</span>
-            </div>
-            <span class="sport-option-chevron" aria-hidden="true">›</span>
-          </button>
-        </div>
-        <button class="sport-picker-cancel" id="hunt-picker-cancel" type="button">Cancel</button>
-      </div>
-    </div>
-
-    <!-- About modal -->
-    <div class="sport-picker about-modal" id="about-modal" hidden role="dialog" aria-modal="true" aria-labelledby="about-title">
-      <div class="sport-picker-backdrop" id="about-backdrop"></div>
-      <div class="sport-picker-panel" style="text-align: center;">
-        <h2 class="sport-picker-title" id="about-title" style="margin-bottom: 12px;" data-i18n="aboutCountly">About Countly</h2>
-        <p class="sport-picker-sub" style="margin-bottom: 24px; line-height: 1.5;" data-i18n="aboutDesc">
-          Created with precision by <strong>Iven Singer</strong>.<br><br>
-          Countly is a beautiful, modern counter app designed to keep track of what matters. Features a stunning Liquid Glass aesthetic, specialized sport scoreboards, and mini-games.
-        </p>
-        <div style="margin-bottom: 24px;">
-          <a href="https://github.com/IvenSinger/Countly---Simple-Counter-App" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline; font-weight: 500; display: inline-flex; align-items: center; gap: 8px;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z"></path>
-            </svg>
-            View on GitHub
-          </a>
-        </div>
-        <button class="continue-tutorial" id="close-about" type="button" style="width: 100%; display: block; text-align: center;" data-i18n="close">Close</button>
-      </div>
-    </div>
-
-    <!-- Skin picker modal -->
-    <div class="sport-picker skin-picker" id="skin-picker" hidden role="dialog" aria-modal="true" aria-labelledby="skin-picker-title">
-      <div class="sport-picker-backdrop" id="skin-picker-backdrop"></div>
-      <div class="sport-picker-panel">
-        <h2 class="sport-picker-title" id="skin-picker-title">Choose Skin</h2>
-        <p class="sport-picker-sub">Select a visual style for Countly</p>
-        <div class="picker-tutorial-card">
-          <div class="picker-tutorial-icon">💡</div>
-          <div class="picker-tutorial-text">
-            <span class="picker-tutorial-title" data-i18n="howItWorks">How it works</span>
-            <p class="picker-tutorial-copy" data-i18n="skinTutorial">Personalize your app's aesthetic. Skins change the colors, materials, and animations of your counters.</p>
-          </div>
-        </div>
-        <div class="sport-option-list">
-          <button class="sport-option" type="button" data-skin="default">
-            <span class="sport-option-emoji">✨</span>
-            <div class="sport-option-info">
-              <span class="sport-option-name">Default (Liquid Glass)</span>
-              <span class="sport-option-desc">The stunning modern aesthetic</span>
-            </div>
-            <span class="sport-option-chevron" aria-hidden="true">›</span>
-          </button>
-          <button class="sport-option" type="button" data-skin="classic">
-            <span class="sport-option-emoji">📏</span>
-            <div class="sport-option-info">
-              <span class="sport-option-name">Classic</span>
-              <span class="sport-option-desc">Clean, flat, and simple</span>
-            </div>
-            <span class="sport-option-chevron" aria-hidden="true">›</span>
-          </button>
-          <button class="sport-option" type="button" data-skin="glitch">
-            <span class="sport-option-emoji">👾</span>
-            <div class="sport-option-info">
-              <span class="sport-option-name">Glitched</span>
-              <span class="sport-option-desc">Chaotic cyberpunk vibes</span>
-            </div>
-            <span class="sport-option-chevron" aria-hidden="true">›</span>
-          </button>
-          <button class="sport-option" type="button" data-skin="neon">
-            <span class="sport-option-emoji">🌃</span>
-            <div class="sport-option-info">
-              <span class="sport-option-name">Neon</span>
-              <span class="sport-option-desc">Vibrant synthwave colors</span>
-            </div>
-            <span class="sport-option-chevron" aria-hidden="true">›</span>
-          </button>
-          <button class="sport-option" type="button" data-skin="ocean">
-            <span class="sport-option-emoji">🌊</span>
-            <div class="sport-option-info">
-              <span class="sport-option-name">Ocean</span>
-              <span class="sport-option-desc">Deep sea blues and aquamarine</span>
-            </div>
-            <span class="sport-option-chevron" aria-hidden="true">›</span>
-          </button>
-          <button class="sport-option" type="button" data-skin="nature">
-            <span class="sport-option-emoji">🌿</span>
-            <div class="sport-option-info">
-              <span class="sport-option-name">Nature</span>
-              <span class="sport-option-desc">Calming greens and organic tones</span>
-            </div>
-            <span class="sport-option-chevron" aria-hidden="true">›</span>
-          </button>
-          <button class="sport-option" type="button" data-skin="sunset">
-            <span class="sport-option-emoji">🌅</span>
-            <div class="sport-option-info">
-              <span class="sport-option-name">Sunset</span>
-              <span class="sport-option-desc">Vibrant twilight and synthwave vibes</span>
-            </div>
-            <span class="sport-option-chevron" aria-hidden="true">›</span>
-          </button>
-          <button class="sport-option" type="button" data-skin="space">
-            <span class="sport-option-emoji">🚀</span>
-            <div class="sport-option-info">
-              <span class="sport-option-name">Space</span>
-              <span class="sport-option-desc">Deep cosmos with floating stars</span>
-            </div>
-            <span class="sport-option-chevron" aria-hidden="true">›</span>
-          </button>
-          <button class="sport-option" type="button" data-skin="minimal">
-            <span class="sport-option-emoji">⚪</span>
-            <div class="sport-option-info">
-              <span class="sport-option-name">Minimal</span>
-              <span class="sport-option-desc">Ultra-clean, monochrome focus</span>
-            </div>
-            <span class="sport-option-chevron" aria-hidden="true">›</span>
-          </button>
-          <button class="sport-option" type="button" data-skin="retro">
-            <span class="sport-option-emoji">👾</span>
-            <div class="sport-option-info">
-              <span class="sport-option-name">Retro</span>
-              <span class="sport-option-desc">Nostalgic 8-bit arcade aesthetic</span>
-            </div>
-            <span class="sport-option-chevron" aria-hidden="true">›</span>
-          </button>
-        </div>
-        <button class="sport-picker-cancel" id="skin-picker-cancel" type="button">Cancel</button>
-      </div>
-    </div>
-
-    <!-- Onboarding Modal -->
-    <div class="onboarding-overlay" id="tutorial-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
-      <div class="onboarding-modal" id="onboarding-modal">
-        
-        <div class="onboarding-carousel" id="onboarding-carousel">
-          <div class="onboarding-slide" id="onboarding-slide">
-            <div class="onboarding-graphic" id="onboarding-graphic"></div>
-            <h2 class="onboarding-title" id="tutorial-title"></h2>
-            <p class="onboarding-copy" id="tutorial-copy"></p>
-          </div>
-        </div>
-
-        <div class="onboarding-bottom">
-          <div class="onboarding-dots" id="onboarding-dots"></div>
-          <div class="onboarding-actions">
-            <button class="skip-tutorial" id="skip-tutorial" type="button" data-i18n="skipIntro">Skip</button>
-            <button class="continue-tutorial liquid-button" id="continue-tutorial" type="button"><span data-i18n="continue">Continue</span> <span aria-hidden="true">→</span></button>
-          </div>
-        </div>
-      </div>
+    
     </div>
 
     <script src="app.js"></script>
