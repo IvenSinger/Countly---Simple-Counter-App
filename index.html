@@ -212,6 +212,12 @@
                 <span class="settings-row-value" id="settings-skin-value" data-i18n="skinDefault">Default</span>
                 <span class="settings-row-chevron" aria-hidden="true">›</span>
               </button>
+              <button class="settings-row" id="settings-appearance-row" type="button">
+                <span class="settings-row-icon">🪟</span>
+                <span class="settings-row-label" data-i18n="settingsAppearance">Glass</span>
+                <span class="settings-row-value" id="settings-appearance-value" data-i18n="appearanceStandard">Standard</span>
+                <span class="settings-row-chevron" aria-hidden="true">›</span>
+              </button>
             </div>
           </div>
 
@@ -481,6 +487,109 @@
     </div>
 
 
+    <!-- Appearance picker modal -->
+    <div class="sport-picker skin-picker" id="appearance-picker" hidden="" role="dialog" aria-modal="true" aria-labelledby="appearance-picker-title">
+      <div class="sport-picker-backdrop" id="appearance-picker-backdrop"></div>
+      <div class="sport-picker-panel">
+        <h2 class="sport-picker-title" id="appearance-picker-title" data-i18n="chooseAppearance">Glass Appearance</h2>
+        <p class="sport-picker-sub" data-i18n="chooseAppearanceDesc">Select a liquid glass intensity</p>
+        
+        <div class="sport-option-list">
+          <button class="sport-option" type="button" data-appearance="clear">
+            <span class="sport-option-emoji">💧</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name" data-i18n="appearanceClearName">Clear</span>
+              <span class="sport-option-desc" data-i18n="appearanceClearDesc">More see through</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+          
+          <button class="sport-option" type="button" data-appearance="standard">
+            <span class="sport-option-emoji">🧊</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name" data-i18n="appearanceStandardName">Standard</span>
+              <span class="sport-option-desc" data-i18n="appearanceStandardDesc">Default liquid glass</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+          
+          <button class="sport-option" type="button" data-appearance="tinted">
+            <span class="sport-option-emoji">🔮</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name" data-i18n="appearanceTintedName">Tinted</span>
+              <span class="sport-option-desc" data-i18n="appearanceTintedDesc">More solid and tinted</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+        </div>
+        <button class="sport-picker-cancel" id="appearance-picker-cancel" type="button" data-i18n="cancelBtn">Cancel</button>
+      </div>
+    </div>
+
+    <!-- Icon Picker Modal -->
+    <div class="qc-save-sheet" id="icon-picker" style="position: fixed;" hidden="" role="dialog" aria-modal="true">
+      <div class="qc-save-sheet-backdrop" id="icon-picker-backdrop"></div>
+      <div class="qc-save-sheet-panel">
+        <h3 id="icon-picker-title">Choose Icon</h3>
+        <div class="icon-grid">
+          <button class="icon-btn" type="button">🎯</button>
+          <button class="icon-btn" type="button">💧</button>
+          <button class="icon-btn" type="button">☕️</button>
+          <button class="icon-btn" type="button">📖</button>
+          <button class="icon-btn" type="button">🏃</button>
+          <button class="icon-btn" type="button">🍎</button>
+          <button class="icon-btn" type="button">🍺</button>
+          <button class="icon-btn" type="button">💊</button>
+          <button class="icon-btn" type="button">📦</button>
+          <button class="icon-btn" type="button">💰</button>
+        </div>
+        <input type="text" id="icon-picker-input" class="qc-input" placeholder="Or type a custom emoji..." autocomplete="off" maxlength="4" style="margin-top: 16px;">
+        <div class="qc-save-actions">
+          <button class="qc-btn-secondary" id="icon-picker-cancel" type="button" data-i18n="cancelBtn">Cancel</button>
+          <button class="qc-btn-primary" id="icon-picker-save" type="button" data-i18n="saveBtn">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Appearance picker modal -->
+    <div class="sport-picker skin-picker" id="appearance-picker" hidden="" role="dialog" aria-modal="true" aria-labelledby="appearance-picker-title">
+      <div class="sport-picker-backdrop" id="appearance-picker-backdrop"></div>
+      <div class="sport-picker-panel">
+        <h2 class="sport-picker-title" id="appearance-picker-title" data-i18n="chooseAppearance">Glass Appearance</h2>
+        <p class="sport-picker-sub" data-i18n="chooseAppearanceDesc">Select a liquid glass intensity</p>
+        
+        <div class="sport-option-list">
+          <button class="sport-option" type="button" data-appearance="clear">
+            <span class="sport-option-emoji">💧</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name" data-i18n="appearanceClearName">Clear</span>
+              <span class="sport-option-desc" data-i18n="appearanceClearDesc">More see through</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+          
+          <button class="sport-option" type="button" data-appearance="standard">
+            <span class="sport-option-emoji">🧊</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name" data-i18n="appearanceStandardName">Standard</span>
+              <span class="sport-option-desc" data-i18n="appearanceStandardDesc">Default liquid glass</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+          
+          <button class="sport-option" type="button" data-appearance="tinted">
+            <span class="sport-option-emoji">🔮</span>
+            <div class="sport-option-info">
+              <span class="sport-option-name" data-i18n="appearanceTintedName">Tinted</span>
+              <span class="sport-option-desc" data-i18n="appearanceTintedDesc">More solid and tinted</span>
+            </div>
+            <span class="sport-option-chevron" aria-hidden="true">›</span>
+          </button>
+        </div>
+        <button class="sport-picker-cancel" id="appearance-picker-cancel" type="button" data-i18n="cancelBtn">Cancel</button>
+      </div>
+    </div>
+
     <!-- Skin picker modal -->
     <div class="sport-picker skin-picker" id="skin-picker" hidden="" role="dialog" aria-modal="true" aria-labelledby="skin-picker-title">
       <div class="sport-picker-backdrop" id="skin-picker-backdrop"></div>
@@ -623,6 +732,31 @@
             <button class="qc-btn-secondary" id="qc-discard-btn" type="button" data-i18n="discardBtn">Discard</button>
             <button class="qc-btn-primary" id="qc-save-btn" type="button" data-i18n="saveBtn">Save</button>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Icon Picker Modal -->
+    <div class="qc-save-sheet" id="icon-picker" style="position: fixed;" hidden="" role="dialog" aria-modal="true">
+      <div class="qc-save-sheet-backdrop" id="icon-picker-backdrop"></div>
+      <div class="qc-save-sheet-panel">
+        <h3 id="icon-picker-title">Choose Icon</h3>
+        <div class="icon-grid">
+          <button class="icon-btn" type="button">🎯</button>
+          <button class="icon-btn" type="button">💧</button>
+          <button class="icon-btn" type="button">☕️</button>
+          <button class="icon-btn" type="button">📖</button>
+          <button class="icon-btn" type="button">🏃</button>
+          <button class="icon-btn" type="button">🍎</button>
+          <button class="icon-btn" type="button">🍺</button>
+          <button class="icon-btn" type="button">💊</button>
+          <button class="icon-btn" type="button">📦</button>
+          <button class="icon-btn" type="button">💰</button>
+        </div>
+        <input type="text" id="icon-picker-input" class="qc-input" placeholder="Or type a custom emoji..." autocomplete="off" maxlength="4" style="margin-top: 16px;">
+        <div class="qc-save-actions">
+          <button class="qc-btn-secondary" id="icon-picker-cancel" type="button" data-i18n="cancelBtn">Cancel</button>
+          <button class="qc-btn-primary" id="icon-picker-save" type="button" data-i18n="saveBtn">Save</button>
         </div>
       </div>
     </div>

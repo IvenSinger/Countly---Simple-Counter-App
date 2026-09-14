@@ -2452,7 +2452,7 @@ function render() {
     card.innerHTML = `
       <div class="card-top">
         <div class="card-icon-name">
-          <input class="card-icon-input" type="text" value="${icon}" maxlength="4" title="Change icon" aria-label="Change icon for ${escapeHtml(counter.name)}" />
+          <input class="card-icon-input" type="text" value="${icon}" maxlength="4" title="Change icon" aria-label="Change icon for ${escapeHtml(counter.name)}" readonly style="cursor:pointer;" />
           <input class="counter-name" value="${escapeHtml(counter.name)}" aria-label="${t("counterName")}" maxlength="32" />
         </div>
         <button class="delete-button" type="button" title="${t("remove")}" aria-label="${t("remove")} ${escapeHtml(counter.name)}">×</button>
@@ -2502,10 +2502,9 @@ function render() {
       counter.name = event.target.value.trim() || t("untitled");
       save(); render();
     });
-    // Icon picker on change
-    card.querySelector(".card-icon-input").addEventListener("change", (event) => {
-      counter.icon = event.target.value.trim() || "🎯";
-      save(); render();
+    // Icon picker on click
+    card.querySelector(".card-icon-input").addEventListener("click", () => {
+      openIconPicker(counter.id);
     });
     grid.appendChild(card);
   });
