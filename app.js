@@ -2205,6 +2205,7 @@ function applyLanguage(language) {
     document.querySelector("#settings-language-value").textContent = selectedChoice.querySelector(".settings-row-label").textContent;
   }
 
+  if(typeof updateSettingsText === 'function') updateSettingsText();
   document.querySelectorAll("[data-i18n]").forEach((element) => {
     const value = t(element.dataset.i18n);
     if (element.dataset.i18n === "guideCopy" || element.dataset.i18n === "aboutDesc") element.innerHTML = value;
@@ -3047,6 +3048,7 @@ document.querySelectorAll("#skin-picker .sport-option").forEach(btn => {
     currentSkin = btn.dataset.skin;
     localStorage.setItem(SKIN_KEY, currentSkin);
     applySkin();
+    if(typeof updateSettingsText === 'function') updateSettingsText();
     closeSkinPicker();
   });
 });
@@ -3329,3 +3331,22 @@ document.getElementById("icon-picker-save")?.addEventListener("click", () => {
 });
 
 window.openIconPicker = openIconPicker; // Make it global just in case it's called from inline HTML or other scopes
+
+function updateSettingsText() {
+  const skinEl = document.querySelector("#settings-skin-value");
+  if (skinEl && typeof currentSkin !== 'undefined') {
+    let skinKey = "skin" + currentSkin.charAt(0).toUpperCase() + currentSkin.slice(1) + "Name";
+    if (currentSkin === 'default') skinKey = 'skinDefaultName';
+    skinEl.textContent = t(skinKey) || currentSkin;
+  }
+  const appearanceEl = document.querySelector("#settings-appearance-value");
+  if (appearanceEl && typeof appearance !== 'undefined') {
+    let appearanceKey = "appearance" + appearance.charAt(0).toUpperCase() + appearance.slice(1) + "Name";
+    appearanceEl.textContent = t(appearanceKey) || appearance;
+  }
+}
+// Run it once on load
+updateSettingsText();
+
+// Hook it into applyLanguage
+const origApplyLanguageRegex = /document.querySelectorAll\("\[data-i18n\]"\)\.forEach\(\(element\) => \{/;
