@@ -1,6 +1,9 @@
 const STORAGE_KEY = "countly-counters";
 const HISTORY_KEY = "countly-history";
 let history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+const DAILY_LOGS_KEY = "countly-daily-logs";
+let dailyLogs = JSON.parse(localStorage.getItem(DAILY_LOGS_KEY)) || {};
+function saveDailyLogs() { localStorage.setItem(DAILY_LOGS_KEY, JSON.stringify(dailyLogs)); }
 function saveHistory() { localStorage.setItem(HISTORY_KEY, JSON.stringify(history)); }
 
 const HUNT_COUNTERS_KEY = "countly-yellow-hunt-counters";
@@ -2514,6 +2517,63 @@ function formatDate(timestamp) {
   if (date.toDateString() === yesterday.toDateString()) return t('yesterday') || "Yesterday";
   return new Intl.DateTimeFormat(currentLanguage, { month: 'short', day: 'numeric', year: 'numeric' }).format(date);
 }
+function getWeeklyCount(counterId) {
+  if (!dailyLogs[counterId]) return 0;
+  let total = 0;
+  for (let i = 0; i < 7; i++) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    const key = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+    total += (dailyLogs[counterId][key] || 0);
+  }
+  return total;
+}
+
+function openStatsModal(counter) {
+  const modal = document.getElementById("stats-modal");
+  if (!modal) return;
+  
+  const todayCount = todayCounts[counter.id] || 0;
+  const weeklyCount = getWeeklyCount(counter.id);
+  const totalCount = counter.count;
+  
+  // Previous sessions logic (history items with the same name)
+  const previousSessions = history.filter(h => h.name === counter.name);
+  
+  document.getElementById("stats-modal-icon").textContent = counter.icon;
+  document.getElementById("stats-modal-name").textContent = counter.name;
+  
+  document.getElementById("stats-total").textContent = formatCount(totalCount);
+  document.getElementById("stats-today").textContent = formatCount(todayCount);
+  document.getElementById("stats-weekly").textContent = formatCount(weeklyCount);
+  
+  const goalContainer = document.getElementById("stats-goal-container");
+  if (counter.goal) {
+    goalContainer.style.display = "block";
+    const progress = Math.min(totalCount / counter.goal, 1) * 100;
+    document.getElementById("stats-goal-text").textContent = `${formatCount(totalCount)} / ${formatCount(counter.goal)} (${Math.round(progress)}%)`;
+    document.getElementById("stats-goal-fill").style.width = `${progress}%`;
+  } else {
+    goalContainer.style.display = "none";
+  }
+  
+  const sessionsList = document.getElementById("stats-sessions-list");
+  sessionsList.innerHTML = "";
+  if (previousSessions.length > 0) {
+    previousSessions.forEach(session => {
+      const dateStr = formatDate(session.endedAt || session.createdAt);
+      const li = document.createElement("li");
+      li.className = "stats-session-item";
+      li.innerHTML = `<span class="stats-session-date">${dateStr}</span> <span class="stats-session-count">${formatCount(session.count)}</span>`;
+      sessionsList.appendChild(li);
+    });
+  } else {
+    sessionsList.innerHTML = `<li class="stats-session-empty">No previous sessions found.</li>`;
+  }
+  
+  modal.hidden = false;
+}
+
 function renderHistory() {
   const container = document.getElementById("history-list-container");
   const emptyState = document.getElementById("history-empty-state");
@@ -2532,13 +2592,37 @@ function renderHistory() {
   emptyState.style.display = "none";
   
   // Build the summary UI at the top
+  
+  let activeCountersHTML = "";
+  if (counters.length > 0) {
+    activeCountersHTML = `
+      <div class="active-stats-section">
+        <h3 class="history-section-title">Active Counters</h3>
+        <div class="active-counters-scroll" id="active-counters-list"></div>
+      </div>
+    `;
+  }
+
   container.innerHTML = `
     <section class="summary" style="margin-bottom: 0;">
       <div class="summary-item"><span class="summary-value">${totalSessions}</span><span class="summary-label">Sessions</span></div>
       <div class="summary-divider"></div>
       <div class="summary-item"><span class="summary-value">${formatCount(totalCounts)}</span><span class="summary-label">Total Counted</span></div>
     </section>
+    ${activeCountersHTML}
+    <h3 class="history-section-title" style="margin-top: 12px;">Archived Sessions</h3>
   `;
+  
+  if (counters.length > 0) {
+    const list = document.getElementById("active-counters-list");
+    counters.forEach(c => {
+      const btn = document.createElement("button");
+      btn.className = "active-stat-card";
+      btn.innerHTML = `<div class="active-stat-icon">${c.icon}</div><div class="active-stat-name">${escapeHtml(c.name)}</div>`;
+      btn.addEventListener("click", () => openStatsModal(c));
+      list.appendChild(btn);
+    });
+  }
   
   // Group by date
   const groups = {};
@@ -2683,7 +2767,15 @@ function render() {
 
 counterSearch.addEventListener("input", (event) => { searchQuery = event.target.value; render(); });
 
-function updateCount(id, amount) { const counter = counters.find((item) => item.id === id); if (counter) { counter.count = Math.max(0, counter.count + amount); save(); render(); } }
+function updateCount(id, amount) { const counter = counters.find((item) => item.id === id); if (counter) { counter.count = Math.max(0, counter.count + amount);
+    
+    // Log daily increment
+    if (amount > 0) {
+      if (!dailyLogs[id]) dailyLogs[id] = {};
+      const today = getTodayKey();
+      dailyLogs[id][today] = (dailyLogs[id][today] || 0) + amount;
+      saveDailyLogs();
+    } save(); render(); } }
 function removeCounter(id) { counters = counters.filter((counter) => counter.id !== id); save(); render(); }
 function escapeHtml(value) { return value.replace(/[&<>'"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[char])); }
 function showVehicle(color = huntColor) {
