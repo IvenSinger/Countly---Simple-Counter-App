@@ -207,7 +207,8 @@ const translations = {
     skinMinimalDesc: "Ultra-clean, monochrome focus",
     skinRetro: "Retro",
     skinRetroDesc: "Nostalgic 8-bit arcade aesthetic",
-    viewOnGithub: "View on GitHub"
+    viewOnGithub: "View on GitHub",
+    prevBtn: "Back"
   },
   de: {
     language: "Sprache",
@@ -351,7 +352,8 @@ const translations = {
     skinMinimalDesc: "Monochromer Fokus",
     skinRetro: "Retro",
     skinRetroDesc: "Nostalgische 8-Bit-Arcade-Ästhetik",
-    viewOnGithub: "Auf GitHub ansehen"
+    viewOnGithub: "Auf GitHub ansehen",
+    prevBtn: "Zurück"
   },
   es: {
     language: "Idioma",
@@ -495,7 +497,8 @@ const translations = {
     skinMinimalDesc: "Enfoque monocromático ultralimpio",
     skinRetro: "Retro",
     skinRetroDesc: "Estética nostálgica de arcade de 8 bits",
-    viewOnGithub: "Ver en GitHub"
+    viewOnGithub: "Ver en GitHub",
+    prevBtn: "Atrás"
   },
   zh: {
     language: "语言",
@@ -639,7 +642,8 @@ const translations = {
     skinMinimalDesc: "超干净的单色焦点",
     skinRetro: "复古",
     skinRetroDesc: "怀旧的8位街机美学",
-    viewOnGithub: "在GitHub上查看"
+    viewOnGithub: "在GitHub上查看",
+    prevBtn: "返回"
   },
   hi: {
     language: "भाषा",
@@ -783,7 +787,8 @@ const translations = {
     skinMinimalDesc: "अल्ट्रा-क्लीन, मोनोक्रोम फोकस",
     skinRetro: "रेट्रो",
     skinRetroDesc: "उदासीन 8-बिट आर्केड सौंदर्य",
-    viewOnGithub: "GitHub पर देखें"
+    viewOnGithub: "GitHub पर देखें",
+    prevBtn: "पीछे"
   },
   it: {
     language: "Lingua",
@@ -927,7 +932,8 @@ const translations = {
     skinMinimalDesc: "Focus monocromatico ultra-pulito",
     skinRetro: "Retro",
     skinRetroDesc: "Estetica nostalgica arcade a 8 bit",
-    viewOnGithub: "Vedi su GitHub"
+    viewOnGithub: "Vedi su GitHub",
+    prevBtn: "Indietro"
   },
   fr: {
     language: "Langue",
@@ -1071,7 +1077,8 @@ const translations = {
     skinMinimalDesc: "Mise au point monochrome ultra-propre",
     skinRetro: "Rétro",
     skinRetroDesc: "Esthétique nostalgique d'arcade 8 bits",
-    viewOnGithub: "Voir sur GitHub"
+    viewOnGithub: "Voir sur GitHub",
+    prevBtn: "Retour"
   },
   pt: {
     language: "Idioma",
@@ -1215,7 +1222,8 @@ const translations = {
     skinMinimalDesc: "Foco monocromático ultra-limpo",
     skinRetro: "Retrô",
     skinRetroDesc: "Estética nostálgica de fliperama 8 bits",
-    viewOnGithub: "Ver no GitHub"
+    viewOnGithub: "Ver no GitHub",
+    prevBtn: "Voltar"
   },
   ko: {
     language: "언어",
@@ -1359,7 +1367,8 @@ const translations = {
     skinMinimalDesc: "매우 깔끔한 단색 포커스",
     skinRetro: "레트로",
     skinRetroDesc: "향수를 불러일으키는 8비트 아케이드 미학",
-    viewOnGithub: "GitHub에서 보기"
+    viewOnGithub: "GitHub에서 보기",
+    prevBtn: "이전"
   },
   ja: {
     language: "言語",
@@ -1503,7 +1512,8 @@ const translations = {
     skinMinimalDesc: "超クリーンなモノクロフォーカス",
     skinRetro: "レトロ",
     skinRetroDesc: "ノスタルジックな8ビットアーケードの美学",
-    viewOnGithub: "GitHubで表示"
+    viewOnGithub: "GitHubで表示",
+    prevBtn: "戻る"
   },
   tr: {
     language: "Dil",
@@ -1647,7 +1657,8 @@ const translations = {
     skinMinimalDesc: "Ultra temiz, tek renk odaklı",
     skinRetro: "Retro",
     skinRetroDesc: "Nostaljik 8-bit arcade estetiği",
-    viewOnGithub: "GitHub'da Gör"
+    viewOnGithub: "GitHub'da Gör",
+    prevBtn: "Geri"
   }
 };
 let currentLanguage = "en";
@@ -2329,6 +2340,16 @@ function showTutorialStep() {
     `<div class="onboarding-dot ${i === tutorialIndex ? "is-active" : ""}"></div>`
   ).join("");
 
+  const skipBtn = document.getElementById("skip-tutorial");
+  const prevBtn = document.getElementById("prev-tutorial");
+  if (tutorialIndex === 0) {
+    skipBtn.style.display = "";
+    prevBtn.style.display = "none";
+  } else {
+    skipBtn.style.display = "none";
+    prevBtn.style.display = "";
+  }
+
   continueTutorial.innerHTML = tutorialIndex === onboardingSlides.length - 1 ? `${t("finish")} <span aria-hidden="true">✓</span>` : `${t("continue")} <span aria-hidden="true">→</span>`;
   tutorialOverlay.hidden = false;
 }
@@ -2691,6 +2712,9 @@ requestAnimationFrame(() => {
 document.querySelector("#continue-tutorial").addEventListener("click", () => {
   if (tutorialIndex === onboardingSlides.length - 1) closeTutorial(true);
   else { tutorialIndex += 1; showTutorialStep(); }
+});
+document.querySelector("#prev-tutorial").addEventListener("click", () => {
+  if (tutorialIndex > 0) { tutorialIndex -= 1; showTutorialStep(); }
 });
 document.querySelector("#skip-tutorial").addEventListener("click", closeTutorial);
 redoTutorial.addEventListener("click", () => {
