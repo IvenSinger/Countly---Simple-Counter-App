@@ -594,6 +594,7 @@ function enterSportMode(type) {
   closeSportPicker();
   applySportMode();
   renderSport();
+  navigateTo("counters");
 }
 
 function exitSportMode() {
@@ -1145,7 +1146,7 @@ if (document.querySelector("#skin-toggle")) {
 }
 document.querySelector("#skin-picker-cancel").addEventListener("click", closeSkinPicker);
 document.querySelector("#skin-picker-backdrop").addEventListener("click", closeSkinPicker);
-document.querySelectorAll(".sport-option[data-skin]").forEach(btn => {
+document.querySelectorAll("#skin-picker .sport-option").forEach(btn => {
   btn.addEventListener("click", () => {
     currentSkin = btn.dataset.skin;
     localStorage.setItem(SKIN_KEY, currentSkin);
