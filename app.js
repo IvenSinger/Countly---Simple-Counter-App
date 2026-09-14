@@ -208,7 +208,8 @@ const translations = {
     skinRetro: "Retro",
     skinRetroDesc: "Nostalgic 8-bit arcade aesthetic",
     viewOnGithub: "View on GitHub",
-    prevBtn: "Back"
+    prevBtn: "Back",
+    brainrotHint: "Hint: Scroll to the bottom of the language menu for a surprise... 💀"
   },
   de: {
     language: "Sprache",
@@ -353,7 +354,8 @@ const translations = {
     skinRetro: "Retro",
     skinRetroDesc: "Nostalgische 8-Bit-Arcade-Ästhetik",
     viewOnGithub: "Auf GitHub ansehen",
-    prevBtn: "Zurück"
+    prevBtn: "Zurück",
+    brainrotHint: "Tipp: Scrolle zum Ende des Sprachmenüs für eine Überraschung... 💀"
   },
   es: {
     language: "Idioma",
@@ -498,7 +500,8 @@ const translations = {
     skinRetro: "Retro",
     skinRetroDesc: "Estética nostálgica de arcade de 8 bits",
     viewOnGithub: "Ver en GitHub",
-    prevBtn: "Atrás"
+    prevBtn: "Atrás",
+    brainrotHint: "Pista: Desplázate hasta el final del menú de idiomas para una sorpresa... 💀"
   },
   zh: {
     language: "语言",
@@ -643,7 +646,8 @@ const translations = {
     skinRetro: "复古",
     skinRetroDesc: "怀旧的8位街机美学",
     viewOnGithub: "在GitHub上查看",
-    prevBtn: "返回"
+    prevBtn: "返回",
+    brainrotHint: "提示：滚动到语言菜单底部发现惊喜... 💀"
   },
   hi: {
     language: "भाषा",
@@ -788,7 +792,8 @@ const translations = {
     skinRetro: "रेट्रो",
     skinRetroDesc: "उदासीन 8-बिट आर्केड सौंदर्य",
     viewOnGithub: "GitHub पर देखें",
-    prevBtn: "पीछे"
+    prevBtn: "पीछे",
+    brainrotHint: "संकेत: एक आश्चर्य के लिए भाषा मेनू के नीचे स्क्रॉल करें... 💀"
   },
   it: {
     language: "Lingua",
@@ -933,7 +938,8 @@ const translations = {
     skinRetro: "Retro",
     skinRetroDesc: "Estetica nostalgica arcade a 8 bit",
     viewOnGithub: "Vedi su GitHub",
-    prevBtn: "Indietro"
+    prevBtn: "Indietro",
+    brainrotHint: "Suggerimento: Scorri fino in fondo al menu delle lingue per una sorpresa... 💀"
   },
   fr: {
     language: "Langue",
@@ -1078,7 +1084,8 @@ const translations = {
     skinRetro: "Rétro",
     skinRetroDesc: "Esthétique nostalgique d'arcade 8 bits",
     viewOnGithub: "Voir sur GitHub",
-    prevBtn: "Retour"
+    prevBtn: "Retour",
+    brainrotHint: "Astuce : Faites défiler jusqu'en bas du menu des langues pour une surprise... 💀"
   },
   pt: {
     language: "Idioma",
@@ -1223,7 +1230,8 @@ const translations = {
     skinRetro: "Retrô",
     skinRetroDesc: "Estética nostálgica de fliperama 8 bits",
     viewOnGithub: "Ver no GitHub",
-    prevBtn: "Voltar"
+    prevBtn: "Voltar",
+    brainrotHint: "Dica: Role até o final do menu de idiomas para uma surpresa... 💀"
   },
   ko: {
     language: "언어",
@@ -1368,7 +1376,8 @@ const translations = {
     skinRetro: "레트로",
     skinRetroDesc: "향수를 불러일으키는 8비트 아케이드 미학",
     viewOnGithub: "GitHub에서 보기",
-    prevBtn: "이전"
+    prevBtn: "이전",
+    brainrotHint: "힌트: 언어 메뉴 하단으로 스크롤하여 깜짝 선물을 확인하세요... 💀"
   },
   ja: {
     language: "言語",
@@ -1513,7 +1522,8 @@ const translations = {
     skinRetro: "レトロ",
     skinRetroDesc: "ノスタルジックな8ビットアーケードの美学",
     viewOnGithub: "GitHubで表示",
-    prevBtn: "戻る"
+    prevBtn: "戻る",
+    brainrotHint: "ヒント：言語メニューの一番下までスクロールしてサプライズを見つけてください... 💀"
   },
   tr: {
     language: "Dil",
@@ -1658,7 +1668,8 @@ const translations = {
     skinRetro: "Retro",
     skinRetroDesc: "Nostaljik 8-bit arcade estetiği",
     viewOnGithub: "GitHub'da Gör",
-    prevBtn: "Geri"
+    prevBtn: "Geri",
+    brainrotHint: "İpucu: Sürpriz için dil menüsünün en altına kaydırın... 💀"
   },
   "en-online": {
     language: "Language (no cap)",
@@ -1803,7 +1814,8 @@ const translations = {
     skinRetro: "Retro",
     skinRetroDesc: "Old school 8-bit aesthetic",
     viewOnGithub: "Check the GitHub",
-    prevBtn: "Wait, go back"
+    prevBtn: "Wait, go back",
+    brainrotHint: "Pro tip: Scroll to the bottom of the language menu for some crazy drip... 💀"
   }
 };
 let currentLanguage = "en";
