@@ -2609,6 +2609,7 @@ function render() {
       saveTodayCounts(todayCounts);
     });
     card.querySelector(".decrement").addEventListener("click", () => updateCount(counter.id, -1));
+    card.querySelector(".archive-button")?.addEventListener("click", () => archiveCounter(counter.id));
     card.querySelector(".delete-button").addEventListener("click", () => removeCounter(counter.id));
     const goalBtn = card.querySelector('[data-action="set-goal"]');
     if (goalBtn) {
