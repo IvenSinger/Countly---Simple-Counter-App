@@ -9,6 +9,43 @@ const LANGUAGE_KEY = "countly-language";
 const SPORT_KEY = "countly-sport-mode";
 const SPORT_TYPE_KEY = "countly-sport-type";
 const SPORT_SCORES_KEY = "countly-sport-scores";
+const TODAY_COUNTS_KEY = "countly-today-counts";
+
+const COUNTER_ICONS = [
+  "🔢", "💧", "👟", "📚", "☕", "🎯", "✅", "🏋️", "🧘", "💊",
+  "🍎", "📝", "🎵", "💰", "🌟", "🚴", "📸", "🧹", "🤝", "🎮",
+  "🐾", "🌱", "⏰", "🍳", "🛒"
+];
+const DEFAULT_ICONS_MAP = {
+  "Water glasses": "💧", "Daily steps": "👟", "Books read": "📚",
+  "Wassergläser": "💧", "Tägliche Schritte": "👟", "Gelesene Bücher": "📚",
+  "Vasos de agua": "💧", "Pasos diarios": "👟", "Libros leídos": "📚",
+  "水杯": "💧", "每日步数": "👟", "已读书籍": "📚",
+  "पानी के गिलास": "💧", "दैनिक कदम": "👟", "पढ़ी गई किताबें": "📚",
+};
+
+function getIconForCounter(counter) {
+  if (counter.icon) return counter.icon;
+  if (DEFAULT_ICONS_MAP[counter.name]) return DEFAULT_ICONS_MAP[counter.name];
+  return COUNTER_ICONS[0];
+}
+
+// ── Today's count tracking ────────────────────────────────────────────────────
+function getTodayKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+function loadTodayCounts() {
+  try {
+    const data = JSON.parse(localStorage.getItem(TODAY_COUNTS_KEY));
+    if (data && data.date === getTodayKey()) return data.counts;
+  } catch {}
+  return {};
+}
+function saveTodayCounts(counts) {
+  localStorage.setItem(TODAY_COUNTS_KEY, JSON.stringify({ date: getTodayKey(), counts }));
+}
+let todayCounts = loadTodayCounts();
 
 function generateId() {
   return typeof crypto !== "undefined" && crypto.randomUUID
@@ -164,9 +201,9 @@ const SPORT_CONFIGS = {
   },
 };
 const starterCounters = [
-  { id: generateId(), name: "Water glasses", count: 4 },
-  { id: generateId(), name: "Daily steps", count: 1250 },
-  { id: generateId(), name: "Books read", count: 2 },
+  { id: generateId(), name: "Water glasses", count: 4, icon: "💧", createdAt: Date.now() },
+  { id: generateId(), name: "Daily steps", count: 1250, icon: "👟", createdAt: Date.now() },
+  { id: generateId(), name: "Books read", count: 2, icon: "📚", createdAt: Date.now() },
 ];
 const starterCounterNames = {
   en: ["Water glasses", "Daily steps", "Books read"],
@@ -195,10 +232,13 @@ function localizeStarterCounters(language) {
 }
 
 function createYellowHuntCounters() {
-  return [1, 2, 3].map((player) => ({
+  const huntIcons = ["🏁", "🎯", "⭐"];
+  return [1, 2, 3].map((player, i) => ({
     id: generateId(),
     name: `Player ${player}`,
     count: Math.floor(Math.random() * 10) + 1,
+    icon: huntIcons[i],
+    createdAt: Date.now(),
   }));
 }
 
@@ -557,6 +597,33 @@ function exitSportMode() {
   applyLanguage(currentLanguage); // restores i18n labels including summary labels
 }
 
+function animateIncrement(button, countEl) {
+  // Spring scale on button
+  button.classList.remove('plus-pop');
+  void button.offsetWidth; // force reflow
+  button.classList.add('plus-pop');
+
+  // Ripple effect
+  const ripple = document.createElement('span');
+  ripple.className = 'plus-ripple';
+  button.appendChild(ripple);
+  ripple.addEventListener('animationend', () => ripple.remove());
+
+  // Count bump animation
+  if (countEl) {
+    countEl.classList.remove('count-bump');
+    void countEl.offsetWidth;
+    countEl.classList.add('count-bump');
+  }
+
+  // Floating +1 indicator
+  const floater = document.createElement('span');
+  floater.className = 'plus-float';
+  floater.textContent = '+1';
+  button.closest('.counter-card').appendChild(floater);
+  floater.addEventListener('animationend', () => floater.remove());
+}
+
 function render() {
   if (sportMode) { renderSport(); return; }
   if (document.body.classList.contains("app-ready")) document.body.classList.add("counter-rendered");
@@ -570,31 +637,76 @@ function render() {
   if (counters.length && !visibleCounters.length) {
     grid.innerHTML = `<div class="empty-state"><strong>${t("noMatchingCounters")}</strong></div>`;
   }
+  todayCounts = loadTodayCounts();
   visibleCounters.forEach((counter) => {
     const card = document.createElement("article");
     card.className = "counter-card";
+    const icon = getIconForCounter(counter);
+    const todayCount = todayCounts[counter.id] || 0;
+    const createdDate = counter.createdAt ? new Date(counter.createdAt) : null;
+    const daysActive = createdDate ? Math.max(1, Math.ceil((Date.now() - createdDate.getTime()) / 86400000)) : null;
+    const avgPerDay = daysActive && counter.count > 0 ? (counter.count / daysActive).toFixed(1) : null;
+
     card.innerHTML = `
       <div class="card-top">
-        <input class="counter-name" value="${escapeHtml(counter.name)}" aria-label="${t("counterName")}" maxlength="32" />
+        <div class="card-icon-name">
+          <button class="card-icon-btn" type="button" title="Change icon" aria-label="Change icon for ${escapeHtml(counter.name)}">${icon}</button>
+          <input class="counter-name" value="${escapeHtml(counter.name)}" aria-label="${t("counterName")}" maxlength="32" />
+        </div>
         <button class="delete-button" type="button" title="${t("remove")}" aria-label="${t("remove")} ${escapeHtml(counter.name)}">×</button>
       </div>
-      <div class="count-controls">
-        <button class="step-button increment" type="button" aria-label="${t("increase")} ${escapeHtml(counter.name)}">+</button>
-        <div class="count">${formatCount(counter.count)}</div>
+      <div class="count-hero">
+        <div class="count" id="count-${counter.id}">${formatCount(counter.count)}</div>
+      </div>
+      <div class="card-actions-row">
         <button class="step-button decrement" type="button" aria-label="${t("decrease")} ${escapeHtml(counter.name)}">−</button>
+        <button class="plus-button increment" type="button" aria-label="${t("increase")} ${escapeHtml(counter.name)}">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 6v16M6 14h16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+        </button>
+        <button class="step-button decrement-right" type="button" aria-label="${t("decrease")} ${escapeHtml(counter.name)}" style="visibility:hidden">−</button>
+      </div>
+      <div class="card-meta">
+        <div class="card-meta-item today-badge${todayCount > 0 ? ' has-count' : ''}">
+          <span class="meta-label">Today</span>
+          <span class="meta-value">${todayCount > 0 ? '+' + formatCount(todayCount) : '—'}</span>
+        </div>
+        ${avgPerDay && !huntMode ? `<div class="card-meta-item">
+          <span class="meta-label">Avg/day</span>
+          <span class="meta-value">${avgPerDay}</span>
+        </div>` : ''}
       </div>
       ${huntMode ? `<div class="hunt-actions">
         <button class="hunt-action car-action" type="button" aria-label="${t("carAria").replace('%s', HUNT_CONFIG[huntColor].label)} ${escapeHtml(counter.name)}"><span class="hunt-emoji">${HUNT_CONFIG[huntColor].emoji}</span><span>${t("car")} <b>+1</b></span></button>
-      </div>` : `<p class="card-caption">${t("tapToAdjust")}</p>`}`;
-    card.querySelector(".increment").addEventListener("click", () => {
+      </div>` : ''}`;
+
+    const incrementBtn = card.querySelector(".increment");
+    const countEl = card.querySelector(".count");
+
+    incrementBtn.addEventListener("click", () => {
+      animateIncrement(incrementBtn, countEl);
       updateCount(counter.id, 1);
+      // Track today's count
+      todayCounts[counter.id] = (todayCounts[counter.id] || 0) + 1;
+      saveTodayCounts(todayCounts);
       if (huntMode) showVehicle();
     });
     card.querySelector(".decrement").addEventListener("click", () => updateCount(counter.id, -1));
-    card.querySelector(".car-action")?.addEventListener("click", () => { updateCount(counter.id, 1); showVehicle(); });
+    card.querySelector(".car-action")?.addEventListener("click", () => {
+      animateIncrement(incrementBtn, countEl);
+      updateCount(counter.id, 1);
+      todayCounts[counter.id] = (todayCounts[counter.id] || 0) + 1;
+      saveTodayCounts(todayCounts);
+      showVehicle();
+    });
     card.querySelector(".delete-button").addEventListener("click", () => removeCounter(counter.id));
     card.querySelector(".counter-name").addEventListener("change", (event) => {
       counter.name = event.target.value.trim() || t("untitled");
+      save(); render();
+    });
+    // Icon picker on click
+    card.querySelector(".card-icon-btn").addEventListener("click", () => {
+      const currentIdx = COUNTER_ICONS.indexOf(counter.icon);
+      counter.icon = COUNTER_ICONS[(currentIdx + 1) % COUNTER_ICONS.length];
       save(); render();
     });
     grid.appendChild(card);
@@ -788,7 +900,8 @@ function closeTutorial(completed = false) {
 document.querySelector("#add-counter").addEventListener("click", () => {
   searchQuery = "";
   counterSearch.value = "";
-  counters.push({ id: generateId(), name: `${t("counter")} ${counters.length + 1}`, count: 0 });
+  const iconIdx = counters.length % COUNTER_ICONS.length;
+  counters.push({ id: generateId(), name: `${t("counter")} ${counters.length + 1}`, count: 0, icon: COUNTER_ICONS[iconIdx], createdAt: Date.now() });
   save(); render();
   setTimeout(() => grid.lastElementChild?.querySelector(".counter-name")?.select(), 0);
 });
