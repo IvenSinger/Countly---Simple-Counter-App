@@ -1184,14 +1184,17 @@ document.querySelector("#about-backdrop").addEventListener("click", () => {
 
 // Settings / Language screen wiring
 document.querySelector("#settings-language-row").addEventListener("click", () => {
+  document.querySelector("#settings-main").hidden = true;
   document.querySelector("#settings-language-screen").hidden = false;
 });
 document.querySelector("#lang-screen-back").addEventListener("click", () => {
   document.querySelector("#settings-language-screen").hidden = true;
+  document.querySelector("#settings-main").hidden = false;
 });
 languageChoices.forEach((choice) => choice.addEventListener("click", () => {
   applyLanguage(choice.dataset.language);
   document.querySelector("#settings-language-screen").hidden = true;
+  document.querySelector("#settings-main").hidden = false;
 }));
 
 applyLanguage(localStorage.getItem(LANGUAGE_KEY) || "en");

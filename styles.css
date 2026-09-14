@@ -276,8 +276,7 @@ footer span { padding: 0 2px; color: var(--muted); opacity: .5; }
 .settings-footer { margin-top: 40px; }
 
 /* ── Language Sub-screen ───────────────────────────────────────────────────── */
-.settings-subscreen { position: absolute; inset: 0; background: var(--glass-bg-elevated); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); z-index: 10; animation: slide-up-in .3s cubic-bezier(.2,.7,.35,1) both; }
-.dark-mode .settings-subscreen { background: rgba(28,28,30,.90); }
+.settings-subscreen { animation: slide-up-in .3s cubic-bezier(.2,.7,.35,1) both; }
 .subscreen-header { display: flex; align-items: center; padding: 12px 0 24px; }
 .subscreen-back { display: inline-flex; align-items: center; gap: 4px; padding: 8px 16px 8px 0; border: 0; color: var(--blue); background: transparent; font-size: 17px; font-weight: 500; }
 .subscreen-back:hover { opacity: .7; }
