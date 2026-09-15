@@ -334,7 +334,68 @@
           </div>
         </div>
 
-      </section>
+      
+        <!-- Feedback Screen -->
+        <div class="settings-screen sub-screen" id="settings-feedback" hidden>
+          <div class="sub-screen-header">
+            <button class="back-btn" id="back-from-feedback" type="button" aria-label="Back">‹</button>
+            <h2 class="sub-screen-title" data-i18n="settingsFeedback">Feedback</h2>
+          </div>
+          
+          <form id="feedback-form" class="feedback-form">
+            <p class="feedback-desc" data-i18n="feedbackDesc">Help us improve Countly! Your feedback is 100% anonymous.</p>
+            
+            <div class="input-group">
+              <label for="feedback-category" class="input-label" data-i18n="feedbackCategory">Category</label>
+              <div class="select-wrapper">
+                <select id="feedback-category" class="custom-select" required>
+                  <option value="" disabled selected data-i18n="feedbackSelectCategory">Select a category...</option>
+                  <option value="general" data-i18n="feedbackCatGeneral">General feedback</option>
+                  <option value="suggestion" data-i18n="feedbackCatSuggestion">Suggestion for new feature</option>
+                  <option value="improvement" data-i18n="feedbackCatImprovement">Idea for improvement</option>
+                  <option value="confusing" data-i18n="feedbackCatConfusing">Confusing interface</option>
+                  <option value="sport" data-i18n="feedbackCatSport">Suggestion for new sport</option>
+                  <option value="bug" data-i18n="feedbackCatBug">Bug or problem</option>
+                  <option value="other" data-i18n="feedbackCatOther">Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label for="feedback-message" class="input-label" data-i18n="feedbackMessage">Message</label>
+              <textarea id="feedback-message" class="custom-textarea" rows="4" required data-i18n-placeholder="feedbackMessagePlaceholder" placeholder="What's on your mind?"></textarea>
+            </div>
+
+            <div class="input-group">
+              <label class="input-label" data-i18n="feedbackRating">Rating (Optional)</label>
+              <div class="feedback-rating" id="feedback-rating-widget">
+                <button type="button" class="rating-star" data-value="1" aria-label="1 star">★</button>
+                <button type="button" class="rating-star" data-value="2" aria-label="2 stars">★</button>
+                <button type="button" class="rating-star" data-value="3" aria-label="3 stars">★</button>
+                <button type="button" class="rating-star" data-value="4" aria-label="4 stars">★</button>
+                <button type="button" class="rating-star" data-value="5" aria-label="5 stars">★</button>
+              </div>
+              <input type="hidden" id="feedback-rating-value" value="0">
+            </div>
+            
+            <div class="input-group">
+              <label for="feedback-additional" class="input-label" data-i18n="feedbackAdditional">Additional Information (Optional)</label>
+              <input type="text" id="feedback-additional" class="custom-input" data-i18n-placeholder="feedbackAdditionalPlaceholder" placeholder="Any extra details?">
+            </div>
+
+            <button type="submit" class="primary-btn feedback-submit-btn">
+              <span data-i18n="feedbackSubmit">Submit Feedback</span>
+            </button>
+          </form>
+          
+          <div id="feedback-success" class="feedback-success" hidden>
+            <div class="feedback-success-icon">✅</div>
+            <h3 data-i18n="feedbackSuccessTitle">Thank You!</h3>
+            <p data-i18n="feedbackSuccessDesc">Your feedback has been submitted successfully.</p>
+            <button type="button" class="primary-btn" id="feedback-success-close" data-i18n="feedbackSuccessClose">Close</button>
+          </div>
+        </div>
+</section>
 
     </main>
 

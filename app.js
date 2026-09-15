@@ -1,4 +1,8 @@
 const STORAGE_KEY = "countly-counters";
+const FEEDBACK_DB_KEY = "countly-feedback";
+const FEEDBACK_TIME_KEY = "countly-last-feedback";
+let countlyFeedback = JSON.parse(localStorage.getItem(FEEDBACK_DB_KEY)) || [];
+
 const HISTORY_KEY = "countly-history";
 let history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
 const DAILY_LOGS_KEY = "countly-daily-logs";
@@ -157,6 +161,29 @@ const translations = {
     navHistory: "History",
     navGames: "Games",
     navSettings: "Settings",
+
+    settingsSupport: "Support",
+    settingsFeedback: "Feedback",
+    feedbackDesc: "Help us improve Countly! Your feedback is 100% anonymous.",
+    feedbackCategory: "Category",
+    feedbackSelectCategory: "Select a category...",
+    feedbackCatGeneral: "General feedback",
+    feedbackCatSuggestion: "Suggestion for new feature",
+    feedbackCatImprovement: "Idea for improvement",
+    feedbackCatConfusing: "Confusing interface",
+    feedbackCatSport: "Suggestion for new sport",
+    feedbackCatBug: "Bug or problem",
+    feedbackCatOther: "Other",
+    feedbackMessage: "Message",
+    feedbackMessagePlaceholder: "What's on your mind?",
+    feedbackRating: "Rating (Optional)",
+    feedbackAdditional: "Additional Information (Optional)",
+    feedbackAdditionalPlaceholder: "Any extra details?",
+    feedbackSubmit: "Submit Feedback",
+    feedbackSuccessTitle: "Thank You!",
+    feedbackSuccessDesc: "Your feedback has been submitted successfully.",
+    feedbackSuccessClose: "Close",
+
     sportsHeroTitle: "Track every score.",
     chooseSport: "Choose a Sport",
     chooseSportDesc: "Pick a game to start tracking scores",
