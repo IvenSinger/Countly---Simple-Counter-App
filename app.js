@@ -3282,6 +3282,94 @@ languageChoices.forEach((choice) => choice.addEventListener("click", () => {
   document.querySelector("#settings-main").hidden = false;
 }));
 
+// ── Feedback Feature ────────────────────────────────────────────────────────
+const settingsFeedbackRow = document.getElementById("settings-feedback-row");
+const settingsFeedbackScreen = document.getElementById("settings-feedback");
+const backFromFeedback = document.getElementById("back-from-feedback");
+const feedbackForm = document.getElementById("feedback-form");
+const feedbackSuccess = document.getElementById("feedback-success");
+const feedbackSuccessClose = document.getElementById("feedback-success-close");
+const feedbackRatingValue = document.getElementById("feedback-rating-value");
+const ratingStars = document.querySelectorAll(".rating-star");
+
+if (settingsFeedbackRow) {
+  settingsFeedbackRow.addEventListener("click", () => {
+    document.getElementById("settings-main").hidden = true;
+    settingsFeedbackScreen.hidden = false;
+  });
+}
+
+if (backFromFeedback) {
+  backFromFeedback.addEventListener("click", () => {
+    settingsFeedbackScreen.hidden = true;
+    document.getElementById("settings-main").hidden = false;
+  });
+}
+
+// Star rating interactive logic
+ratingStars.forEach(star => {
+  star.addEventListener("mouseover", (e) => {
+    const val = parseInt(e.target.dataset.value);
+    ratingStars.forEach(s => {
+      s.classList.toggle("hover-active", parseInt(s.dataset.value) <= val);
+    });
+  });
+  star.addEventListener("mouseout", () => {
+    ratingStars.forEach(s => s.classList.remove("hover-active"));
+  });
+  star.addEventListener("click", (e) => {
+    const val = parseInt(e.target.dataset.value);
+    feedbackRatingValue.value = val;
+    ratingStars.forEach(s => {
+      s.classList.toggle("active", parseInt(s.dataset.value) <= val);
+    });
+  });
+});
+
+if (feedbackForm) {
+  feedbackForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    
+    // Anti-spam check (10 minutes)
+    const lastFeedback = parseInt(localStorage.getItem(FEEDBACK_TIME_KEY)) || 0;
+    if (Date.now() - lastFeedback < 10 * 60 * 1000) {
+      alert("Please wait 10 minutes before submitting more feedback.");
+      return;
+    }
+    
+    const newFeedback = {
+      id: "fb-" + Date.now().toString(36),
+      category: document.getElementById("feedback-category").value,
+      message: document.getElementById("feedback-message").value,
+      rating: parseInt(feedbackRatingValue.value),
+      additionalInfo: document.getElementById("feedback-additional").value,
+      timestamp: Date.now()
+    };
+    
+    countlyFeedback.push(newFeedback);
+    localStorage.setItem(FEEDBACK_DB_KEY, JSON.stringify(countlyFeedback));
+    localStorage.setItem(FEEDBACK_TIME_KEY, Date.now().toString());
+    
+    feedbackForm.hidden = true;
+    feedbackSuccess.hidden = false;
+  });
+}
+
+if (feedbackSuccessClose) {
+  feedbackSuccessClose.addEventListener("click", () => {
+    // Reset state
+    feedbackForm.reset();
+    feedbackRatingValue.value = "0";
+    ratingStars.forEach(s => s.classList.remove("active"));
+    feedbackSuccess.hidden = true;
+    feedbackForm.hidden = false;
+    
+    // Navigate back
+    settingsFeedbackScreen.hidden = true;
+    document.getElementById("settings-main").hidden = false;
+  });
+}
+
 applyLanguage(localStorage.getItem(LANGUAGE_KEY) || "en");
 applySkin();
 
