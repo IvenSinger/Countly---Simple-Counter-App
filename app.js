@@ -3677,9 +3677,19 @@ window.openIconPicker = openIconPicker; // Make it global just in case it's call
 function updateSettingsText() {
   const skinEl = document.querySelector("#settings-skin-value");
   if (skinEl && typeof currentSkin !== 'undefined') {
-    let skinKey = currentSkin === 'default'
-      ? 'skinDefaultName'
-      : 'skin' + currentSkin.charAt(0).toUpperCase() + currentSkin.slice(1);
+    const skinKeyMap = {
+      default: 'skinDefaultName',
+      classic: 'skinClassic',
+      glitch:  'skinGlitched',
+      neon:    'skinNeon',
+      ocean:   'skinOcean',
+      nature:  'skinNature',
+      sunset:  'skinSunset',
+      space:   'skinSpace',
+      minimal: 'skinMinimal',
+      retro:   'skinRetro',
+    };
+    const skinKey = skinKeyMap[currentSkin] || ('skin' + currentSkin.charAt(0).toUpperCase() + currentSkin.slice(1));
     skinEl.textContent = t(skinKey) || currentSkin;
   }
   const appearanceEl = document.querySelector("#settings-appearance-value");
