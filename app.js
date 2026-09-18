@@ -2263,13 +2263,13 @@ function applyLanguage(language) {
     document.querySelector("#settings-language-value").textContent = selectedChoice.querySelector(".settings-row-label").textContent;
   }
 
-  if(typeof updateSettingsText === 'function') updateSettingsText();
   document.querySelectorAll("[data-i18n]").forEach((element) => {
     const value = t(element.dataset.i18n);
     if (element.dataset.i18n === "guideCopy" || element.dataset.i18n === "aboutDesc") element.innerHTML = value;
     else element.textContent = value;
   });
   document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => { element.placeholder = t(element.dataset.i18nPlaceholder); });
+  if(typeof updateSettingsText === 'function') updateSettingsText();
   
   themeToggle.title = document.body.classList.contains("dark-mode") ? t("lightMode") : t("darkMode");
   themeToggle.setAttribute("aria-label", themeToggle.title);
@@ -3677,8 +3677,9 @@ window.openIconPicker = openIconPicker; // Make it global just in case it's call
 function updateSettingsText() {
   const skinEl = document.querySelector("#settings-skin-value");
   if (skinEl && typeof currentSkin !== 'undefined') {
-    let skinKey = "skin" + currentSkin.charAt(0).toUpperCase() + currentSkin.slice(1) + "Name";
-    if (currentSkin === 'default') skinKey = 'skinDefaultName';
+    let skinKey = currentSkin === 'default'
+      ? 'skinDefaultName'
+      : 'skin' + currentSkin.charAt(0).toUpperCase() + currentSkin.slice(1);
     skinEl.textContent = t(skinKey) || currentSkin;
   }
   const appearanceEl = document.querySelector("#settings-appearance-value");
